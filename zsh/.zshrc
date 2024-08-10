@@ -59,8 +59,11 @@ alias so="source ~/.zshrc"
 alias yazi="~/yazi/yazi"
 alias untar="tar xzvf"
 
-alias tmc="tmux new -s default"
-alias tma="tmux attach -t default"
+# Tmux
+alias tmd="tmux attach -t default || tmux new -s default"
+alias tma="tmux attach -t"
+alias tmls="tmux ls"
+alias tmk="tmux kill-session -t"
 
 # Nvim
 alias nvim="neovim -u ~/.config/nvim/lua/main/init.lua"
