@@ -1,12 +1,3 @@
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-# if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#   source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-# fi
-
-# If you come from bash you might have to change your $PATH.
-
 #!/bin/zsh
 
 # Path
@@ -19,9 +10,12 @@ export NEOVIM_BIN="/opt/nvim-linux64/bin"
 export ZSH="$HOME/.oh-my-zsh"
 export FZF_DEFAULT_COMMand='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
 export OLLAMA_MODELS="/mnt/d/code/ollama"
-export PATH=$KITTY_BIN:$NEOVIM_BIN:$HOME/.config/nvim:$PATH:/home/i0i/.local/bin:$HOME/bin:/usr/local/bin:/home/i0i/.cargo/bin
+export TMUX_SCRIPTS=$HOME/.tmux/scripts
+export GO=/usr/local/go/bin
+export LAZY_GIT=$HOME/lazygit
+export PATH=$LAZY_GIT:$GO:$KITTY_BIN:$TMUX_SCRIPTS:$NEOVIM_BIN:$HOME/.config/nvim:$PATH:/home/i0i/.local/bin:$HOME/bin:/usr/local/bin:/home/i0i/.cargo/bin
 
-export EDITOR="neovim -u ~/.config/nvim/lua/mini/init.lua"
+export EDITOR="neovim"
 export VPN_IP="80.209.240.101"
 
 # Uncomment the following line to enable command auto-correction.
@@ -51,8 +45,6 @@ alias man="tldr"
 alias bc="batcat"
 alias py="python3"
 alias pip="python3 -m pip"
-alias ls="eza --tree --level=1 --color=always --long --git --icons=always --no-filesize --no-time --no-user --no-permissions --ignore-glob='node_modules'"
-alias la="ls -a"
 alias lt="ls --level=99"
 alias so="source ~/.zshrc"
 
@@ -64,6 +56,10 @@ alias tmd="tmux attach -t default || tmux new -s default"
 alias tma="tmux attach -t"
 alias tmls="tmux ls"
 alias tmk="tmux kill-session -t"
+
+alias tsj="tmux-start-job"
+alias tsjd="tsj Development"
+alias tsjc="tsj Console"
 
 # Nvim
 alias nvim="neovim -u ~/.config/nvim/lua/main/init.lua"
@@ -86,6 +82,9 @@ _fzf_comprun() {
         *) fzf --preview "--preview 'bat -n --color=always --line-range :500 {}'" "$@" ;;
     esac
 }
+
+bindkey -s  "tmux-sessionizer\n"
+bindkey -s ^G "tmux-lazygit\n"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 # [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
