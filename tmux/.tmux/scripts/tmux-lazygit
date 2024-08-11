@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+window_name="Git"
+
+tmux neww -n $window_name "lazygit"
