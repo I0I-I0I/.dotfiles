@@ -8,12 +8,12 @@ export KITTY_BIN="/opt/kitty.app/bin"
 export NEOVIDE_MAXIMIZED=true
 export NEOVIM_BIN="/opt/nvim-linux64/bin"
 export ZSH="$HOME/.oh-my-zsh"
-export FZF_DEFAULT_COMMand='rg --files --follow --no-ignore-vcs --hidden -g "!{node_modules/*,.git/*}"'
 export OLLAMA_MODELS="/mnt/d/code/ollama"
 export TMUX_SCRIPTS=$HOME/.tmux/scripts
 export GO=/usr/local/go/bin
 export LAZY_GIT=$HOME/lazygit
-export PATH=$LAZY_GIT:$GO:$KITTY_BIN:$TMUX_SCRIPTS:$NEOVIM_BIN:$HOME/.config/nvim:$PATH:/home/i0i/.local/bin:$HOME/bin:/usr/local/bin:/home/i0i/.cargo/bin
+export FISH=$HOME/fish-3.7.0/fish
+export PATH=$LAZY_GIT:$GO:$FISH:$KITTY_BIN:$TMUX_SCRIPTS:$NEOVIM_BIN:$HOME/.config/nvim:$PATH:/home/i0i/.local/bin:$HOME/bin:/usr/local/bin:/home/i0i/.cargo/bin
 
 export EDITOR="neovim"
 export VPN_IP="80.209.240.101"
@@ -22,13 +22,9 @@ export VPN_IP="80.209.240.101"
 ENABLE_CORRECTION="true"
 
 # zsh-vi-mode
-plugins=(zsh-exa zsh-syntax-highlighting git zsh-autosuggestions web-search zsh-z)
+plugins=(zsh-syntax-highlighting git zsh-autosuggestions zsh-z)
 
 source $ZSH/oh-my-zsh.sh
-
-#/bin/sh/bash
-
-# User
 
 # Path
 
@@ -36,11 +32,7 @@ export profile=/mnt/c/Users/azudj/Documents/PowerShell/Microsoft.PowerShell_prof
 export term=/mnt/c/Users/azudj/AppData/Local/Microsoft/Windows\ Terminal
 export neovideConfig=/mnt/c/Users/azudj/AppData/Roaming/neovide
 
-export react=/mnt/d/code/learning/react/
-
-# Github
-export Gulp=https://github.com/I0I-I0I/gulp
-
+# Aliases
 alias man="tldr"
 alias bc="batcat"
 alias py="python3"
@@ -48,18 +40,22 @@ alias pip="python3 -m pip"
 alias lt="ls --level=99"
 alias so="source ~/.zshrc"
 
+
 alias yazi="~/yazi/yazi"
 alias untar="tar xzvf"
 
 # Tmux
-alias tmd="tmux attach -t default || tmux new -s default"
-alias tma="tmux attach -t"
+alias tmd="tmux new -A -t A_default"
+alias tma="tmux attach"
+alias tmat="tmux attach -t"
 alias tmls="tmux ls"
 alias tmk="tmux kill-session -t"
 
 alias tsj="tmux-start-job"
 alias tsjd="tsj Development"
 alias tsjc="tsj Console"
+
+alias prtr='prettier --write "**/*.{js,jsx,ts,tsx,html,css,json}"'
 
 # Nvim
 alias nvim="neovim -u ~/.config/nvim/lua/main/init.lua"
@@ -69,20 +65,7 @@ alias code="/mnt/c/Program\ Files/Neovide/neovide.exe --neovim-bin /opt/nvim-lin
 # LSP
 export PATH=$PATH:$HOME/lsp_servers/lua-language-server/bin
 
-# fzf
-
-_fzf_comprun() {
-    local command=$1
-    shift
-
-    case "$command" in
-        cd) fzf --preview 'eza --tree --color=always {} | head -200' "$@" ;;
-        export|unset) fzf --preview "eval 'echo \$' {}" "$@" ;;
-        ssh) fzf --preview 'dig {}' "$@" ;;
-        *) fzf --preview "--preview 'bat -n --color=always --line-range :500 {}'" "$@" ;;
-    esac
-}
-
+# for tmux
 bindkey -s  "tmux-sessionizer\n"
 bindkey -s ^G "tmux-lazygit\n"
 
