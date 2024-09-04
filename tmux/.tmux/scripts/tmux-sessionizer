@@ -3,7 +3,7 @@
 if [[ $# -eq 1 ]]; then
     selected=$1
 else
-    selected=$(find ~/.dotfiles /mnt/c/Users/azudj/Dropbox ~/.config /mnt/d/code/learning/react /mnt/d/code/github /mnt/d/code/project/app /mnt/d/code/project/programs -mindepth 0 -maxdepth 1 -type d | fzf)
+    selected=$(find ~/.dotfiles /mnt/c/Users/azudj/Dropbox ~/.config /mnt/d/code/learning/react /mnt/d/code/cpp /mnt/d/code/github /mnt/d/code/project/app /mnt/d/code/project/programs -mindepth 0 -maxdepth 1 -type d | fzf)
 fi
 
 if [[ -z $selected ]]; then
