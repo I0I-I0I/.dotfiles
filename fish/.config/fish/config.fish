@@ -7,10 +7,6 @@ set -gx PATH $PATH ~/yazi
 
 set -gx todo /mnt/c/Users/azudj/Dropbox/TODO
 
-# Set vim bindings
-fish_vi_key_bindings
-fish_vi_cursor
-
 # Tmux
 alias tma="tmux attach"
 alias tmat="tmux attach -t"
@@ -26,7 +22,7 @@ alias nvim="~/nvim-linux64/bin/nvim"
 alias vim="NVIM_APPNAME=nvim-mini nvim"
 
 # Binds
-bind \cf "tmux-sessionizer"
+bind \ct "tmux-sessionizer"
 
 # Theme
 fish_config theme choose "Rose Pine"
