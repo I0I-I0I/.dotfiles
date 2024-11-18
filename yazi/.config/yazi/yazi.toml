@@ -1,3 +1,8 @@
 # yazi.toml
 [manager]
 show_hidden = true
+
+[opener]
+edit = [
+	{ run = 'NVIM_APPNAME=nvim-mini ~/nvim-linux64/bin/nvim "$@"', desc = "NeoVim", block = true, for = "unix" },
+]
