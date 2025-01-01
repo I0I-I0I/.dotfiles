@@ -16,7 +16,7 @@ create_directory() {
 
 create_directory $HOME/apps
 
-packages=("lazygit" "atac" "fish" "stow")
+packages=("clang" "lazygit" "atac" "fish" "stow" "bat" "fd" "fzf")
 if command_exists dnf; then
     package_manager="dnf"
 elif command_exists pacman; then
@@ -98,8 +98,8 @@ install_git "sxyazi/yazi.git" "$HOME/apps/yazi"
 cd $HOME/apps/yazi && cargo build --release --locked
 
 cd $HOME/.dotfiles
-for dir in $(find . -type d); do
-	if [ "$dir" == "." ] || [ "$dir" == ".." ] || [ "$dir" == ".git" ] || [ "$dir" == ".gitignore" ] || [ "$dir" == "install" ]; then
+for dir in $(find . -maxdepth 1 -mindepth 0 -type d); do
+	if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./install" ]; then
 		continue
 	fi
 	stow $dir
@@ -109,4 +109,4 @@ install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
 
 fish
 echo /usr/bin/fish | sudo tee -a /etc/shells
-chsh -s /usr/local/bin/fish
+chsh -s /usr/bin/fish

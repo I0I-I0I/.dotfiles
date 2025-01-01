@@ -4,6 +4,8 @@ set -gx PATH $PATH ~/.local/bin
 set -gx PATH $PATH ~/.cargo/bin
 set -gx PATH $PATH ~/apps
 set -gx PATH $PATH ~/.local/share/pnpm
+set -gx PATH $PATH ~/apps/yazi/target/release
+set -gx PATH $PATH ~/apps/neovim/build/bin
 
 # Aliases
 alias bc="batcat"
