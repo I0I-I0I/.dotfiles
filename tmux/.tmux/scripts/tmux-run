@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+window_name="DB"
+app=$(basename $1)
+
+tmux neww -n $window_name $app
