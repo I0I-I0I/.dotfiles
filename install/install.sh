@@ -16,7 +16,6 @@ create_directory() {
 
 create_directory $HOME/apps
 
-packages=("clang" "lazygit" "atac" "fish" "stow" "bat" "fd" "fzf")
 if command_exists dnf; then
     package_manager="dnf"
 elif command_exists pacman; then
@@ -25,11 +24,12 @@ else
     echo "Neither dnf nor pacman is available. Exiting."
     exit 1
 fi
+packages=("clang" "lazygit" "atac" "fish" "stow" "bat" "fd" "fzf" "gh" "chafa")
 cargo_packages=("rainfrog")
 
 
 if [ "$package_manager" == "dnf" ]; then
-	sudo dnf update -y
+	sudo dnf update -y && sudo dnf upgrade -y
 	sudo dnf -y install ninja-build cmake gcc make unzip gettext curl glibc-gconv-extra
 	sudo dnf copr enable atim/lazygit -y
 	sudo dnf copr enable joxcat/atac -y
@@ -55,7 +55,7 @@ install_pacman() {
         echo "$package is installed. Updating..."
         sudo pacman -Syu "$package"
     else
-        sudo pacman -S "$package"
+        sudo pacman -Sy "$package"
 		echo "$package was installed."
     fi
 }
