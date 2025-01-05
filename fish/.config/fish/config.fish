@@ -8,9 +8,7 @@ set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
 
 # Aliases
-alias bc="batcat"
 alias py="python3"
-# alias nvim="~/nvim-linux64/bin/nvim"
 alias vim="nvim"
 
 # Tmux
@@ -27,3 +25,7 @@ bind -k nul "tmux-yazi"
 
 # Theme
 fish_config theme choose "Rose Pine"
+
+alias wifi="nmtui"
+alias bt="bluetui"
+alias light="brightnessctl set"
