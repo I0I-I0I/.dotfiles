@@ -10,6 +10,7 @@ set -gx PATH $PATH ~/apps/neovim/build/bin
 # Aliases
 alias py="python3"
 alias vim="nvim"
+alias mkdir="mkdir -p"
 
 # Tmux
 set -gx PATH $PATH ~/.tmux/scripts

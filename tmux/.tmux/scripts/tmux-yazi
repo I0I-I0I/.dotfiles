@@ -3,7 +3,7 @@
 window_name="Yazi"
 root_path=$(basename $1)
 
-if [ $root_path == "i0i" ]; then
+if [ "$root_path" = "i0i" ]; then
     root_path="/home/i0i/"
 fi
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-wall_dir="${HOME}/w"
+wall_dir="${HOME}/walls"
 cacheDir="${HOME}/.cache/walls"
 rofi_command="rofi -dmenu -theme ${HOME}/.config/rofi/wallSelect.rasi"
 
