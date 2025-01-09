@@ -6,6 +6,7 @@ set -gx PATH $PATH ~/apps
 set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
+set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 
 # Aliases
 alias py="python3"
@@ -23,9 +24,8 @@ alias tmks="tmux kill-server"
 bind \ct "tmux-sessionizer"
 bind -k nul "tmux-yazi"
 
-# Theme
-fish_config theme choose "Rose Pine"
-
 alias wifi="nmtui"
 alias bt="bluetui"
-alias light="brightnessctl set"
+
+# Theme
+fish_config theme choose "Rose Pine"

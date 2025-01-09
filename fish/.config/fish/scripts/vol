@@ -1,0 +1,8 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+    echo "Usage: vol <percentage>"
+    exit 1
+fi
+
+pactl set-sink-volume @DEFAULT_SINK@ $1%
