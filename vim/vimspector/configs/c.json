@@ -1,0 +1,28 @@
+{
+    "configurations": {
+        "ASM": {
+            "adapter": "CodeLLDB",
+            "filetypes": [ "c", "cpp" ],
+            "default": true,
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceRoot}/build/${fileBasenameNoExtension}",
+                "stopOnEntry": true,
+                "cwd": "${workspaceRoot}",
+                "args": []
+            }
+        },
+        "Run": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [ "c", "cpp" ],
+            "default": true,
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceRoot}/build/${fileBasenameNoExtension}",
+                "stopOnEntry": true,
+                "cwd": "${workspaceRoot}",
+                "args": []
+            }
+        }
+    }
+}
