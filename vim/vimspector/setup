@@ -1,9 +1,0 @@
-#!/bin/bash
-
-output_dir="$HOME/.vim/plugged/vimspector/configurations/linux/_all"
-
-find ./configs -type f ! -name 'README.md' | while read -r file; do
-    base_name=$(basename "$file")
-    touch "$output_dir/$base_name"
-    cat "$file" > "$output_dir/$base_name"
-done

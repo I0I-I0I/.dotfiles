@@ -1,7 +1,6 @@
 call plug#begin()
 
-Plug 'bling/vim-bufferline'
-Plug 'puremourning/vimspector'
+Plug 'pacha/vem-tabline'
 
 call plug#end()
 
@@ -13,6 +12,7 @@ colorscheme retrobox
 set wildignore=*/node_modules/*,*/build/*,*/dist/*,*/env/*
 set path=**
 
+set nocompatible
 set termguicolors
 set undofile
 set noswapfile nobackup nowritebackup
@@ -26,6 +26,7 @@ set updatetime=300
 set signcolumn=yes
 set laststatus=0
 set hidden
+set cursorline
 
 let g:netrw_banner=0
 let g:netrw_list_hide="node_modules/,^\\.\\=/\\=$,^\\.\\.\\=/\\=$"
@@ -35,7 +36,7 @@ filetype plugin indent on
 set omnifunc=syntaxcomplete#Complete
 autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
 
-let g:vimspector_enable_mappings = 'HUMAN'
+let g:vem_tabline_show = 2
 
 autocmd BufWritePre * %s/\s\+$//e
 
@@ -48,7 +49,6 @@ nnoremap n nzzzv
 nnoremap N Nzzzv
 nnoremap <C-y> 3<C-y>
 nnoremap <C-e> 3<C-e>
-nnoremap <leader><leader> <cmd>nohlsearch<cr>
 vnoremap <silent> K :m '<-2<cr>gv=gv
 vnoremap <silent> J :m '>+1<cr>gv=gv
 nnoremap <C-l> <cmd>bn<cr>
@@ -64,16 +64,4 @@ nnoremap <C-@> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
 nnoremap <leader><C-t> <cmd>!tmux neww tmux-sessionizer<cr>
 nnoremap <leader>t <cmd>execute '!tmux neww tmux-run ' . input("Run: ")<cr>
 
-nnoremap <leader>dr <cmd>VimspectorReset<cr>
-
-function! SetBg(...)
-    let l:color = get(a:, 1, "#000001")
-    execute 'highlight Normal guibg=' . l:color
-    execute 'highlight LineNr guibg=' . l:color
-    execute 'highlight StatusLine guibg=' . l:color
-    execute 'highlight SignColumn guibg=' . l:color
-    execute 'highlight EndOfBuffer guibg=' . l:color
-endfunction
-command! -nargs=? SB call SetBg(<f-args>)
-
-autocmd BufRead * call SetBg()
+autocmd VimEnter * packadd termdebug
