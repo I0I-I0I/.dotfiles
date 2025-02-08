@@ -9,6 +9,8 @@ set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx EDITOR ~/nvim-linux64/bin/nvim
 
+set -gx WALLPAPER ~/walls/girl.jpg
+
 # Aliases
 alias py="python3"
 alias mkdir="mkdir -p"
