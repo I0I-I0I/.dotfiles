@@ -3,6 +3,8 @@ font-family-bold = "Maple Mono Bold"
 font-family-italic = "Maple Mono Italic"
 font-family-bold-italic = "Maple Mono Bold Italic"
 
+
+# theme = Solarized Dark Higher Contrast
 theme = rose-pine
 
 cursor-style = block

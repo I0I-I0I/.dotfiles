@@ -24,8 +24,7 @@ else
     echo "Neither dnf nor pacman is available. Exiting."
     exit 1
 fi
-packages=("clang" "lazygit" "atac" "fish" "stow" "bat" "fd" "fzf" "gh" "chafa")
-cargo_packages=("rainfrog")
+packages="clang lazygit atac lazysql fish stow bat fd fzf go btop"
 
 
 if [ "$package_manager" == "dnf" ]; then
@@ -35,7 +34,7 @@ if [ "$package_manager" == "dnf" ]; then
 	sudo dnf copr enable joxcat/atac -y
 elif [ "$package_manager" == "pacman" ]; then
 	sudo pacman -Syu
-	sudo pacman -S base-devel cmake unzip ninja curl
+	sudo pacman -S --needed git base-devel cmake unzip ninja curl yay
 fi
 
 install_dnf() {
@@ -51,18 +50,8 @@ install_dnf() {
 
 install_pacman() {
     local package=$1
-    if pacman -Qi "$package" >/dev/null 2>&1; then
-        echo "$package is installed. Updating..."
-        sudo pacman -Syu "$package"
-    else
-        sudo pacman -Sy "$package"
-		echo "$package was installed."
-    fi
-}
-
-install_cargo() {
-    local package=$1
-	cargo install "$package"
+    sudo pacman -Sy --needed "$package"
+    echo "$package was installed."
 }
 
 install_git() {
@@ -79,17 +68,12 @@ install_git() {
     fi
 }
 
-for package in "${packages[@]}"; do
-    if [ "$package_manager" == "dnf" ]; then
-        install_dnf "$package"
-    elif [ "$package_manager" == "pacman" ]; then
-        install_pacman "$package"
-    fi
-done
-
-for package in "${cargo_packages[@]}"; do
-    install_cargo "$package"
-done
+if [ "$package_manager" == "dnf" ]; then
+    install_dnf $packages
+elif [ "$package_manager" == "pacman" ]; then
+    install_pacman $packages
+    yay -S epy-ereader-git
+fi
 
 install_git "neovim/neovim" "$HOME/apps/neovim"
 cd $HOME/apps/neovim && make CMAKE_BUILD_TYPE=Release && sudo make install
@@ -99,9 +83,10 @@ cd $HOME/apps/yazi && cargo build --release --locked
 
 cd $HOME/.dotfiles
 for dir in $(find . -maxdepth 1 -mindepth 0 -type d); do
-	if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./install" ]; then
+	if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./install" ] || [ "$dir" == "./walls" ]; then
 		continue
 	fi
+    rm -fr $HOME/.config/$dir
 	stow $dir
 done
 
@@ -110,3 +95,5 @@ install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
 fish
 echo /usr/bin/fish | sudo tee -a /etc/shells
 chsh -s /usr/bin/fish
+
+go install github.com/dece2183/yamusic-tui@latest

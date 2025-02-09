@@ -1,8 +1,8 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-    echo "Usage: light <percentage>"
-    exit 1
+    brightnessctl info
+    exit 0
 fi
 
 brightnessctl set $1%

@@ -53,7 +53,7 @@ vnoremap <silent> K :m '<-2<cr>gv=gv
 vnoremap <silent> J :m '>+1<cr>gv=gv
 nnoremap <C-l> <cmd>bn<cr>
 nnoremap <C-h> <cmd>bp<cr>
-nnoremap <C-q> <cmd>bd<cr>
+nnoremap <C-x> <cmd>bd<cr>
 nnoremap <C-n> <cmd>cnext<cr>zz
 nnoremap <C-p> <cmd>cprevious<cr>zz
 xnoremap P "0P

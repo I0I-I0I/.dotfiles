@@ -8,6 +8,7 @@ set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx PATH $PATH ~/go/bin
+
 set -gx EDITOR /usr/local/bin/nvim
 
 # Aliases
@@ -20,6 +21,7 @@ alias drop="dropbox-cli"
 # Tmux
 set -gx PATH $PATH ~/.tmux/scripts
 
+alias tmn="tmux new -s"
 alias tma="tmux attach"
 alias tmat="tmux attach -t"
 alias tmls="tmux ls"
@@ -31,6 +33,8 @@ bind -k nul "tmux-yazi"
 
 alias wifi="nmtui"
 alias bt="bluetui"
+alias music="yamusic-tui"
 
 # Theme
 fish_config theme choose "Rose Pine"
+# fish_config theme choose "Solarized Dark"

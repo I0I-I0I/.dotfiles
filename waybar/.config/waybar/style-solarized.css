@@ -1,7 +1,8 @@
 /*
-solarized
 :root {
-    --bg: #002B36
+    --primary: #29a298;
+    --bg: #002b36;
+    --border: #073f4e;
 }
 */
 
@@ -15,7 +16,7 @@ solarized
 
 #window {
     padding: 0 30px;
-    color: #a6adc8;
+    color: #29a298;
 }
 
 window#waybar {
@@ -29,14 +30,14 @@ window#waybar.hidden {
 #workspaces button {
     padding: 0 5px;
     background-color: transparent;
-    color: #6e6a86;
+    color: #664c00;
     transition-property: color;
     transition-duration: 0.35s;
     border-radius: 50%;
 }
 
 #workspaces button.active {
-    color: #e0def4;
+    color: #c34a16;
 }
 
 #workspaces button.urgent {
@@ -62,8 +63,8 @@ window#waybar.hidden {
 #memory,
 #pulseaudio {
     padding: 0 10px;
-    border: 2px solid #c4a7e7;
-    background-color: #232136;
+    border: 2px solid #073f4e;
+    background-color: #001419;
     color: white;
 }
 
@@ -77,12 +78,12 @@ window#waybar.hidden {
 }
 
 #battery {
-    color: #f6c177;
+    color: #B28500;
     margin-right: 0;
 }
 
 #bluetooth {
-    color: #3e8fb0;
+    color: #268bd3;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right: none;
@@ -90,7 +91,7 @@ window#waybar.hidden {
 }
 
 #network {
-    color: #c8a0a1;
+    color: #f34b00;
     margin-right: 8px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -104,7 +105,7 @@ window#waybar.hidden {
 
 /* Clock instance which displays the date */
 #clock.date {
-    color: #eb6f92;
+    color: #c94c16;
     margin-right: 8px;
     margin-left: 8px;
 }
@@ -120,7 +121,7 @@ window#waybar.hidden {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right: none;
-    color: #ea9a97;
+    color: #c54b16;
     margin: 0;
     padding: 0;
     padding-left: 15px;
@@ -131,7 +132,7 @@ window#waybar.hidden {
 #memory {
     border-right: none;
     border-left: none;
-    color: #3e8fb0;
+    color: #29a298;
     margin: 0;
     padding: 0;
     padding-left: 8px;
@@ -154,6 +155,6 @@ window#waybar.hidden {
 
 /* Time Clock */
 #clock {
-    color: #c4a7e7;
+    color: #29a298;
     margin-right: 0;
 }
