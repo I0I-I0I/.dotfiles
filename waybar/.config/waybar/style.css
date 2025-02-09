@@ -6,7 +6,6 @@
     padding: 0;
 }
 
-
 #window {
     padding: 0 30px;
     color: #a6adc8;
@@ -55,8 +54,8 @@ window#waybar.hidden {
 #cpu,
 #memory,
 #pulseaudio {
-    padding: 0 15px;
-    /* border: 2px solid #c4a7e7; */
+    padding: 0 10px;
+    border: 2px solid #c4a7e7;
     background-color: #232136;
     color: white;
 }

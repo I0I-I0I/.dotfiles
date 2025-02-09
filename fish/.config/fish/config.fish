@@ -7,9 +7,8 @@ set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
-set -gx EDITOR ~/nvim-linux64/bin/nvim
-
-set -gx WALLPAPER ~/walls/girl.jpg
+set -gx PATH $PATH ~/go/bin
+set -gx EDITOR /usr/local/bin/nvim
 
 # Aliases
 alias py="python3"
