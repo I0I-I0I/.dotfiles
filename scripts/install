@@ -83,7 +83,7 @@ cd $HOME/apps/yazi && cargo build --release --locked
 
 cd $HOME/.dotfiles
 for dir in $(find . -maxdepth 1 -mindepth 0 -type d); do
-	if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./install" ] || [ "$dir" == "./walls" ]; then
+	if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./scripts" ] || [ "$dir" == "./walls" ]; then
 		continue
 	fi
     rm -fr $HOME/.config/$dir

@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# waybar
+
+waybar_path=$HOME/.config/waybar
+nvim_path="$HOME/.config/nvim/init.lua"
+ghostty_path="$HOME/.config/ghostty/config"
+hyprpaper_path="$HOME/.config/hypr/hyprpaper.conf"
+
+
+current_theme=$(basename $1)
+prev_theme=$(grep 'theme =' $nvim_path | sed -n 's/theme = "\(.*\)",/\1/p')
+prev_theme="${prev_theme#"${prev_theme%%[![:space:]]*}"}"
+
+if [ "$current_theme" = "$prev_theme" ]; then
+    echo "Theme is already set to $current_theme"
+    exit 2
+elif [ "$current_theme" = "rose" ]; then
+    ghostty_theme_name="rose-pine"
+    nvim_theme_name="rose"
+    waybar_current_theme="rose"
+    hyprpaper_img="/home/i0i/.dotfiles/walls/girl.jpg"
+elif [ "$current_theme" = "osaka" ]; then
+    ghostty_theme_name="Solarized Dark Higher Contrast"
+    nvim_theme_name="osaka"
+    waybar_current_theme="osaka"
+    hyprpaper_img="/home/i0i/.dotfiles/walls/solarized.jpg"
+else
+    echo "Unrecognized theme: $current_theme"
+    exit 1
+fi
+
+ghostty_string="s/theme = .*/theme = $ghostty_theme_name/"
+nvim_string="s/theme = \".*\"/theme = \"$nvim_theme_name\"/"
+hyprpaper_string="s|wallpaper = eDP-1, .*|wallpaper = eDP-1, $hyprpaper_img|"
+
+sed -i "$nvim_string" $nvim_path
+sed -i "$ghostty_string" $ghostty_path
+sed -i "$hyprpaper_string" $hyprpaper_path
+
+hyprctl hyprpaper preload "$hyprpaper_img" > /dev/null
+hyprctl hyprpaper wallpaper "eDP-1, $hyprpaper_img" > /dev/null
+
+mv $waybar_path/style.css $waybar_path/"$prev_theme.css"
+mv $waybar_path/"$waybar_current_theme.css" $waybar_path/style.css
+
+pkill -USR1 waybar
