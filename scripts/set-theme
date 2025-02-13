@@ -1,47 +1,98 @@
 #!/bin/bash
 
-# waybar
-
-waybar_path=$HOME/.config/waybar
+waybar_path="$HOME/.config/waybar"
 nvim_path="$HOME/.config/nvim/init.lua"
 ghostty_path="$HOME/.config/ghostty/config"
 hyprpaper_path="$HOME/.config/hypr/hyprpaper.conf"
+hyprland_path="$HOME/.config/hypr/hyprland.conf"
 
-
-current_theme=$(basename $1)
 prev_theme=$(grep 'theme =' $nvim_path | sed -n 's/theme = "\(.*\)",/\1/p')
 prev_theme="${prev_theme#"${prev_theme%%[![:space:]]*}"}"
 
-if [ "$current_theme" = "$prev_theme" ]; then
-    echo "Theme is already set to $current_theme"
-    exit 2
-elif [ "$current_theme" = "rose" ]; then
+if [ "$1" = "" ]; then
+    echo "Current theme: $prev_theme" 
+    exit 0
+fi
+
+current_theme=$(basename $1)
+
+if [ "$2" = "" ]; then
+    transparent="NONE"
+else
+    transparent=$(basename $2)
+fi
+
+if [ "$current_theme" = "rose" ]; then
     ghostty_theme_name="rose-pine"
     nvim_theme_name="rose"
+    nvim_theme_bg=$transparent
     waybar_current_theme="rose"
     hyprpaper_img="/home/i0i/.dotfiles/walls/girl.jpg"
+    hyprland_gaps=5
+    hyprland_rounding=10
+elif [ "$current_theme" = "hack" ]; then
+    ghostty_theme_name="Oceanic-Next"
+    nvim_theme_name="hack"
+    nvim_theme_bg=$transparent
+    waybar_current_theme="hack"
+    hyprpaper_img="/home/i0i/.dotfiles/walls/black-waves.jpg"
+    hyprland_gaps=0
+    hyprland_rounding=0
 elif [ "$current_theme" = "osaka" ]; then
     ghostty_theme_name="Solarized Dark Higher Contrast"
     nvim_theme_name="osaka"
+    nvim_theme_bg=$transparent
     waybar_current_theme="osaka"
     hyprpaper_img="/home/i0i/.dotfiles/walls/solarized.jpg"
+    hyprland_gaps=5
+    hyprland_rounding=10
 else
     echo "Unrecognized theme: $current_theme"
     exit 1
 fi
 
-ghostty_string="s/theme = .*/theme = $ghostty_theme_name/"
 nvim_string="s/theme = \".*\"/theme = \"$nvim_theme_name\"/"
+nvim_bg_string="s/bg = \".*\"/bg = \"$nvim_theme_bg\"/"
+ghostty_string="s/theme = .*/theme = $ghostty_theme_name/"
 hyprpaper_string="s|wallpaper = eDP-1, .*|wallpaper = eDP-1, $hyprpaper_img|"
 
+hyprland_rounding_string="s/rounding = .*/rounding = $hyprland_rounding/"
+hyprland_gaps_in_string="s/gaps_in = .*/gaps_in = $hyprland_gaps/"
+hyprland_gaps_out_string="s/gaps_out = .*/gaps_out = $hyprland_gaps/"
+
+waybar_margin_left="s/\"margin-left\": .*,/\"margin-left\": $hyprland_gaps,/"
+waybar_margin_right="s/\"margin-right\": .*,/\"margin-right\": $hyprland_gaps,/"
+
+sed -i "$waybar_margin_left" "$waybar_path/config"
+sed -i "$waybar_margin_right" "$waybar_path/config"
+sed -i "$hyprland_rounding_string" $hyprland_path
+sed -i "$hyprland_gaps_in_string" $hyprland_path
+sed -i "$hyprland_gaps_out_string" $hyprland_path
 sed -i "$nvim_string" $nvim_path
+sed -i "$nvim_bg_string" $nvim_path
 sed -i "$ghostty_string" $ghostty_path
 sed -i "$hyprpaper_string" $hyprpaper_path
 
 hyprctl hyprpaper preload "$hyprpaper_img" > /dev/null
 hyprctl hyprpaper wallpaper "eDP-1, $hyprpaper_img" > /dev/null
 
-mv $waybar_path/style.css $waybar_path/"$prev_theme.css"
-mv $waybar_path/"$waybar_current_theme.css" $waybar_path/style.css
+if [ "$current_theme" != "$prev_theme" ]; then
+    mv $waybar_path/style.css $waybar_path/"$prev_theme.css"
+    sleep .1
+    mv $waybar_path/"$waybar_current_theme.css" $waybar_path/style.css
+fi
 
-pkill -USR1 waybar
+hyprctl reload
+
+if pgrep -x "waybar" > /dev/null; then
+    pkill waybar
+fi
+
+waybar &
+
+WAYBAR_PID=$!
+
+disown $WAYBAR_PID
+
+sleep .5
+clear

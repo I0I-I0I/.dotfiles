@@ -5,7 +5,6 @@
     font-weight: 600;
     font-size: 14px;
     margin: 0;
-    margin-top: 4px;
     padding: 2px 0;
 }
 
@@ -16,6 +15,7 @@
 
 window#waybar {
     background-color: transparent;
+    margin-top: 4px;
 }
 
 window#waybar.hidden {

@@ -3,7 +3,7 @@ font-family-bold = "Maple Mono Bold"
 font-family-italic = "Maple Mono Italic"
 font-family-bold-italic = "Maple Mono Bold Italic"
 
-theme = rose-pine
+theme = Oceanic-Next
 
 cursor-style = block
 cursor-style-blink = true

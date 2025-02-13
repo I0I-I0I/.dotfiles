@@ -4,7 +4,7 @@
     font-family: 'JetBrains Mono Nerd Font';
     font-weight: 600;
     font-size: 14px;
-    margin: 0 5px;
+    margin: 0;
     padding: 2px 0;
 }
 
@@ -24,10 +24,10 @@ window#waybar.hidden {
 #workspaces button {
     padding: 0 5px;
     background-color: #000001;
-    color: white;
     transition-property: color;
     transition-duration: 0.35s;
     border-radius: 50%;
+    color: grey;
 }
 
 #workspaces button.active {
