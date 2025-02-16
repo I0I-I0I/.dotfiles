@@ -35,6 +35,7 @@ alias wifi="nmtui"
 alias bt="bluetui"
 alias music="yamusic-tui"
 alias theme="$HOME/.dotfiles/scripts/set-theme"
+alias btop="sudo btop"
 
 # Theme
 fish_config theme choose "Rose Pine"

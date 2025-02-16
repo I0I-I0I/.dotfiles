@@ -12,6 +12,7 @@ colorscheme retrobox
 set wildignore=*/node_modules/*,*/build/*,*/dist/*,*/env/*
 set path=**
 
+set bg=dark
 set nocompatible
 set termguicolors
 set undofile

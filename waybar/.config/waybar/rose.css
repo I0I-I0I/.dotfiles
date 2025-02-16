@@ -5,17 +5,18 @@
     font-weight: 600;
     font-size: 14px;
     margin: 0;
-    padding: 2px 0;
+    padding: 0;
 }
 
 #window {
     padding: 0 30px;
     color: #a6adc8;
+    margin-top: 5px;
 }
 
 window#waybar {
     background-color: transparent;
-    margin-top: 4px;
+    margin-top: 5px;
 }
 
 window#waybar.hidden {

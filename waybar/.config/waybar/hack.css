@@ -1,21 +1,20 @@
-/* Solarized Osaka */
+/* Hack */
 
 * {
     font-family: 'JetBrains Mono Nerd Font';
     font-weight: 600;
     font-size: 14px;
     margin: 0;
-    padding: 2px 0;
+    padding: 1px 0;
 }
 
 #window {
     padding: 0 30px;
-    color: #29a298;
+    color: white;
 }
 
 window#waybar {
-    background-color: transparent;
-    margin-top: 4px;
+    background-color: #000001;
 }
 
 window#waybar.hidden {
@@ -24,24 +23,24 @@ window#waybar.hidden {
 
 #workspaces button {
     padding: 0 5px;
-    background-color: transparent;
-    color: #664c00;
+    background-color: #000001;
     transition-property: color;
     transition-duration: 0.35s;
     border-radius: 50%;
+    color: grey;
 }
 
 #workspaces button.active {
-    color: #c34a16;
+    color: white;
 }
 
 #workspaces button.urgent {
-    background-color: #c9a0dc;
-    color: #000000;
+    background-color: #000001;
+    color: white;
 }
 
 #mode {
-    background-color: #64727D;
+    background-color: #000001;
     border-bottom: 3px solid #ffffff;
 }
 
@@ -58,8 +57,8 @@ window#waybar.hidden {
 #memory,
 #pulseaudio {
     padding: 0 10px;
-    border: 2px solid #073f4e;
-    background-color: #001419;
+    border: none;
+    background-color: #000001;
     color: white;
 }
 
@@ -73,12 +72,12 @@ window#waybar.hidden {
 }
 
 #battery {
-    color: #B28500;
+    color: white;
     margin-right: 0;
 }
 
 #bluetooth {
-    color: #268bd3;
+    color: white;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right: none;
@@ -86,7 +85,7 @@ window#waybar.hidden {
 }
 
 #network {
-    color: #f34b00;
+    color: white;
     margin-right: 8px;
     border-top-right-radius: 10px;
     border-bottom-right-radius: 10px;
@@ -100,14 +99,14 @@ window#waybar.hidden {
 
 /* Clock instance which displays the date */
 #clock.date {
-    color: #c94c16;
+    color: white;
     margin-right: 8px;
     margin-left: 8px;
 }
 
 /* Pacman Updates */
 #custom-updates {
-    color: #f6c177;
+    color: white;
     font-weight: 600;
 }
 
@@ -116,7 +115,7 @@ window#waybar.hidden {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right: none;
-    color: #c54b16;
+    color: white;
     margin: 0;
     padding: 0;
     padding-left: 15px;
@@ -127,7 +126,7 @@ window#waybar.hidden {
 #memory {
     border-right: none;
     border-left: none;
-    color: #29a298;
+    color: white;
     margin: 0;
     padding: 0;
     padding-left: 8px;
@@ -140,7 +139,7 @@ window#waybar.hidden {
     border-bottom-right-radius: 10px;
     border-left: none;
     margin-right: 8px;
-    color: #9ccfd8;
+    color: white;
     margin: 0;
     padding: 0;
     padding-left: 8px;
@@ -150,6 +149,6 @@ window#waybar.hidden {
 
 /* Time Clock */
 #clock {
-    color: #29a298;
+    color: white;
     margin-right: 0;
 }

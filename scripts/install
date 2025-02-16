@@ -24,17 +24,16 @@ else
     echo "Neither dnf nor pacman is available. Exiting."
     exit 1
 fi
-packages="clang lazygit atac lazysql fish stow bat fd fzf go btop"
+packages="clang lazygit fish stow bat fd fzf go btop"
 
 
 if [ "$package_manager" == "dnf" ]; then
-	sudo dnf update -y && sudo dnf upgrade -y
-	sudo dnf -y install ninja-build cmake gcc make unzip gettext curl glibc-gconv-extra
-	sudo dnf copr enable atim/lazygit -y
-	sudo dnf copr enable joxcat/atac -y
+    sudo dnf update -y && sudo dnf upgrade -y
+    sudo dnf -y install ninja-build cmake gcc make unzip gettext curl glibc-gconv-extra
+    sudo dnf copr enable atim/lazygit -y
 elif [ "$package_manager" == "pacman" ]; then
-	sudo pacman -Syu
-	sudo pacman -S --needed git base-devel cmake unzip ninja curl yay
+    sudo pacman -Syu
+    sudo pacman -S --needed git base-devel cmake unzip ninja curl yay
 fi
 
 install_dnf() {
@@ -43,8 +42,8 @@ install_dnf() {
         echo "$package is installed. Updating..."
         sudo dnf update -y "$package"
     else
-		sudo dnf install -y "$package"
-		echo "$package was installed."
+        sudo dnf install -y "$package"
+        echo "$package was installed."
     fi
 }
 
@@ -56,15 +55,15 @@ install_pacman() {
 
 install_git() {
     local repo=$1
-	local path=$2
+    local path=$2
     if [ -d "$path" ]; then
         echo "Repository exists at $repo. Updating..."
         cd "$path"
         git pull origin main
     else
-		echo "HI Cloning $repo to $path"
-		git clone https://github.com/$repo --depth=1 "$path"
-		echo "$repo was installed."
+        echo "HI Cloning $repo to $path"
+        git clone https://github.com/$repo --depth=1 "$path"
+        echo "$repo was installed."
     fi
 }
 
@@ -83,11 +82,11 @@ cd $HOME/apps/yazi && cargo build --release --locked
 
 cd $HOME/.dotfiles
 for dir in $(find . -maxdepth 1 -mindepth 0 -type d); do
-	if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./scripts" ] || [ "$dir" == "./walls" ]; then
-		continue
-	fi
+    if [ "$dir" == "." ] || [ "$dir" == "./.git" ] || [ "$dir" == "./scripts" ] || [ "$dir" == "./walls" ]; then
+        continue
+    fi
     rm -fr $HOME/.config/$dir
-	stow $dir
+    stow $dir
 done
 
 install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
