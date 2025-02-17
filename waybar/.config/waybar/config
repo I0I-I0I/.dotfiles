@@ -4,6 +4,7 @@
     "margin-left": 0,
     "margin-top": 0,
     "margin-right": 0,
+
     "modules-left": [
         "clock",
         "clock#date"
@@ -12,6 +13,7 @@
         "hyprland/workspaces"
     ],
     "modules-right": [
+        "temperature",
         "cpu",
         "memory",
         "pulseaudio",
@@ -43,6 +45,11 @@
         "format": " {:%A, %b %d}"
     },
 
+    "temperature": {
+        "critical-threshold": 60,
+        "format-critical": " {temperatureC}°C",
+        "format": " {temperatureC}°C"
+    },
     "cpu": {
         "format": " {usage}%",
         "tooltip": false

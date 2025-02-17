@@ -56,6 +56,7 @@ window#waybar.hidden {
 #bluetooth,
 #network,
 #cpu,
+#temperature,
 #memory,
 #pulseaudio {
     padding: 0 10px;
@@ -78,11 +79,22 @@ window#waybar.hidden {
     margin-right: 0;
 }
 
-#bluetooth {
-    color: #3e8fb0;
+
+#pulseaudio {
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     border-right: none;
+    color: #9ccfd8;
+    margin: 0;
+    padding: 0;
+    padding-left: 15px;
+    margin-left: 8px;
+}
+
+#bluetooth {
+    color: #3e8fb0;
+    border-right: none;
+    border-left: none;
     padding-right: 0;
 }
 
@@ -112,41 +124,40 @@ window#waybar.hidden {
     font-weight: 600;
 }
 
-/* CPU Usage */
-#cpu {
-    border-top-left-radius: 10px;
-    border-bottom-left-radius: 10px;
-    border-right: none;
+/* Temperature */
+#temperature {
     color: #ea9a97;
     margin: 0;
     padding: 0;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-right: none;
     padding-left: 15px;
     padding-right: 8px;
 }
 
-/* Memory Usage */
-#memory {
-    border-right: none;
-    border-left: none;
-    color: #3e8fb0;
+/* CPU Usage */
+#cpu {
+    color: #ea9a97;
     margin: 0;
     padding: 0;
     padding-left: 8px;
     padding-right: 8px;
+    border-right: none;
+    border-left: none;
 }
 
-/* Pulseaudio Widget */
-#pulseaudio {
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
-    border-left: none;
-    margin-right: 8px;
-    color: #9ccfd8;
+/* Memory Usage */
+#memory {
+    color: #3e8fb0;
     margin: 0;
     padding: 0;
     padding-left: 8px;
     padding-right: 15px;
-    margin-right: 8px;
+
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-left: none;
 }
 
 /* Time Clock */
