@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
 window_name="Yazi"
-root_path=$(basename $1)
+
+if [ "$1" != "" ]; then
+    root_path=$(basename $1)
+else
+    root_path=""
+fi
 
 if [ "$root_path" = "i0i" ]; then
     root_path="/home/i0i/"
