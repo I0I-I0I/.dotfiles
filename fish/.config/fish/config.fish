@@ -21,10 +21,9 @@ alias drop="dropbox-cli"
 # Tmux
 set -gx PATH $PATH ~/.tmux/scripts
 
-alias tmn="tmux new -s"
-alias tma="tmux attach"
-alias tmat="tmux attach -t"
-alias tmls="tmux ls"
+alias tm="tmux -L default"
+alias tms="tmux -L second"
+alias tmls="ls /tmp/tmux-$(id -u)"
 alias tmk="tmux kill-session"
 alias tmks="tmux kill-server"
 
@@ -39,4 +38,3 @@ alias btop="sudo btop"
 
 # Theme
 fish_config theme choose "Rose Pine"
-# fish_config theme choose "Solarized Dark"
