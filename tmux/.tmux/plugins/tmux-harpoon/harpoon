@@ -80,7 +80,7 @@ _getBookmark() {
     server_name="$(get_server_name)"
 
 	base_info='#{session_name}=#{session_path}'
-	pane_info=':#{window_index}.#{pane_index}'
+	pane_info=':0.0'
 	tmux -L $server_name display -p "$base_info$([ "$extended" = true ] && echo "$pane_info")"
 }
 
