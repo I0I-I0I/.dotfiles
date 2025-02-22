@@ -2,17 +2,19 @@ call plug#begin()
 
 Plug 'mhartington/oceanic-next'
 
-Plug 'Donaldttt/fuzzyy'
+Plug 'AnotherProksY/ez-window'
+
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'augmentcode/augment.vim'
 
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-completion'
 
 Plug 'tpope/vim-fugitive'
+Plug 'mbbill/undotree'
 
-Plug 'augmentcode/augment.vim'
-Plug 'AnotherProksY/ez-window'
+Plug 'nicwest/vim-http'
 
 call plug#end()
 
@@ -20,13 +22,17 @@ call plug#end()
 
 colorscheme OceanicNext
 
-set wildignore=*/node_modules/*,*/build/*,*/dist/*,*/env/*,/usr/local/include/*
+set wildignore=*/node_modules/*,*/build/*,*/dist/*,*/env/*,/usr/local/include/*,/usr/include/*
 set path+=**
 
 let g:netrw_banner=0
 let g:netrw_list_hide="node_modules/,^\\.\\=/\\=$,^\\.\\.\\=/\\=$"
-set termguicolors
+set lazyredraw
 set undofile
+set grepprg="rg --vimgrep"
+set undolevels=10000000
+set undoreload=10000000
+set termguicolors
 set noswapfile
 set smartindent expandtab shiftwidth=4 tabstop=4
 set completeopt=menu,menuone,fuzzy,noinsert,popup
@@ -42,11 +48,8 @@ set hidden
 syntax on
 filetype plugin indent on
 
-let g:vem_tabline_show = 2
-
 let g:augment_workspace_folders = [
-            \ "~/code/personal/real-time-chat/server/",
-            \ "~/code/personal/real-time-chat/frontend/",
+            \ "~/code/personal/real-time-chat/",
             \ "~/code/personal/track-mouse/"
             \]
 
@@ -58,9 +61,11 @@ execute 'highlight SignColumn guibg=' . color
 execute 'highlight EndOfBuffer guibg=' . color
 
 autocmd BufWritePre * %s/\s\+$//e
-autocmd FileType sql setlocal omnifunc=vim_dadbod_completion#omni
+autocmd FileType fugitive nmap q <cmd>clo<cr>
 
 " Mappings
+
+let g:ez_terminal_key = '<C-q>'
 
 let g:mapleader=" "
 
@@ -72,31 +77,29 @@ nnoremap <C-e> 3<C-e>
 vnoremap <silent> K :m '<-2<cr>gv=gv
 vnoremap <silent> J :m '>+1<cr>gv=gv
 nnoremap <C-w>C <cmd>tabc<cr>
-nnoremap <C-p> <cmd>bn<cr>
-nnoremap <C-n> <cmd>bp<cr>
+nnoremap <Tab> <cmd>tabn<cr>
+nnoremap <S-Tab> <cmd>tabp<cr>
 nnoremap <C-x> <cmd>bd<cr>
-nnoremap n <cmd>cnext<cr>zz
-nnoremap p <cmd>cprevious<cr>zz
-xnoremap P "0P
+nnoremap <leader><C-x> <cmd>bd!<cr>
+nnoremap <leader>q <cmd>copen<cr>
+nnoremap <C-n> <cmd>cnext<cr>zz
+nnoremap <C-p> <cmd>cprevious<cr>zz
 xnoremap "+y y:call system("wl-copy", @")<cr>
 nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
 
 nnoremap <C-@> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
-nnoremap <leader><C-t> <cmd>!tmux neww tmux-sessionizer<cr>
-nnoremap <leader>t <cmd>execute '!tmux neww tmux-run ' . input("Run: ")<cr>
-
-nnoremap <C-f> <cmd>FuzzyFiles<cr>
-nnoremap <C-b> <cmd>FuzzyBuffers<cr>
-nnoremap  <cmd>FuzzyBuffers<cr>
+nnoremap <C-t> <cmd>!tmux neww tmux-sessionizer<cr>
 
 nnoremap <leader>d :tabnew<cr>:DBUIToggle<cr>
+nnoremap <leader>g :Git<cr>
+nnoremap <leader>u :UndotreeToggle<cr><cmd>UndotreeFocus<cr>
+nnoremap <leader>r :Http<cr>
 
 nnoremap <leader>ac <cmd>Augment chat<cr>
+vnoremap <leader>ac :Augment chat<cr>
 nnoremap <leader>at <cmd>Augment chat-toggle<cr>
 nnoremap <leader>an <cmd>Augment chat-new<cr>
 nnoremap <leader>as <cmd>Augment status<cr>
-
-nnoremap <leader>g :Git<cr>
 
 cnoremap <C-b> <Left>
 cnoremap b <C-Left>
@@ -108,6 +111,12 @@ cnoremap <C-d> <Del>
 cnoremap d <C-Del>
 
 " Coc
+
+nmap <silent> <leader>/ <cmd>execute 'CocList grep'<cr>
+nmap <silent> <leader>f <cmd>execute 'CocList files'<cr>
+nmap <silent> <C-w>t <cmd>tabnew<cr><cmd>execute 'CocList files'<cr>
+nmap <silent> grd <cmd>execute 'CocList diagnostics'<cr>
+nmap <silent> <leader>s <cmd>execute 'CocCommand clangd.switchSourceHeader'<cr>
 
 inoremap <silent><expr> <C-x><C-o> coc#refresh()
 nmap <silent> <C-]> <Plug>(coc-definition)
