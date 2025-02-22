@@ -1,0 +1,40 @@
+{
+    "configurations": {
+        "current file": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [ "c", "cpp" ],
+            "default": true,
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceFolder}/build/${fileBasenameNoExtension}",
+                "stopOnEntry": true,
+                "cwd": "${workspaceFolder}",
+                "args": []
+            }
+        },
+        "main": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [ "c", "cpp" ],
+            "default": true,
+            "configuration": {
+                "request": "launch",
+                "program": "${workspaceFolder}/build/main",
+                "stopOnEntry": true,
+                "cwd": "${workspaceFolder}",
+                "args": []
+            }
+        },
+        "server": {
+            "adapter": "vscode-cpptools",
+            "filetypes": [ "c", "cpp" ],
+            "default": true,
+            "configuration": {
+                "request": "launch",
+                "program": "/home/i0i/code/personal/real-time-chat/server/build/server",
+                "stopOnEntry": true,
+                "cwd": "${workspaceFolder}",
+                "args": []
+            }
+        }
+    }
+}

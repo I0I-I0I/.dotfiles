@@ -1,20 +1,24 @@
 call plug#begin()
-
+" Theme
 Plug 'mhartington/oceanic-next'
 
+" UI Enhancements
 Plug 'AnotherProksY/ez-window'
+Plug 'mbbill/undotree'
 
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" IDE Features
 Plug 'augmentcode/augment.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'puremourning/vimspector'
 
+" Database
 Plug 'kristijanhusak/vim-dadbod-ui'
 Plug 'tpope/vim-dadbod'
 Plug 'kristijanhusak/vim-dadbod-completion'
 
-Plug 'tpope/vim-fugitive'
-Plug 'mbbill/undotree'
-
+" Development Tools
 Plug 'nicwest/vim-http'
+Plug 'tpope/vim-fugitive'
 
 call plug#end()
 
@@ -27,7 +31,8 @@ set path+=**
 
 let g:netrw_banner=0
 let g:netrw_list_hide="node_modules/,^\\.\\=/\\=$,^\\.\\.\\=/\\=$"
-set lazyredraw
+set lazyredraw ttyfast
+set synmaxcol=200
 set undofile
 set grepprg="rg --vimgrep"
 set undolevels=10000000
@@ -37,7 +42,7 @@ set noswapfile
 set smartindent expandtab shiftwidth=4 tabstop=4
 set completeopt=menu,menuone,fuzzy,noinsert,popup
 set linebreak
-set smartcase incsearch
+set smartcase incsearch ignorecase hlsearch
 set mouse=a
 set rnu nu
 set updatetime=300
@@ -60,8 +65,17 @@ execute 'highlight StatusLine guibg=' . color
 execute 'highlight SignColumn guibg=' . color
 execute 'highlight EndOfBuffer guibg=' . color
 
-autocmd BufWritePre * %s/\s\+$//e
-autocmd FileType fugitive nmap q <cmd>clo<cr>
+augroup vimrc_autocmds
+    autocmd!
+    autocmd BufReadPost *
+        \ if line("'\"") > 0 && line("'\"") <= line("$") |
+        \   exe "normal! g`\"" |
+        \ endif
+    autocmd FileType fugitive nmap q <cmd>clo<cr>
+    autocmd BufWritePre * call mkdir(expand("<afile>:p:h"), "p")
+    autocmd BufWritePre * %s/\s\+$//e
+    autocmd FocusGained,BufEnter * checktime
+augroup END
 
 " Mappings
 
@@ -69,37 +83,32 @@ let g:ez_terminal_key = '<C-q>'
 
 let g:mapleader=" "
 
-nnoremap - <cmd>:Ex<cr>
+cmap w!! w !sudo tee > /dev/null %
+
 nnoremap n nzzzv
 nnoremap N Nzzzv
+nnoremap * *zzzv
+nnoremap # #zzzv
 nnoremap <C-y> 3<C-y>
 nnoremap <C-e> 3<C-e>
+nnoremap <silent> <leader><leader> :nohlsearch<CR>
+nnoremap <leader> - <cmd>:Ex<cr>
 vnoremap <silent> K :m '<-2<cr>gv=gv
 vnoremap <silent> J :m '>+1<cr>gv=gv
-nnoremap <C-w>C <cmd>tabc<cr>
-nnoremap <Tab> <cmd>tabn<cr>
-nnoremap <S-Tab> <cmd>tabp<cr>
-nnoremap <C-x> <cmd>bd<cr>
-nnoremap <leader><C-x> <cmd>bd!<cr>
-nnoremap <leader>q <cmd>copen<cr>
-nnoremap <C-n> <cmd>cnext<cr>zz
-nnoremap <C-p> <cmd>cprevious<cr>zz
+nnoremap <silent> <C-w>C <cmd>tabc<cr>
+nnoremap <silent> <Tab> <cmd>tabn<cr>
+nnoremap <silent> <S-Tab> <cmd>tabp<cr>
+nnoremap <silent> <C-z> <cmd>bd<cr>
+nnoremap <silent> <leader><C-z> <cmd>bd!<cr>
+nnoremap <silent> <leader>q <cmd>copen<cr>
+nnoremap <silent> <C-n> <cmd>cnext<cr>zz
+nnoremap <silent> <C-p> <cmd>cprevious<cr>zz
+
 xnoremap "+y y:call system("wl-copy", @")<cr>
 nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
-
-nnoremap <C-@> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
-nnoremap <C-t> <cmd>!tmux neww tmux-sessionizer<cr>
-
-nnoremap <leader>d :tabnew<cr>:DBUIToggle<cr>
-nnoremap <leader>g :Git<cr>
-nnoremap <leader>u :UndotreeToggle<cr><cmd>UndotreeFocus<cr>
-nnoremap <leader>r :Http<cr>
-
-nnoremap <leader>ac <cmd>Augment chat<cr>
-vnoremap <leader>ac :Augment chat<cr>
-nnoremap <leader>at <cmd>Augment chat-toggle<cr>
-nnoremap <leader>an <cmd>Augment chat-new<cr>
-nnoremap <leader>as <cmd>Augment status<cr>
+vnoremap y myy`y
+vnoremap Y myY`y
+nnoremap <leader>p p`[v`]=
 
 cnoremap <C-b> <Left>
 cnoremap b <C-Left>
@@ -110,19 +119,45 @@ cnoremap <C-e> <End>
 cnoremap <C-d> <Del>
 cnoremap d <C-Del>
 
+nnoremap <C-@> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
+nnoremap <C-t> <cmd>!tmux neww tmux-sessionizer<cr>
+
+nnoremap <C-s>d :tabnew<cr>:DBUIToggle<cr>
+nnoremap <C-s>g :Git<cr>
+nnoremap <C-s><C-g>l :GlLog<cr>
+nnoremap <C-s><C-g>c :G checkout hash
+nnoremap <C-s>u :UndotreeToggle<cr><cmd>UndotreeFocus<cr>
+vnoremap <C-s>r :Http<cr>
+
+nnoremap <C-a>c <cmd>Augment chat<cr>
+vnoremap <C-a>c :Augment chat<cr>
+nnoremap <C-a>t <cmd>Augment chat-toggle<cr>
+nnoremap <C-a>n <cmd>Augment chat-new<cr>
+nnoremap <C-a>s <cmd>Augment status<cr>
+
+nnoremap <leader>r <cmd>VimspectorReset<cr>
+nnoremap <leader>c <cmd>call vimspector#Continue()<cr>
+nnoremap <leader>b <cmd>call vimspector#ToggleBreakpoint()<cr>
+nnoremap <leader>n <cmd>call vimspector#StepOver()<cr>
+nnoremap <leader>s <cmd>call vimspector#StepInto()<cr>
+nnoremap <leader>o <cmd>call vimspector#StepOut()<cr>
+
+nnoremap <silent> <C-f>/ <cmd>execute 'CocList grep'<cr>
+nnoremap <silent> <C-f>f <cmd>execute 'CocList files'<cr>
+nnoremap <silent> <C-f>t <cmd>tabnew<cr><cmd>execute 'CocList files'<cr>
+
+nmap <silent> <C-s><C-s>s <cmd>execute 'CocCommand session.save'<cr>
+nmap <silent> <C-s><C-s>l <cmd>execute 'CocCommand session.load'<cr>
+
 " Coc
 
-nmap <silent> <leader>/ <cmd>execute 'CocList grep'<cr>
-nmap <silent> <leader>f <cmd>execute 'CocList files'<cr>
-nmap <silent> <C-w>t <cmd>tabnew<cr><cmd>execute 'CocList files'<cr>
-nmap <silent> grd <cmd>execute 'CocList diagnostics'<cr>
-nmap <silent> <leader>s <cmd>execute 'CocCommand clangd.switchSourceHeader'<cr>
-
 inoremap <silent><expr> <C-x><C-o> coc#refresh()
+nmap <silent> s <cmd>execute 'CocCommand clangd.switchSourceHeader'<cr>
 nmap <silent> <C-]> <Plug>(coc-definition)
 nmap <silent> grt <Plug>(coc-type-definition)
 nmap <silent> gri <Plug>(coc-implementation)
 nmap <silent> grr <Plug>(coc-references)
+nmap <silent> grd <cmd>execute 'CocList diagnostics'<cr>
 nmap grn <Plug>(coc-rename)
 nmap gra <Plug>(coc-codeaction-cursor)
 nmap grA <Plug>(coc-codeaction-source)
@@ -133,7 +168,7 @@ nnoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? coc#float#scroll(
 nnoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-u>"
 inoremap <silent><nowait><expr> <C-d> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
 inoremap <silent><nowait><expr> <C-u> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-nnoremap <silent><nowait> <leader>c  :<C-u>CocList<cr>
+nnoremap <silent><nowait> <leader>C  :<C-u>CocList<cr>
 
 nnoremap <silent> K :call ShowDocumentation()<CR>
 function! ShowDocumentation()
