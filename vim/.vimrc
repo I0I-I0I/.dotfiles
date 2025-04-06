@@ -127,6 +127,17 @@ cnoremap d <C-Del>
 nnoremap <silent> <C-@> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
 nnoremap <silent> <C-t> <cmd>!tmux neww tmux-sessionizer<cr>
 
+function! FindWord()
+    let input = input('Enter word: ')
+    if input == ''
+        return
+    endif
+    execute "copen | wincmd p"
+    execute "AsyncRun rg --vimgrep --no-heading --smart-case --glob '!libs' '" . input . "'"
+endfunction
+
+nnoremap  :call FindWord()<cr>
+
 " Plugins
 
 let g:ez_terminal_key = '<C-q>'
@@ -167,21 +178,7 @@ nnoremap <silent> Rd :copen \| wincmd p<cr><cmd>AsyncRun make debug<cr>
 nnoremap <silent> Rs :cclose<cr><cmd>AsyncStop<cr>
 nnoremap <silent> Rr :copen \| wincmd p<cr><cmd>AsyncReset<cr>
 
-function! FindWord()
-    let input = input('Enter word: ')
-    if input == ''
-        return
-    endif
-    execute "copen | wincmd p"
-    execute "AsyncRun rg --vimgrep --no-heading --smart-case --glob '!libs' '" . input . "'"
-endfunction
-
-nnoremap  :call FindWord()<cr>
-
-" Multi Cursor
-
 let g:multi_cursor_use_default_mapping=0
-
 let g:multi_cursor_start_word_key      = 'n'
 let g:multi_cursor_select_all_word_key = 'a'
 let g:multi_cursor_start_key           = 'gn'

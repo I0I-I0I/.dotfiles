@@ -1,7 +1,7 @@
 #!/bin/bash
 
 waybar_path="$HOME/.config/waybar"
-nvim_path="$HOME/.config/nvim/init.lua"
+nvim_path="$HOME/.config/nvim/lua/one-window-army/init.lua"
 ghostty_path="$HOME/.config/ghostty/config"
 hyprpaper_path="$HOME/.config/hypr/hyprpaper.conf"
 hyprland_path="$HOME/.config/hypr/hyprland.conf"
@@ -10,7 +10,7 @@ prev_theme=$(grep 'theme =' $nvim_path | sed -n 's/theme = "\(.*\)",/\1/p')
 prev_theme="${prev_theme#"${prev_theme%%[![:space:]]*}"}"
 
 if [ "$1" = "" ]; then
-    echo "Current theme: $prev_theme" 
+    echo "Current theme: $prev_theme"
     exit 0
 fi
 
@@ -34,7 +34,7 @@ if [ "$current_theme" = "rose" ]; then
     hyprpaper_img="/home/i0i/.dotfiles/walls/girl.jpg"
     hyprland_gaps=0
     hyprland_rounding=0
-elif [ "$current_theme" = "hack_dark" ]; then
+elif [ "$current_theme" = "hack-dark" ]; then
     ghostty_theme_name="zenbones_dark"
     nvim_theme_name="hack_dark"
     nvim_theme_bg="#000001"
@@ -45,7 +45,7 @@ elif [ "$current_theme" = "hack_dark" ]; then
 elif [ "$current_theme" = "hack" ]; then
     ghostty_theme_name="zenbones_dark"
     nvim_theme_name="hack"
-    nvim_theme_bg=$transparent
+    nvim_theme_bg="#0e0a00"
     waybar_current_theme="hack"
     hyprpaper_img="/home/i0i/.dotfiles/walls/black-waves.jpg"
     hyprland_gaps=0

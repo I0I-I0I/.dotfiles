@@ -9,13 +9,14 @@ set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx PATH $PATH ~/go/bin
 
-set -gx EDITOR /usr/local/bin/nvim
+set -gx EDITOR /sbin/vim
 
 # Aliases
 alias py="python3"
 alias mkdir="mkdir -p"
 alias vi="/sbin/vim"
 alias vim="nvim"
+alias tim="CONF=t nvim"
 alias drop="dropbox-cli"
 
 # Tmux
