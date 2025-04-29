@@ -1,15 +1,12 @@
 font-family = "Maple Mono"
-font-family-bold = "Maple Mono Bold"
-font-family-italic = "Maple Mono Italic"
-font-family-bold-italic = "Maple Mono Bold Italic"
 
-theme = zenbones_dark
+theme = rose-pine
 
 cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor
 
-background-opacity = 0.8
+background-opacity = 0.85
 background = "#000000"
 
 window-padding-balance = true

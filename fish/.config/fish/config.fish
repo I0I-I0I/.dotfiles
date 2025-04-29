@@ -16,8 +16,11 @@ alias py="python3"
 alias mkdir="mkdir -p"
 alias vi="/sbin/vim"
 alias vim="nvim"
-alias tim="CONF=t nvim"
+alias tim="CONF=code nvim"
 alias drop="dropbox-cli"
+alias cloc="cloc --exclude_dir=node_modules,.git,libs,package-lock.json,pnpm-lock.yaml,tags,tsconfig.node.json,tsconfig.tsbuildinfo,compile_commands.json,build"
+alias la="ls -Alhv --group-directories-first --color=auto"
+alias ll="ls -vA --group-directories-first --color=auto"
 
 # Tmux
 set -gx PATH $PATH ~/.tmux/scripts
@@ -39,3 +42,11 @@ alias btop="sudo btop"
 
 # Theme
 fish_config theme choose "Rose Pine"
+~/.local/bin/mise activate fish | source
+
+# pnpm
+set -gx PNPM_HOME "/home/i0i/.local/share/pnpm"
+if not string match -q -- $PNPM_HOME $PATH
+  set -gx PATH "$PNPM_HOME" $PATH
+end
+# pnpm end

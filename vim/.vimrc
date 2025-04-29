@@ -2,25 +2,10 @@ call plug#begin()
 " Theme
 Plug 'mhartington/oceanic-next'
 
-" UI Enhancements
-Plug 'AnotherProksY/ez-window'
-Plug 'mbbill/undotree'
-
-" IDE Features
 Plug 'augmentcode/augment.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'puremourning/vimspector'
-Plug 'terryma/vim-multiple-cursors'
-
-" Database
-Plug 'kristijanhusak/vim-dadbod-ui'
-Plug 'tpope/vim-dadbod'
-Plug 'kristijanhusak/vim-dadbod-completion'
-
-" Development Tools
-Plug 'nicwest/vim-http'
-Plug 'tpope/vim-fugitive'
 Plug 'skywind3000/asyncrun.vim'
+Plug 'mbbill/undotree'
 
 call plug#end()
 
@@ -58,11 +43,6 @@ set hidden
 
 syntax on
 filetype plugin indent on
-
-let g:augment_workspace_folders = [
-            \ "~/code/personal/real-time-chat/",
-            \ "~/code/personal/track-mouse/"
-            \]
 
 let color = '#000001'
 execute 'highlight Normal guibg=' . color
@@ -115,55 +95,10 @@ nnoremap <silent> <C-p> <cmd>cprevious<cr>zz
 xnoremap "+y y:call system("wl-copy", @")<cr>
 nnoremap "+p :let @"=substitute(system("wl-paste --no-newline"), '<C-v><C-m>', '', 'g')<cr>p
 
-cnoremap <C-b> <Left>
-cnoremap b <C-Left>
-cnoremap <C-f> <Right>
-cnoremap f <C-Right>
-cnoremap <C-a> <Home>
-cnoremap <C-e> <End>
-cnoremap <C-d> <Del>
-cnoremap d <C-Del>
-
 nnoremap <silent> <C-@> <cmd>execute '!tmux neww tmux-yazi ' . expand("%:p:h")<cr>
 nnoremap <silent> <C-t> <cmd>!tmux neww tmux-sessionizer<cr>
 
-function! FindWord()
-    let input = input('Enter word: ')
-    if input == ''
-        return
-    endif
-    execute "copen | wincmd p"
-    execute "AsyncRun rg --vimgrep --no-heading --smart-case --glob '!libs' '" . input . "'"
-endfunction
-
-nnoremap  :call FindWord()<cr>
-
 " Plugins
-
-let g:ez_terminal_key = '<C-q>'
-let g:resize_start_key = '<C-w><C-r>'
-
-nnoremap <silent> <C-g>g :Git<cr>
-nnoremap <silent> <C-g><C-g>l :GlLog<cr>
-nnoremap <silent> <C-g>d :tabnew<cr>:DBUIToggle<cr>
-nnoremap <silent> <C-g>u :UndotreeToggle<cr><cmd>UndotreeFocus<cr>
-nnoremap <silent> <C-g><C-s>s <cmd>CocCommand session.save<cr>
-nnoremap <silent> <C-g><C-s>l <cmd>CocCommand session.load<cr>
-vnoremap <C-g><C-a>c :Augment chat<cr>
-nnoremap <C-g><C-a>c <cmd>Augment chat<cr>
-nnoremap <silent> <C-g><C-a>t <cmd>Augment chat-toggle<cr>
-nnoremap <silent> <C-g><C-a>n <cmd>Augment chat-new<cr>
-nnoremap <silent> <C-g><C-a>s <cmd>Augment status<cr>
-
-autocmd FileType http vnoremap <silent> R :Http<cr>
-autocmd FileType http vnoremap <silent> F :!jq<cr>
-
-nnoremap <silent> <leader>d <cmd>VimspectorReset<cr>
-nnoremap <silent> <leader>c <cmd>call vimspector#Continue()<cr>
-nnoremap <silent> <leader>b <cmd>call vimspector#ToggleBreakpoint()<cr>
-nnoremap <silent> <leader>n <cmd>call vimspector#StepOver()<cr>
-nnoremap <silent> <leader>s <cmd>call vimspector#StepInto()<cr>
-nnoremap <silent> <leader>o <cmd>call vimspector#StepOut()<cr>
 
 nnoremap <silent> <C-f><C-f> <cmd>CocList files<cr>
 nnoremap <silent> <C-f> <cmd>CocList grep<cr>
@@ -171,24 +106,6 @@ nnoremap <silent> <C-f><C-k> <cmd>CocList maps<cr>
 nnoremap <silent> <C-f><C-h> <cmd>CocList helptags<cr>
 nnoremap <silent> <C-f><C-r> <cmd>CocList registers<cr>
 nnoremap <silent> <C-f><C-t> <cmd>tabnew<cr><cmd>CocList files<cr>
-
-nnoremap <silent> Rm :copen \| wincmd p<cr><cmd>AsyncRun make<cr>
-nnoremap RM :copen \| wincmd p<cr>:AsyncRun make
-nnoremap <silent> Rd :copen \| wincmd p<cr><cmd>AsyncRun make debug<cr>
-nnoremap <silent> Rs :cclose<cr><cmd>AsyncStop<cr>
-nnoremap <silent> Rr :copen \| wincmd p<cr><cmd>AsyncReset<cr>
-
-let g:multi_cursor_use_default_mapping=0
-let g:multi_cursor_start_word_key      = 'n'
-let g:multi_cursor_select_all_word_key = 'a'
-let g:multi_cursor_start_key           = 'gn'
-let g:multi_cursor_select_all_key      = 'ga'
-let g:multi_cursor_next_key            = 'n'
-let g:multi_cursor_prev_key            = 'p'
-let g:multi_cursor_skip_key            = 'x'
-let g:multi_cursor_quit_key            = 'z'
-vnoremap <silent> I :MultipleCursorsFind ^<cr>
-vnoremap <silent> A :MultipleCursorsFind $<cr>
 
 " Coc
 
