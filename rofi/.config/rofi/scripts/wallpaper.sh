@@ -30,13 +30,14 @@ wall_selection=$(find "${cacheDir}"  -maxdepth 1  -type f \( -iname "*.jpg" -o -
 [[ -n "$wall_selection" ]] || exit 1
 
 hyprpaper_img=${wall_dir}/${wall_selection}
+echo hyprpaper_img
 hyprctl hyprpaper preload $hyprpaper_img
 hyprctl hyprpaper wallpaper "eDP-1,$hyprpaper_img"
 
 hyprpaper_path="$HOME/.config/hypr/hyprpaper.conf"
 
 hyprpaper_string_preload="s|preload = .*|preload = $hyprpaper_img|"
-hyprpaper_string="s|wallpaper = eDP-1, .*|wallpaper = eDP-1, $hyprpaper_img|"
+hyprpaper_string="s|wallpaper = eDP-1,.*|wallpaper = eDP-1,$hyprpaper_img|"
 sed -i "$hyprpaper_string" $hyprpaper_path
 sed -i "$hyprpaper_string_preload" $hyprpaper_path
 

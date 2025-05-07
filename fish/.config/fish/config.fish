@@ -9,18 +9,17 @@ set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx PATH $PATH ~/go/bin
 
-set -gx EDITOR /sbin/vim
+set -gx EDITOR /usr/local/bin/nvim
 
 # Aliases
-alias py="python3"
-alias mkdir="mkdir -p"
+alias py="uv run python"
 alias vi="/sbin/vim"
 alias vim="nvim"
 alias tim="CONF=code nvim"
 alias drop="dropbox-cli"
-alias cloc="cloc --exclude_dir=node_modules,.git,libs,package-lock.json,pnpm-lock.yaml,tags,tsconfig.node.json,tsconfig.tsbuildinfo,compile_commands.json,build"
 alias la="ls -Alhv --group-directories-first --color=auto"
 alias ll="ls -vA --group-directories-first --color=auto"
+alias poe="uv run poe"
 
 # Tmux
 set -gx PATH $PATH ~/.tmux/scripts
@@ -36,7 +35,6 @@ bind -k nul "tmux-yazi"
 
 alias wifi="nmtui"
 alias bt="bluetui"
-alias music="yamusic-tui"
 alias theme="$HOME/.dotfiles/scripts/set-theme"
 alias btop="sudo btop"
 
