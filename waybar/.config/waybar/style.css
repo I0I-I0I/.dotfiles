@@ -1,11 +1,11 @@
-/* Hack */
+/* Black */
 
 * {
     font-family: 'JetBrains Mono Nerd Font';
     font-weight: 600;
-    font-size: 14px;
+    font-size: 12px;
     margin: 0;
-    padding: 1px 0;
+    padding: 0px 0;
 }
 
 #window {
@@ -54,6 +54,7 @@ window#waybar.hidden {
 #bluetooth,
 #network,
 #cpu,
+#backlight,
 #temperature,
 #memory,
 #pulseaudio {
@@ -126,12 +127,17 @@ window#waybar.hidden {
     padding-right: 8px;
 }
 
+#backlight {
+    padding: 0px;
+    margin: 0px;
+    margin-right: 0px;
+}
+
 /* Pulseaudio Widget */
 #pulseaudio {
     color: white;
-    padding-left: 15px;
-    padding-right: 8px;
-    margin-left: 8px;
+    padding-right: 12px;
+    margin-left: 0px;
 }
 
 /* Time Clock */

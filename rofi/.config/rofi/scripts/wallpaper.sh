@@ -35,10 +35,14 @@ hyprctl hyprpaper preload $hyprpaper_img
 hyprctl hyprpaper wallpaper "eDP-1,$hyprpaper_img"
 
 hyprpaper_path="$HOME/.config/hypr/hyprpaper.conf"
+hyprlock_path="$HOME/.config/hypr/hyprlock.conf"
 
 hyprpaper_string_preload="s|preload = .*|preload = $hyprpaper_img|"
 hyprpaper_string="s|wallpaper = eDP-1,.*|wallpaper = eDP-1,$hyprpaper_img|"
+hyprlock_string="s|path = .*|path = $hyprpaper_img|"
 sed -i "$hyprpaper_string" $hyprpaper_path
 sed -i "$hyprpaper_string_preload" $hyprpaper_path
+sed -i "$hyprlock_string" $hyprlock_path
+
 
 exit 0

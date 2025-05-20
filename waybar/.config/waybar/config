@@ -1,9 +1,15 @@
 {
-    "position": "top",
-    "spacing": 0, 
+    "layer": "top",
+    "position": "top",  // or "bottom", "left", "right"
+    "mode": "hide",
+    "passthrough": false,  // Set to true if you want clicks to pass through when hidden
+    "exclusive": false,
+    "modifier-reset": "press",  // Reset visibility on modifier key press (e.g., Super key)
+    "spacing": 0,
     "margin-left": 0,
     "margin-top": 0,
     "margin-right": 0,
+    "sort-by-number": true,
 
     "modules-left": [
         "clock",
@@ -13,30 +19,54 @@
         "hyprland/workspaces"
     ],
     "modules-right": [
-        "temperature",
-        "cpu",
-        "memory",
+        "backlight",
         "pulseaudio",
         "bluetooth",
         "network",
         "battery"
     ],
 
+    "bluetooth": {
+        "on-click": "ghostty -e bluetui",
+    },
+
+    "pulseaudio": {
+        "format": "{icon} {volume}%",
+        "format-icons": {
+            "headphone": "",
+            "default": ["","",""]
+        },
+        "on-click": "pavucontrol",
+        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
+        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%"
+    },
+
+    "backlight": {
+        "format": "{icon} {percent}%",
+        "format-icons": ["", ""],
+        "on-click": "light 20",
+        "on-click-right": "light 80",
+        "on-scroll-up": "light +1",
+        "on-scroll-down": "light 1-"
+    },
+
     "network": {
         "interface": "wlan0",
         "format": "{ifname}",
         "format-wifi": "<span>  </span>{essid}",
         "format-ethernet": "{ipaddr}/{cidr} ",
-        "format-disconnected": "<span>󰖪 </span>No Network",
+        "format-disconnected": "<span></span> Offline",
+        "on-click": "ghostty -e nmtui",
         "tooltip": false,
     },
+
     "battery": {
         "format": "<span>{icon}</span> {capacity}%",
         "format-icons": ["", "", "", "", "", "", "", "", "", ""],
         "format-charging": "<span></span> {capacity}%",
         "tooltip": false,
     },
-    
+
     "clock": {
         "format": "󰥔 {:%I:%M%p}",
         "height": 26
@@ -44,31 +74,6 @@
     "clock#date": {
         "format": " {:%A, %b %d}"
     },
-
-    "temperature": {
-        "critical-threshold": 60,
-        "format-critical": " {temperatureC}°C",
-        "format": " {temperatureC}°C"
-    },
-    "cpu": {
-        "format": " {usage}%",
-        "tooltip": false
-    },
-    "memory": {
-        "format": " {}%"
-    },
-    "pulseaudio": {
-        "format": "󰓃 {volume}%",
-        "format-icons": {
-            "headphone": "",
-            "default": ["", ""]
-        },
-        "scroll-step": 1,
-        "on-click": "pavucontrol",
-        "ignored-sinks": ["Easy Effects Sink"]
-    },
-
-    "sort-by-number": true
 }
 }
 
