@@ -11,12 +11,9 @@ background = "#000000"
 
 window-padding-balance = true
 window-padding-color = extend-always
-
 window-decoration = false
 
 confirm-close-surface = false
 
-keybind = global:alt+1=unbind
-keybind = global:alt+2=unbind
-keybind = global:alt+3=unbind
-keybind = global:alt+4=unbind
+gtk-titlebar = false
+gtk-tabs-location = hidden
