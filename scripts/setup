@@ -1,6 +1,6 @@
 cd $HOME/.dotfiles
 for dir in $(find . -maxdepth 1 -mindepth 1 -type d | sed 's|^\./||'); do
-    if [ "$dir" == ".git" ] || [ "$dir" == "scripts" ] || [ "$dir" == "walls" ]; then
+    if [ "$dir" == "configs" ] || [ "$dir" == ".git" ] || [ "$dir" == "scripts" ] || [ "$dir" == "walls" ]; then
         continue
     fi
     rm -fr "$HOME/.config/$dir"

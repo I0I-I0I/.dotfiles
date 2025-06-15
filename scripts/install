@@ -33,7 +33,7 @@ if [ "$package_manager" == "dnf" ]; then
     sudo dnf copr enable atim/lazygit -y
 elif [ "$package_manager" == "pacman" ]; then
     sudo pacman -Syu
-    sudo pacman -S --needed git base-devel cmake unzip ninja curl yay
+    sudo pacman -S --needed git base-devel cmake unzip ninja curl
 fi
 
 install_dnf() {
@@ -81,6 +81,6 @@ cd $HOME/apps/yazi && cargo build --release --locked
 
 install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
 
-# fish
-# echo /usr/bin/fish | sudo tee -a /etc/shells
-# chsh -s /usr/bin/fish
+fish
+echo /usr/bin/fish | sudo tee -a /etc/shells
+chsh -s /usr/bin/fish

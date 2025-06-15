@@ -40,7 +40,7 @@ alias btop="sudo btop"
 
 # Theme
 fish_config theme choose "Rose Pine"
-~/.local/bin/mise activate fish | source
+mise activate fish | source
 
 # pnpm
 set -gx PNPM_HOME "/home/i0i/.local/share/pnpm"
