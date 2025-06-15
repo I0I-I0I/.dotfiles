@@ -14,9 +14,7 @@ set -gx EDITOR /usr/local/bin/nvim
 # Aliases
 alias py="uv run python"
 alias vi="/sbin/vim"
-alias vim="nvim"
-alias tim="CONF=code nvim"
-alias drop="dropbox-cli"
+alias vim="CONF=text nvim"
 alias la="ls -Alhv --group-directories-first --color=auto"
 alias ll="ls -vA --group-directories-first --color=auto"
 alias poe="uv run poe"
