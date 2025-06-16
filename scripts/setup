@@ -1,8 +1,31 @@
 cd $HOME/.dotfiles
-for dir in $(find . -maxdepth 1 -mindepth 1 -type d | sed 's|^\./||'); do
-    if [ "$dir" == "configs" ] || [ "$dir" == ".git" ] || [ "$dir" == "scripts" ] || [ "$dir" == "walls" ]; then
-        continue
-    fi
+
+type=$1
+
+paths=["ghostty" "fish" "tmux" "yazi" "vim"]
+hyprpaths=["hypr" "waybar" "dnust" "rofi"]
+bwmpaths=[]
+
+
+for dir in paths; do
     rm -fr "$HOME/.config/$dir"
-    stow -t "$HOME/.config" "$dir"
+    stow "$dir"
 done
+
+if [ -eq "$type" "hypr" ]; then
+    for dir in hyprpaths; do
+        rm -fr "$HOME/.config/$dir"
+        stow "$dir"
+    done
+fi
+
+if [ -eq "$type" "bwm" ]; then
+    for dir in bwmpaths; do
+        rm -fr "$HOME/.config/$dir"
+        stow "$dir"
+    done
+fi
+
+fish
+echo /usr/bin/fish | sudo tee -a /etc/shells
+chsh -s /usr/bin/fish

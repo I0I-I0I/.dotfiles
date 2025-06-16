@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 command_exists() {
     command -v "$1" >/dev/null 2>&1
@@ -7,50 +7,8 @@ command_exists() {
 create_directory() {
     local dir_path=$1
     if [ ! -d "$dir_path" ]; then
-        echo "Creating directory $dir_path..."
         mkdir -p "$dir_path"
-    else
-        echo "Directory $dir_path already exists."
     fi
-}
-
-create_directory $HOME/apps
-
-if command_exists dnf; then
-    package_manager="dnf"
-elif command_exists pacman; then
-    package_manager="pacman"
-else
-    echo "Neither dnf nor pacman is available. Exiting."
-    exit 1
-fi
-packages="clang fish stow bat fd fzf go btop"
-
-
-if [ "$package_manager" == "dnf" ]; then
-    sudo dnf update -y && sudo dnf upgrade -y
-    sudo dnf -y install ninja-build cmake gcc make unzip gettext curl glibc-gconv-extra
-    sudo dnf copr enable atim/lazygit -y
-elif [ "$package_manager" == "pacman" ]; then
-    sudo pacman -Syu
-    sudo pacman -S --needed git base-devel cmake unzip ninja curl
-fi
-
-install_dnf() {
-    local package=$1
-    if dnf list installed "$package" >/dev/null 2>&1; then
-        echo "$package is installed. Updating..."
-        sudo dnf update -y "$package"
-    else
-        sudo dnf install -y "$package"
-        echo "$package was installed."
-    fi
-}
-
-install_pacman() {
-    local package=$1
-    sudo pacman -Sy --needed "$package"
-    echo "$package was installed."
 }
 
 install_git() {
@@ -59,28 +17,40 @@ install_git() {
     if [ -d "$path" ]; then
         echo "Repository exists at $repo. Updating..."
         cd "$path"
-        git pull origin main
+        git pull
+        echo "$repo was updated."
     else
-        echo "HI Cloning $repo to $path"
+        echo "Cloning $repo to $path"
         git clone https://github.com/$repo --depth=1 "$path"
         echo "$repo was installed."
     fi
 }
 
-if [ "$package_manager" == "dnf" ]; then
-    install_dnf $packages
-elif [ "$package_manager" == "pacman" ]; then
-    install_pacman $packages
+
+create_directory $HOME/apps
+
+off_packages="clang fish bat fd fzf btop ghostty qbittorrent telegram-desktop yazi tmux spotifyd"
+aur_packages="visual-studio-code-bin zed-preview-bin zen-browser-bin windserf-next spotify dropbox-cli" # balena-cli-bin
+
+sudo pacman -Syu
+sudo pacman --needed git curl base-devel clang cmake unzip ninja alsa-lib stow go
+
+if ! command_exists "cargo"; then
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 fi
+
+sudo pacman -S --needed $off_packages
+
+if ! command_exists "paru"; then
+    git clone https://aur.archlinux.org/paru.git $HOME/apps/paru
+    cd $HOME/apps/paru
+    makepkg -si
+    cd $HOME
+fi
+
+paru -S --needed $aur_packages
 
 install_git "neovim/neovim" "$HOME/apps/neovim"
 cd $HOME/apps/neovim && make CMAKE_BUILD_TYPE=Release && sudo make install
 
-install_git "sxyazi/yazi.git" "$HOME/apps/yazi"
-cd $HOME/apps/yazi && cargo build --release --locked
-
 install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
-
-fish
-echo /usr/bin/fish | sudo tee -a /etc/shells
-chsh -s /usr/bin/fish
