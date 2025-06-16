@@ -8,6 +8,7 @@ set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx PATH $PATH ~/go/bin
+set -gx PATH $PATH ~/scripts
 
 set -gx EDITOR /usr/local/bin/nvim
 
@@ -18,6 +19,9 @@ alias vim="CONF=text nvim"
 alias la="ls -Alhv --group-directories-first --color=auto"
 alias ll="ls -vA --group-directories-first --color=auto"
 alias poe="uv run poe"
+
+alias pbcopy='xsel --clipboard --input'
+alias pbpaste='xsel --clipboard --output'
 
 # Tmux
 set -gx PATH $PATH ~/.tmux/scripts
