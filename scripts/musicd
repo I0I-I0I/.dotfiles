@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+spotifyd -B 320 -b alsa --audio-format s32

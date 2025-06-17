@@ -29,26 +29,15 @@ install_git() {
 
 create_directory $HOME/apps
 
-off_packages="clang fish bat fd fzf btop ghostty qbittorrent telegram-desktop yazi tmux spotifyd"
+off_packages="clang fish bat fd fzf btop ghostty qbittorrent telegram-desktop yazi tmux spotifyd openssh"
 aur_packages="visual-studio-code-bin zed-preview-bin zen-browser-bin windserf-next spotify dropbox-cli" # balena-cli-bin
 
 sudo pacman -Syu
-sudo pacman --needed git curl base-devel clang cmake unzip ninja alsa-lib stow go
-
-if ! command_exists "cargo"; then
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-fi
+sudo pacman -S --needed git curl base-devel clang cmake unzip ninja alsa-lib stow go
 
 sudo pacman -S --needed $off_packages
 
-if ! command_exists "paru"; then
-    git clone https://aur.archlinux.org/paru.git $HOME/apps/paru
-    cd $HOME/apps/paru
-    makepkg -si
-    cd $HOME
-fi
-
-paru -S --needed $aur_packages
+yay -S --needed $aur_packages
 
 install_git "neovim/neovim" "$HOME/apps/neovim"
 cd $HOME/apps/neovim && make CMAKE_BUILD_TYPE=Release && sudo make install

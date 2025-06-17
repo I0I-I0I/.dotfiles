@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+
+if [ -f /etc/environment ]; then
+    source /etc/environment
+else
+    echo "Error: /etc/environment not found" >&2
+fi
+
+sudo ip route del default via 10.0.0.2 >/dev/null 2>&1
+
+if [ -z "$DEFAULT_GW" ]; then
+    echo "something is missing: \$DEFAULT_GATEWAY"
+else
+    sudo ip route del $SERVER_IP 2>/dev/null
+fi
+
+sudo ip link set dev tun0 down 2>/dev/null
+sudo ip tuntap del dev tun0 mode tun 2>/dev/null
+sudo ip link del tun0 2>/dev/null
+
+sudo pkill -f "badvpn-tun2socks"
+
+ip=$(curl https://ifconfig.me 2> /dev/null)
+if [ "$ip" == "$SERVER_IP" ]; then
+    echo "VPN still connected"
+    exit 1
+fi
+
+echo "VPN disconnected"

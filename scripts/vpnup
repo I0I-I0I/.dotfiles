@@ -1,0 +1,46 @@
+#!/usr/bin/env bash
+
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+if ! command_exists badvpn-tun2socks; then
+    echo "Installing badvpn-tun2socks..."
+    sudo pacman -S --noconfirm badvpn
+fi
+
+
+if [ -f /etc/environment ]; then
+    source /etc/environment
+else
+    echo "Error: /etc/environment not found" >&2
+    exit 1
+fi
+
+ip_start=$(curl https://ifconfig.me 2> /dev/null)
+if [ "$ip_start" == "$SERVER_IP" ]; then
+    echo "VPN already connected"
+    exit 1
+fi
+
+USER=$(whoami)
+
+if [ -z "$SERVER_IP" ] || [ -z "$DEFAULT_GW" ]; then
+    echo "something is missing: \$SERVER_IP or \$DEFAULT_GW"
+    exit 1
+fi
+
+sudo ip tuntap add dev tun0 mode tun user nnofly
+sudo ip a add 10.0.0.1/24 dev tun0
+sudo ip link set dev tun0 up
+badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 > /tmp/tun2socks.log 2>&1 &
+sudo ip r a $SERVER_IP via $DEFAULT_GW
+sudo ip r a default via 10.0.0.2 metric 10
+
+ip_end=$(curl https://ifconfig.me 2> /dev/null)
+if [ "$ip_start" == "$ip_end" ]; then
+    echo "VPN connection failed"
+    exit 1
+fi
+
+echo "VPN connection successful"

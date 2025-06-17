@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+
+sudo pacman -S pipewire pipewire-pulse pipewire-alsa pipewire-jack pipewire-audio bluez bluez-utils pipewire-alsa libldac pulseaudio-alsa
+
+mkdir -p ~/.config/wireplumber/bluetooth.lua.d
+cat <<EOF | tee ~/.config/wireplumber/bluetooth.lua.d/51-bluez-config.lua
+bluez_monitor.properties = {
+  ["bluez5.enable-sbc-xq"] = true,
+  ["bluez5.enable-msbc"] = true,
+  ["bluez5.enable-hw-volume"] = true,
+  ["bluez5.codecs"] = "[sbc sbc_xq aac ldac aptx aptx_hd aptx_adaptive]",
+  ["bluez5.headset-roles"] = "[hsp_hs hsp_ag hfp_hf hfp_ag]"
+}
+EOF
+
+sudo systemctl enable --now bluetooth.service
+systemctl --user enable --now pipewire pipewire-pulse wireplumber
+
+echo "btusb" > /etc/modulesj-load.d/bluettoth.conf
+echo "bluetooth" >> /etc/modulesj-load.d/bluettoth.conf
+
+sudo systemctl restart bluetooth
+systemctl --user restart pipewire pipewire-pulse wireplumber
+
+echo "You need to reboot"
