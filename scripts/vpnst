@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+
+if [ -f /etc/environment ]; then
+    source /etc/environment
+else
+    echo "Error: /etc/environment not found" >&2
+    exit 1
+fi
+
+ip=$(curl https://ifconfig.me 2> /dev/null)
+if [ "$ip" == "$SERVER_IP" ]; then
+    echo "VPN is CONNECTED"
+else
+    echo "VPN is DISCONNECTED"
+fi
