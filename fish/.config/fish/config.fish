@@ -6,9 +6,9 @@ set -gx PATH $PATH ~/apps
 set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
-set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx PATH $PATH ~/.dotfiles/scripts
 set -gx PATH $PATH ~/go/bin
+set -gx ELECTRON_OZONE_PLATFORM_HINT auto
 
 set -gx EDITOR /usr/local/bin/nvim
 

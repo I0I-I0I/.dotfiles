@@ -1,8 +1,0 @@
-#!/bin/bash
-
-if [ -z "$1" ]; then
-    pactl get-sink-volume @DEFAULT_SINK@
-    exit 0
-fi
-
-pactl set-sink-volume @DEFAULT_SINK@ $1%

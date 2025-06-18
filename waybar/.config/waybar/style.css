@@ -5,7 +5,7 @@
     font-weight: 600;
     font-size: 12px;
     margin: 0;
-    padding: 0px 0;
+    padding: 0 0;
 }
 
 #window {
@@ -55,6 +55,7 @@ window#waybar.hidden {
 #network,
 #cpu,
 #backlight,
+#custom-vpn,
 #temperature,
 #memory,
 #pulseaudio {
@@ -145,4 +146,13 @@ window#waybar.hidden {
     color: white;
     margin-right: 0px;
     padding-right: 0px;
+}
+
+/* VPN */
+#custom-vpn.connected {
+    color: #00ff00;
+}
+
+#custom-vpn.disconnected {
+    color: #ff0000;
 }

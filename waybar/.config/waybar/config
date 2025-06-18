@@ -1,10 +1,7 @@
 {
     "layer": "top",
     "position": "top",  // or "bottom", "left", "right"
-    "mode": "hide",
-    "passthrough": false,  // Set to true if you want clicks to pass through when hidden
-    "exclusive": false,
-    "modifier-reset": "press",  // Reset visibility on modifier key press (e.g., Super key)
+    "exclusive": true,  // set to false if you want to hide bar
     "spacing": 0,
     "margin-left": 0,
     "margin-top": 0,
@@ -16,9 +13,9 @@
         "clock#date"
     ],
     "modules-center": [
-        "hyprland/workspaces"
     ],
     "modules-right": [
+        "custom/vpn",
         "backlight",
         "pulseaudio",
         "bluetooth",
@@ -44,20 +41,28 @@
     "backlight": {
         "format": "{icon} {percent}%",
         "format-icons": ["", ""],
-        "on-click": "light 20",
-        "on-click-right": "light 80",
-        "on-scroll-up": "light +1",
-        "on-scroll-down": "light 1-"
+        "on-click": "brightnessctl 20%",
+        "on-click-right": "brightnessctl 80%",
+        "on-scroll-up": "brightnessctl +1%",
+        "on-scroll-down": "brightnessctl 1%-"
     },
 
     "network": {
-        "interface": "wlan0",
+        "interface": "wlp1s0",
         "format": "{ifname}",
         "format-wifi": "<span>  </span>{essid}",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "format-disconnected": "<span></span> Offline",
         "on-click": "ghostty -e nmtui",
         "tooltip": false,
+    },
+
+    "custom/vpn": {
+        "exec": "~/.dotfiles/scripts/vpnst",
+        "return-type": "json",
+        "interval": 5,
+        "tooltip": false,
+        "on-click": "ghostty -e ~/.dotfiles/scripts/vpntog"
     },
 
     "battery": {
