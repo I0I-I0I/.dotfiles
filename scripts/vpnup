@@ -5,10 +5,9 @@ command_exists() {
 }
 
 if ! command_exists badvpn-tun2socks; then
-    echo "Installing badvpn-tun2socks..."
-    sudo pacman -S --noconfirm badvpn
+    echo "packet 'badvpn-tun2socks' is not installed!"
+    exit 1
 fi
-
 
 if [ -f /etc/environment ]; then
     source /etc/environment
@@ -17,8 +16,11 @@ else
     exit 1
 fi
 
-ip_start=$(curl https://ifconfig.me 2> /dev/null)
-if [ "$ip_start" == "$SERVER_IP" ]; then
+if [ -z "$IP" ]; then
+    IP=$(curl https://ifconfig.me 2> /dev/null)
+fi
+
+if [ "$IP" == "$SERVER_IP" ]; then
     echo "VPN already connected"
     exit 1
 fi
@@ -33,12 +35,12 @@ fi
 sudo ip tuntap add dev tun0 mode tun user nnofly
 sudo ip a add 10.0.0.1/24 dev tun0
 sudo ip link set dev tun0 up
-badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 > /tmp/tun2socks.log 2>&1 &
+sudo badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 > $HOME/tun2socks.log 2>&1 &
 sudo ip r a $SERVER_IP via $DEFAULT_GW
 sudo ip r a default via 10.0.0.2 metric 10
 
 ip_end=$(curl https://ifconfig.me 2> /dev/null)
-if [ "$ip_start" == "$ip_end" ]; then
+if [ "$IP" == "$ip_end" ]; then
     echo "VPN connection failed"
     exit 1
 fi
