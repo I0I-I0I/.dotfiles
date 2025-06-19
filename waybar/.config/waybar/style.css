@@ -54,7 +54,7 @@ window#waybar.hidden {
 #bluetooth,
 #network,
 #cpu,
-#backlight,
+#custom-brightness,
 #custom-vpn,
 #temperature,
 #memory,
@@ -87,8 +87,11 @@ window#waybar.hidden {
 #network {
     color: white;
     margin-right: 8px;
-    margin-right: 8px;
-    padding-right: 15px;
+}
+
+#custom-vpn {
+    padding-left: 0;
+    padding-right: 8px;
 }
 
 /* Individual Widget Styles */
@@ -128,7 +131,7 @@ window#waybar.hidden {
     padding-right: 8px;
 }
 
-#backlight {
+#custom-brightness {
     padding: 0px;
     margin: 0px;
     margin-right: 0px;

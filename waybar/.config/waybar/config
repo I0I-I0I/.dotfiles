@@ -15,11 +15,11 @@
     "modules-center": [
     ],
     "modules-right": [
-        "custom/vpn",
-        "backlight",
+        "custom/brightness",
         "pulseaudio",
         "bluetooth",
         "network",
+        "custom/vpn",
         "battery"
     ],
 
@@ -38,19 +38,23 @@
         "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%"
     },
 
-    "backlight": {
-        "format": "{icon} {percent}%",
-        "format-icons": ["", ""],
-        "on-click": "brightnessctl 20%",
-        "on-click-right": "brightnessctl 80%",
-        "on-scroll-up": "brightnessctl +1%",
-        "on-scroll-down": "brightnessctl 1%-"
+    "custom/brightness": {
+        "format": " {}% {icon}",
+        "interval": 5,
+        "exec": "brightnessctl -m | awk -F, '{print substr($4, 0, length($4)-1)}'",
+        "exec-if": "brightnessctl -m | grep -q 'backlight'",
+        "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"],
+        "on-click": "brightnessctl set 20%",
+        "on-click-right": "brightnessctl set 80%",
+        "on-scroll-up": "brightnessctl set +1%",
+        "on-scroll-down": "brightnessctl set 1%-",
+        "tooltip": "Current brightness: {}%"
     },
 
     "network": {
         "interface": "wlp1s0",
         "format": "{ifname}",
-        "format-wifi": "<span>  </span>{essid}",
+        "format-wifi": "<span> </span>{essid}",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "format-disconnected": "<span></span> Offline",
         "on-click": "ghostty -e nmtui",
@@ -66,10 +70,17 @@
     },
 
     "battery": {
-        "format": "<span>{icon}</span> {capacity}%",
-        "format-icons": ["", "", "", "", "", "", "", "", "", ""],
-        "format-charging": "<span></span> {capacity}%",
-        "tooltip": false,
+        "interval": 10,
+        "states": {
+            "warning": 20,
+            "critical": 10
+        },
+        "format": "{icon} {capacity}%",
+        "format-charging": "⚡ {capacity}%",
+        "format-plugged": "🔌 {capacity}%",
+        "format-alt": "{time} {icon}",
+        "format-icons": ["", "", "", "", ""],
+        "tooltip": true
     },
 
     "clock": {
