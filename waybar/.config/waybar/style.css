@@ -5,7 +5,7 @@
     font-weight: 600;
     font-size: 14px;
     margin: 0;
-    padding: 1px 0;
+    padding: 0 0;
 }
 
 #window {
@@ -59,7 +59,7 @@ window#waybar.hidden {
 #temperature,
 #memory,
 #pulseaudio {
-    padding: 0 10px;
+    padding: 1px 10px;
     border: none;
     background-color: #000001;
     color: white;

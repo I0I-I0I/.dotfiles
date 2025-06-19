@@ -1,8 +1,0 @@
-# yazi.toml
-[mgr]
-show_hidden = true
-
-[opener]
-edit = [
-	{ run = 'nvim', desc = "NeoVim", block = true, for = "unix" },
-]

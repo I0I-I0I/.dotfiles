@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-session_name=$(tmux display-message -p "#S")
-target=$session_name
-
-tmux switch-client -p
-tmux kill-session -t $target
