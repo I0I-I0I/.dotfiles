@@ -1,6 +1,7 @@
 /*
  * See LICENSE file for copyright and license details.
  */
+#include <limits.h>
 #include <getopt.h>
 #include <libinput.h>
 #include <linux/input-event-codes.h>
@@ -103,6 +104,7 @@ typedef struct {
 	const Arg arg;
 } Button;
 
+typedef struct LayoutNode LayoutNode;
 typedef struct Monitor Monitor;
 typedef struct {
 	/* Must keep these three elements in this order */
@@ -139,8 +141,9 @@ typedef struct {
 #endif
 	unsigned int bw;
 	uint32_t tags;
-	int isfloating, isurgent, isfullscreen;
+	int isfloating, isurgent, isfullscreen, was_tiled;
 	uint32_t resize; /* configure serial of a pending resize */
+	struct wlr_box old_geom;
 } Client;
 
 typedef struct {
@@ -209,6 +212,7 @@ struct Monitor {
 	int nmaster;
 	char ltsymbol[16];
 	int asleep;
+	LayoutNode *root;
 };
 
 typedef struct {
@@ -252,6 +256,7 @@ static void arrangelayer(Monitor *m, struct wl_list *list,
 static void arrangelayers(Monitor *m);
 static void assignkeymap(struct wlr_keyboard *keyboard);
 static void axisnotify(struct wl_listener *listener, void *data);
+static void btrtile(Monitor *m);
 static void buttonpress(struct wl_listener *listener, void *data);
 static void chvt(const Arg *arg);
 static void checkidleinhibitor(struct wlr_surface *exclude);
@@ -333,9 +338,15 @@ static void setgamma(struct wl_listener *listener, void *data);
 static void setlayout(const Arg *arg);
 static void setmfact(const Arg *arg);
 static void setmon(Client *c, Monitor *m, uint32_t newtags);
+static void setratio_h(const Arg *arg);
+static void setratio_v(const Arg *arg);
+static void swapclients(const Arg *arg);
 static void setpsel(struct wl_listener *listener, void *data);
 static void setsel(struct wl_listener *listener, void *data);
 static void setup(void);
+static void setratio_h(const Arg *arg);
+static void setratio_v(const Arg *arg);
+static void swapclients(const Arg *arg);
 static void setxkbrules(const Arg *arg);
 static void spawn(const Arg *arg);
 static void startdrag(struct wl_listener *listener, void *data);
@@ -437,6 +448,7 @@ static xcb_atom_t netatom[NetLast];
 
 /* attempt to encapsulate suck into one file */
 #include "client.h"
+#include "btrtile.c"
 
 /* function implementations */
 void
@@ -484,6 +496,12 @@ applyrules(Client *c)
 			}
 		}
 	}
+
+    if (mon) {
+        c->geom.x = (mon->w.width - c->geom.width) / 2 + mon->m.x;
+        c->geom.y = (mon->w.height - c->geom.height) / 2 + mon->m.y;
+    }
+
 	setmon(c, mon, newtags);
 }
 
@@ -621,7 +639,7 @@ buttonpress(struct wl_listener *listener, void *data)
 	struct wlr_pointer_button_event *event = data;
 	struct wlr_keyboard *keyboard;
 	uint32_t mods;
-	Client *c;
+	Client *c, *target = NULL;
 	const Button *b;
 
 	wlr_idle_notifier_v1_notify_activity(idle_notifier, seat);
@@ -642,7 +660,7 @@ buttonpress(struct wl_listener *listener, void *data)
 		mods = keyboard ? wlr_keyboard_get_modifiers(keyboard) : 0;
 		for (b = buttons; b < END(buttons); b++) {
 			if (CLEANMASK(mods) == CLEANMASK(b->mod) &&
-					event->button == b->button && b->func) {
+				event->button == b->button && b->func) {
 				b->func(&b->arg);
 				return;
 			}
@@ -652,15 +670,36 @@ buttonpress(struct wl_listener *listener, void *data)
 		/* If you released any buttons, we exit interactive move/resize mode. */
 		/* TODO should reset to the pointer focus's current setcursor */
 		if (!locked && cursor_mode != CurNormal && cursor_mode != CurPressed) {
+			c = grabc;
+			if (c && c->was_tiled && !strcmp(selmon->ltsymbol, "|w|")) {
+				if (cursor_mode == CurMove && c->isfloating) {
+					target = xytoclient(cursor->x, cursor->y);
+
+					if (target && !target->isfloating && !target->isfullscreen)
+						insert_client(selmon, target, c);
+					else
+						selmon->root = create_client_node(c);
+
+					setfloating(c, 0);
+					arrange(selmon);
+
+				} else if (cursor_mode == CurResize && !c->isfloating) {
+					resizing_from_mouse = 0;
+				}
+			} else {
+				if (cursor_mode == CurResize && resizing_from_mouse)
+					resizing_from_mouse = 0;
+			}
+			/* Default behaviour */
 			wlr_cursor_set_xcursor(cursor, cursor_mgr, "default");
 			cursor_mode = CurNormal;
 			/* Drop the window off on its new monitor */
 			selmon = xytomon(cursor->x, cursor->y);
 			setmon(grabc, selmon, 0);
+			grabc = NULL;
 			return;
-		} else {
-			cursor_mode = CurNormal;
 		}
+		cursor_mode = CurNormal;
 		break;
 	}
 	/* If the event wasn't handled by the compositor, notify the client with
@@ -740,6 +779,7 @@ cleanupmon(struct wl_listener *listener, void *data)
 	wlr_output_layout_remove(output_layout, m->wlr_output);
 	wlr_scene_output_destroy(m->scene_output);
 
+	destroy_tree(m);
 	closemon(m);
 	wlr_scene_node_destroy(&m->fullscreen_bg->node);
 	free(m);
@@ -1036,6 +1076,7 @@ createmon(struct wl_listener *listener, void *data)
 
 	wl_list_insert(&mons, &m->link);
 	printstatus();
+	init_tree(m);
 
 	/* The xdg-protocol specifies:
 	 *
@@ -1275,6 +1316,10 @@ destroynotify(struct wl_listener *listener, void *data)
 	wl_list_remove(&c->destroy.link);
 	wl_list_remove(&c->set_title.link);
 	wl_list_remove(&c->fullscreen.link);
+	/* We check if the destroyed client was part of any tiled_list, to catch
+	 * client removals even if they would not be currently managed by btrtile */
+	if (selmon && selmon->root)
+		remove_client(selmon, c);
 #ifdef XWAYLAND
 	if (c->type != XDGShell) {
 		wl_list_remove(&c->activate.link);
@@ -1753,6 +1798,10 @@ mapnotify(struct wl_listener *listener, void *data)
 	 * try to apply rules for them */
 	if ((p = client_get_parent(c))) {
 		c->isfloating = 1;
+		if (p->mon) {
+			c->geom.x = (p->mon->w.width - c->geom.width) / 2 + p->mon->m.x;
+			c->geom.y = (p->mon->w.height - c->geom.height) / 2 + p->mon->m.y;
+		}
 		setmon(c, p->mon, p->tags);
 	} else {
 		applyrules(c);
@@ -1828,7 +1877,8 @@ void
 motionnotify(uint32_t time, struct wlr_input_device *device, double dx, double dy,
 		double dx_unaccel, double dy_unaccel)
 {
-	double sx = 0, sy = 0, sx_confined, sy_confined;
+	int tiled = 0;
+	double sx = 0, sy = 0, sx_confined, sy_confined, dx_total, dy_total;
 	Client *c = NULL, *w = NULL;
 	LayerSurface *l = NULL;
 	struct wlr_surface *surface = NULL;
@@ -1882,18 +1932,56 @@ motionnotify(uint32_t time, struct wlr_input_device *device, double dx, double d
 	/* Update drag icon's position */
 	wlr_scene_node_set_position(&drag_icon->node, (int)round(cursor->x), (int)round(cursor->y));
 
-	/* If we are currently grabbing the mouse, handle and return */
+	/* Skip if internal call or already resizing */
+	if (time == 0 && resizing_from_mouse)
+		goto focus;
+
+	tiled = grabc && !grabc->isfloating && !grabc->isfullscreen;
 	if (cursor_mode == CurMove) {
 		/* Move the grabbed client to the new position. */
-		resize(grabc, (struct wlr_box){.x = (int)round(cursor->x) - grabcx, .y = (int)round(cursor->y) - grabcy,
-			.width = grabc->geom.width, .height = grabc->geom.height}, 1);
-		return;
+		if (grabc && grabc->isfloating) {
+			resize(grabc, (struct wlr_box){
+				.x = (int)round(cursor->x) - grabcx,
+				.y = (int)round(cursor->y) - grabcy,
+				.width = grabc->geom.width,
+				.height = grabc->geom.height
+			}, 1);
+			return;
+		}
 	} else if (cursor_mode == CurResize) {
-		resize(grabc, (struct wlr_box){.x = grabc->geom.x, .y = grabc->geom.y,
-			.width = (int)round(cursor->x) - grabc->geom.x, .height = (int)round(cursor->y) - grabc->geom.y}, 1);
-		return;
+		if (tiled && resizing_from_mouse) {
+			dx_total = cursor->x - resize_last_update_x;
+			dy_total = cursor->y - resize_last_update_y;
+
+			if (time - last_resize_time >= resize_interval_ms) {
+				Arg a = {0};
+				if (fabs(dx_total) > fabs(dy_total)) {
+					a.f = (float)(dx_total * resize_factor);
+					setratio_h(&a);
+				} else {
+					a.f = (float)(dy_total * resize_factor);
+					setratio_v(&a);
+				}
+				arrange(selmon);
+
+				last_resize_time = time;
+				resize_last_update_x = cursor->x;
+				resize_last_update_y = cursor->y;
+			}
+
+		} else if (grabc && grabc->isfloating) {
+			/* Floating resize as original */
+			resize(grabc, (struct wlr_box){
+				.x = grabc->geom.x,
+				.y = grabc->geom.y,
+				.width = (int)round(cursor->x) - grabc->geom.x,
+				.height = (int)round(cursor->y) - grabc->geom.y
+			}, 1);
+			return;
+		}
 	}
 
+focus:
 	/* If there's no client surface under the cursor, set the cursor image to a
 	 * default. This is what makes the cursor image appear when you move it
 	 * off of a client or over its border. */
@@ -1927,22 +2015,41 @@ moveresize(const Arg *arg)
 	if (!grabc || client_is_unmanaged(grabc) || grabc->isfullscreen)
 		return;
 
-	/* Float the window and tell motionnotify to grab it */
-	setfloating(grabc, 1);
-	switch (cursor_mode = arg->ui) {
-	case CurMove:
-		grabcx = (int)round(cursor->x) - grabc->geom.x;
-		grabcy = (int)round(cursor->y) - grabc->geom.y;
-		wlr_cursor_set_xcursor(cursor, cursor_mgr, "fleur");
-		break;
-	case CurResize:
-		/* Doesn't work for X11 output - the next absolute motion event
-		 * returns the cursor to where it started */
-		wlr_cursor_warp_closest(cursor, NULL,
-				grabc->geom.x + grabc->geom.width,
-				grabc->geom.y + grabc->geom.height);
-		wlr_cursor_set_xcursor(cursor, cursor_mgr, "se-resize");
-		break;
+	cursor_mode = arg->ui;
+	grabc->was_tiled = (!grabc->isfloating && !grabc->isfullscreen);
+
+	if (grabc->was_tiled) {
+		switch (cursor_mode) {
+		case CurMove:
+			setfloating(grabc, 1);
+			grabcx = (int)round(cursor->x) - grabc->geom.x;
+			grabcy = (int)round(cursor->y) - grabc->geom.y;
+			wlr_cursor_set_xcursor(cursor, cursor_mgr, "fleur");
+			break;
+		case CurResize:
+			wlr_cursor_set_xcursor(cursor, cursor_mgr, "se-resize");
+			resize_last_update_x = cursor->x;
+			resize_last_update_y = cursor->y;
+			resizing_from_mouse = 1;
+			break;
+		}
+	} else {
+		/* Default floating logic */
+		/* Float the window and tell motionnotify to grab it */
+		setfloating(grabc, 1);
+		switch (cursor_mode) {
+		case CurMove:
+			grabcx = (int)round(cursor->x) - grabc->geom.x;
+			grabcy = (int)round(cursor->y) - grabc->geom.y;
+			wlr_cursor_set_xcursor(cursor, cursor_mgr, "fleur");
+			break;
+		case CurResize:
+			wlr_cursor_warp_closest(cursor, NULL,
+			grabc->geom.x + grabc->geom.width,
+			grabc->geom.y + grabc->geom.height);
+			wlr_cursor_set_xcursor(cursor, cursor_mgr, "se-resize");
+			break;
+		}
 	}
 }
 

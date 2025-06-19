@@ -1,0 +1,12 @@
+--- dwl.c
++++ dwl.c
+@@ -338,6 +343,9 @@ static void setmon(Client *c, Monitor *m, uint32_t newtags);
+ static void setpsel(struct wl_listener *listener, void *data);
+ static void setsel(struct wl_listener *listener, void *data);
+ static void setup(void);
++static void setratio_h(const Arg *arg);
++static void setratio_v(const Arg *arg);
++static void swapclients(const Arg *arg);
+ static void spawn(const Arg *arg);
+ static void startdrag(struct wl_listener *listener, void *data);
+ static void tag(const Arg *arg);
