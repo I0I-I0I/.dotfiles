@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+dwl &
+sleep 1
+waybar &
+wbg /home/nnofly/.dotfiles/walls/1369866_1.jpg &
+foot --server &
