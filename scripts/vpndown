@@ -11,7 +11,7 @@ sudo ip route del default via 10.0.0.2 >/dev/null 2>&1
 if [ -z "$DEFAULT_GW" ]; then
     echo "something is missing: \$DEFAULT_GATEWAY"
 else
-    ip route del $SERVER_IP 2>/dev/null
+    sudo ip route del $SERVER_IP 2>/dev/null
 fi
 
 sudo ip link set dev tun0 down 2>/dev/null

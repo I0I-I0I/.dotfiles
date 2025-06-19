@@ -24,7 +24,7 @@
     ],
 
     "bluetooth": {
-        "on-click": "ghostty -e bluetui",
+        "on-click": "footclient -e bluetui",
     },
 
     "pulseaudio": {
@@ -57,16 +57,16 @@
         "format-wifi": "<span> </span>{essid}",
         "format-ethernet": "{ipaddr}/{cidr} ",
         "format-disconnected": "<span></span> Offline",
-        "on-click": "ghostty -e nmtui",
+        "on-click": "footclient -e nmtui",
         "tooltip": false,
     },
 
     "custom/vpn": {
-        "exec": "~/.dotfiles/scripts/vpnst",
+        "exec": "vpnst",
         "return-type": "json",
         "interval": 5,
         "tooltip": false,
-        "on-click": "ghostty -e ~/.dotfiles/scripts/vpntog"
+        "on-click": "footclient -e ~/.dotfiles/scripts/vpntog"
     },
 
     "battery": {

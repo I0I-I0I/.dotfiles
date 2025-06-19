@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+
+sudo mkdir -p /etc/vconsole.d
+sudo dumpkeys | sudo tee /etc/vconsole.d/custom.kmap >/dev/null
+sudo sed -i 's/keycode\s\+58\s*=\s*Caps_Lock/keycode  58 = Control/' /etc/vconsole.d/custom.kmap
+
+echo 'KEYMAP=/etc/vconsole.d/custom.kmap' | sudo tee -a /etc/vconsole.conf
+
+echo 'You can apply chagnes immediately by runnig following command'
+echo ""
+echo "      sudo loadkeys /etc/vconsole.d/custom.kmap"
+echo ""
