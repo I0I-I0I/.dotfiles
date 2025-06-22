@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
+
+if [ -f /etc/environment ]; then
+    source /etc/environment
+else
+    echo "Error: /etc/environment not found" >&2
+    exit 1
+fi
+
+_vpn_st() {
+    if ip link show tun0 &> /dev/null; then
+        return 0
+    fi
+    return 1
+}
+
+show_help() {
+    cat <<EOF
+    Usage: $0 <command>
+    Commands:
+    help               Show this help message
+    st                 Show current status
+    up                 Enable VPN
+    down               Disable VPN
+    tog                Toggle VPN
+EOF
+}
+
+if ! command_exists badvpn-tun2socks; then
+    echo "packet 'badvpn-tun2socks' is not installed!"
+    exit 1
+fi
+
+vpn_up() {
+    if _vpn_st; then
+        echo "VPN already connected"
+        exit 0
+    fi
+
+    USER=$(whoami)
+
+    if [ -z "$SERVER_IP" ] || [ -z "$DEFAULT_GW" ]; then
+        echo "something is missing: \$SERVER_IP or \$DEFAULT_GW"
+        exit 1
+    fi
+
+    sudo ip tuntap add dev tun0 mode tun user nnofly
+    sudo ip a add 10.0.0.1/24 dev tun0
+    sudo ip link set dev tun0 up
+    sudo badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 > $HOME/tun2socks.log 2>&1 &
+    sudo ip r a $SERVER_IP via $DEFAULT_GW
+    sudo ip r a default via 10.0.0.2 metric 10
+
+    if _vpn_st; then
+        echo "VPN connection successful"
+    else
+        echo "VPN connection failed"
+        exit 1
+    fi
+}
+
+vpn_down() {
+    if ! _vpn_st; then
+        echo "VPN is already off"
+        exit 0
+    fi
+    sudo ip route del default via 10.0.0.2 >/dev/null 2>&1
+    if [ -z "$DEFAULT_GW" ]; then
+        echo "something is missing: \$DEFAULT_GATEWAY"
+    else
+        sudo ip route del $SERVER_IP 2>/dev/null
+    fi
+    sudo ip link set dev tun0 down 2>/dev/null
+    sudo ip tuntap del dev tun0 mode tun 2>/dev/null
+    sudo ip link del tun0 2>/dev/null
+    sudo pkill -f "badvpn-tun2sock"
+    if _vpn_st; then
+        echo "VPN still connected"
+        exit 1
+    fi
+    echo "VPN disconnected"
+}
+
+vpn_toggle() {
+    if _vpn_st; then
+        vpn_down
+    else
+        IP="$IP" vpn_up
+    fi
+}
+
+vpn_status() {
+    if _vpn_st; then
+        echo '{"text": " VPN", "class": "connected"}'
+    else
+        echo '{"text": " VPN", "class": "disconnected"}'
+    fi
+}
+
+case "$1" in
+    help) show_help ;;
+    st) vpn_status ;;
+    up) vpn_up ;;
+    down) vpn_down ;;
+    tog) vpn_toggle ;;
+    *)
+        echo "Invalid input: '$1'"
+        show_help
+        exit 1
+        ;;
+esac

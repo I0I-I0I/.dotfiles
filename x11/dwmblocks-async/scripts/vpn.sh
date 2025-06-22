@@ -1,12 +1,7 @@
 #!/usr/bin/env bash
 
-status=$(vpnst | jq -r .class 2>/dev/null)
-case "$status" in
-    connected)    echo " VPN" ;;
-    disconnected) echo " VPN" ;;
-    *)            echo "ERROR VPN" ;;
-esac
+echo "$(vpn st | jq -r .text 2>/dev/null)"
 
 case "$BLOCK_BUTTON" in
-    1) st -e ~/.dotfiles/scripts/vpntog ;;
+    1) st -e vpn tog ;;
 esac

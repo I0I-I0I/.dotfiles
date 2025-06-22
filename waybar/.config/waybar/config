@@ -61,11 +61,11 @@
     },
 
     "custom/vpn": {
-        "exec": "vpnst",
+        "exec": "vpn st",
         "return-type": "json",
         "interval": 5,
         "tooltip": false,
-        "on-click": "footclient -e ~/.dotfiles/scripts/vpntog"
+        "on-click": "footclient -e vpn tog"
     },
 
     "battery": {
