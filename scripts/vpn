@@ -91,6 +91,8 @@ vpn_toggle() {
     else
         IP="$IP" vpn_up
     fi
+    pkill -RTMIN+1 waybar
+    pkill -RTMIN+2 waybar
 }
 
 vpn_status() {

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-sudo pacman -S pipewire pipewire-pulse pipewire-alsa pipewire-jack pipewire-audio bluez bluez-utils pipewire-alsa libldac pulseaudio-alsa
+sudo pacman -S --needed pipewire pipewire-pulse pipewire-alsa pipewire-jack pipewire-audio bluez bluez-utils pipewire-alsa libldac pulseaudio-alsa
 
 mkdir -p ~/.config/wireplumber/bluetooth.lua.d
 cat <<EOF | tee ~/.config/wireplumber/bluetooth.lua.d/51-bluez-config.lua

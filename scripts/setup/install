@@ -29,17 +29,24 @@ install_git() {
 
 create_directory $HOME/apps
 
-off_packages="clang fish bat fd fzf btop ghostty qbittorrent telegram-desktop yazi tmux spotifyd openssh"
-aur_packages="visual-studio-code-bin zed-preview-bin zen-browser-bin windserf-next spotify dropbox-cli balena-cli-bin"
-amd_packs="vulkan-radeon mesa amd-ucode"
-nvidia_packs="nvidia nvidia-utils nvidia-dkms egl-wayland"
-intel_packs="vulkan-intel mesa"
+off_packages="clang bat fd fzf btop yazi tmux spotifyd openssh"
+aur_packages="visual-studio-code-bin zen-browser-bin windserf-next spotify dropbox-cli balena-cli-bin"
+
+case "$1" in
+    amd) drivers="vulkan-radeon mesa amd-ucode" ;;
+    nvidia) drivers="nvidia nvidia-utils nvidia-dkms egl-wayland" ;;
+    intel) drivers="vulkan-intel mesa" ;;
+    *)
+        echo "Ivalid arg: $1"
+        exit 1
+        ;;
+esac
 
 sudo pacman -Syu
 sudo pacman -S --needed git curl base-devel clang cmake unzip ninja alsa-lib stow go
 
 sudo pacman -S --needed $off_packages
-sudo pacman -S --needed $amd_packs
+sudo pacman -S --needed $drivers
 
 yay -S --needed $aur_packages
 

@@ -63,9 +63,11 @@
     "custom/vpn": {
         "exec": "vpn st",
         "return-type": "json",
+        "exec-on-event": true,
+        "signal": 1,
         "interval": 5,
         "tooltip": false,
-        "on-click": "footclient -e vpn tog"
+        "on-click": "vpn tog"
     },
 
     "battery": {
@@ -74,11 +76,12 @@
             "warning": 20,
             "critical": 10
         },
-        "format-alt": "{capacity}% {icon}",
+        "format": "{capacity}% {icon}",
+        "format-alt": "{time} {icon}",
         "format-charging": "⚡ {capacity}%",
         "format-plugged": "🔌 {capacity}%",
-        "format": "{time} {icon}",
-        "format-icons": ["", "", "", "", ""],
+        "format-icons": ["󰂃", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
+
         "tooltip": true
     },
 

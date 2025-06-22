@@ -12,7 +12,7 @@ static const unsigned int gappx            = 10; /* gap pixel between windows */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
 static const float rootcolor[]             = COLOR(0x222222ff);
 static const float bordercolor[]           = COLOR(0x44444400);
-static const float focuscolor[]            = COLOR(0x626262ff);
+static const float focuscolor[]            = COLOR(0x777777ff);
 static const float urgentcolor[]           = COLOR(0xff0000ff);
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
@@ -128,6 +128,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 static const char *termcmd[] = { "footclient", NULL };
 static const char *menucmd[] = { "wmenu-run", "-i", NULL };
 static const char *browsercmd[] = { "zen-browser", NULL };
+static const char *qutebrowsercmd[] = { "qutebrowser", NULL };
 static const char *waybarcmd[] = { "toggle-waybar", NULL };
 static const char *musiccmd[] = { "spotify", "--enable-features=UseOzonePlatform", "--ozone-platform=wayland", NULL };
 static const char *lockscrencmd[] = { "waylock", "-init-color", "0x111111", "-input-color", "0x444444", "-fail-color", "0x6C4141", NULL };
@@ -138,18 +139,20 @@ static const Key keys[] = {
     { MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_c,          spawn,          SHCMD("screenshot window") },
     { MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_c,          spawn,          SHCMD("screenshot all") },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          spawn,          SHCMD("footclient -e change-wall") },
+    { MODKEY,                    XKB_KEY_v,          spawn,          SHCMD("vpn tog") },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_L,          spawn,          {.v = lockscrencmd} },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_M,          spawn,          {.v = musiccmd} },
     { MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
     { MODKEY,                    XKB_KEY_s,          spawn,          {.v = waybarcmd} },
-	{ MODKEY,                    XKB_KEY_b,          spawn,          {.v = browsercmd} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_B,          spawn,          {.v = browsercmd} },
+	{ MODKEY,                    XKB_KEY_b,          spawn,          {.v = qutebrowsercmd} },
 	{ MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_d,          incnmaster,     {.i = -1} },
-	{ MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
-	{ MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
+	// { MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
+	// { MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
 	{ MODKEY,                    XKB_KEY_g,          togglegaps,     {0} },
