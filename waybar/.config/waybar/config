@@ -25,6 +25,7 @@
 
     "bluetooth": {
         "on-click": "footclient -e bluetui",
+        "tooltip": true
     },
 
     "pulseaudio": {
@@ -33,22 +34,20 @@
             "headphone": "",
             "default": ["","",""]
         },
-        "on-click": "pavucontrol",
-        "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
-        "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%"
+        "on-click": "pactl set-sink-volume @DEFAULT_SINK@ +5%",
+        "on-click-right": "pactl set-sink-volume @DEFAULT_SINK@ -5%",
     },
 
     "custom/brightness": {
-        "format": " {}% {icon}",
+        "format": "{icon} {text}%",
         "interval": 5,
         "exec": "brightnessctl -m | awk -F, '{print substr($4, 0, length($4)-1)}'",
         "exec-if": "brightnessctl -m | grep -q 'backlight'",
         "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"],
-        "on-click": "brightnessctl set 20%",
-        "on-click-right": "brightnessctl set 80%",
-        "on-scroll-up": "brightnessctl set +1%",
-        "on-scroll-down": "brightnessctl set 1%-",
-        "tooltip": "Current brightness: {}%"
+        "on-click": "brightnessctl set +5%",
+        "on-click-right": "brightnessctl set 5%-",
+        "tooltip": "Current brightness: {}%",
+        "tooltip": false
     },
 
     "network": {
@@ -75,20 +74,22 @@
             "warning": 20,
             "critical": 10
         },
-        "format": "{icon} {capacity}%",
+        "format-alt": "{capacity}% {icon}",
         "format-charging": "⚡ {capacity}%",
         "format-plugged": "🔌 {capacity}%",
-        "format-alt": "{time} {icon}",
+        "format": "{time} {icon}",
         "format-icons": ["", "", "", "", ""],
         "tooltip": true
     },
 
     "clock": {
         "format": "󰥔 {:%I:%M%p}",
-        "height": 26
+        "height": 26,
+        "tooltip": false
     },
     "clock#date": {
-        "format": " {:%A, %b %d}"
+        "format": " {:%A, %b %d}",
+        "tooltip": false
     },
 }
 }

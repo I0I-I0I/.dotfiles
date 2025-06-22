@@ -4,15 +4,15 @@
                         ((hex >> 8) & 0xFF) / 255.0f, \
                         (hex & 0xFF) / 255.0f }
 /* appearance */
-static const int sloppyfocus               = 1;  /* focus follows mouse */
+static const int sloppyfocus               = 0;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
 static int gaps                            = 1;  /* 1 means gaps between windows are added */
 static const unsigned int gappx            = 10; /* gap pixel between windows */
-static const unsigned int borderpx         = 1;  /* border pixel of windows */
+static const unsigned int borderpx         = 2;  /* border pixel of windows */
 static const float rootcolor[]             = COLOR(0x222222ff);
-static const float bordercolor[]           = COLOR(0x444444ff);
-static const float focuscolor[]            = COLOR(0x005577ff);
+static const float bordercolor[]           = COLOR(0x44444400);
+static const float focuscolor[]            = COLOR(0x626262ff);
 static const float urgentcolor[]           = COLOR(0xff0000ff);
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
 static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
@@ -157,7 +157,6 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_t,          setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                    XKB_KEY_f,          setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[2]} },
-	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_space,      setlayout,      {0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
 	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,          view,           {.ui = ~0} },
@@ -168,12 +167,14 @@ static const Key keys[] = {
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_greater,    tagmon,         {.i = WLR_DIRECTION_RIGHT} },
 	{ MODKEY,                    XKB_KEY_space,      incxkbrules,    {.i = +1} },
 
-	{ MODKEY|WLR_MODIFIER_ALT, XKB_KEY_k,            swapclients,    {.i = DIR_UP} },
-	{ MODKEY|WLR_MODIFIER_ALT, XKB_KEY_j,            swapclients,    {.i = DIR_DOWN} },
-	{ MODKEY|WLR_MODIFIER_ALT, XKB_KEY_l,            swapclients,    {.i = DIR_RIGHT} },
-	{ MODKEY|WLR_MODIFIER_ALT, XKB_KEY_h,            swapclients,    {.i = DIR_LEFT} },
+	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_k,          swapclients,    {.i = DIR_UP} },
+	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_j,          swapclients,    {.i = DIR_DOWN} },
+	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_l,          swapclients,    {.i = DIR_RIGHT} },
+	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_h,          swapclients,    {.i = DIR_LEFT} },
 	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_l,          setratio_h,     {.f = +0.025f} },
-	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_h,          setratio_h,     {.f = -0.025f} },
+    { MODKEY,                    XKB_KEY_l,          setratio_h,     {.f = +0.025f} },
+    { MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_h,          setratio_h,     {.f = -0.025f} },
+    { MODKEY,                    XKB_KEY_h,          setratio_h,     {.f = -0.025f} },
 	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_k,          setratio_v,     {.f = -0.025f} },
 	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_j,          setratio_v,     {.f = +0.025f} },
 

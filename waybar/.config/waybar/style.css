@@ -3,7 +3,7 @@
 * {
     font-family: 'JetBrains Mono Nerd Font';
     font-weight: 600;
-    font-size: 14px;
+    font-size: 16px;
     margin: 0;
     padding: 0 0;
 }
@@ -59,7 +59,7 @@ window#waybar.hidden {
 #temperature,
 #memory,
 #pulseaudio {
-    padding: 1px 10px;
+    padding: 5px 10px;
     border: none;
     background-color: #000001;
     color: white;
@@ -76,6 +76,27 @@ window#waybar.hidden {
 
 #battery {
     color: white;
+    margin-right: 0;
+    margin-left: 8px;
+}
+
+#battery .warning {
+    color: yellow;
+    margin-right: 0;
+}
+
+#battery.warning {
+    color: yellow;
+    margin-right: 0;
+}
+
+#battery.critical {
+    color: red;
+    margin-right: 0;
+}
+
+#battery .critical {
+    color: red;
     margin-right: 0;
 }
 
