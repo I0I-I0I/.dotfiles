@@ -20,9 +20,11 @@
 // Define blocks for the status feed as X(icon, cmd, interval, signal).
 #define BLOCKS(X)                                                \
     X("", "~/.dotfiles/x11/dwmblocks-async/scripts/clock.sh",       60,      1) \
+    X("", "~/.dotfiles/x11/dwmblocks-async/scripts/memory.sh",       5,      1) \
+    X("", "~/.dotfiles/x11/dwmblocks-async/scripts/cpu.sh",          5,      1) \
     X("", "~/.dotfiles/x11/dwmblocks-async/scripts/brightness.sh",   5,      2) \
     X("", "~/.dotfiles/x11/dwmblocks-async/scripts/volume.sh",       5,      3) \
-    X("", "~/.dotfiles/x11/dwmblocks-async/scripts/bluetooth.sh",    0,      4) \
+    X("", "~/.dotfiles/x11/dwmblocks-async/scripts/bluetooth.sh",   30,      4) \
     X("", "~/.dotfiles/x11/dwmblocks-async/scripts/network.sh",      0,      5) \
     X("", "~/.dotfiles/x11/dwmblocks-async/scripts/vpn.sh",          5,      6) \
     X("", "~/.dotfiles/x11/dwmblocks-async/scripts/battery.sh",     10,      7)

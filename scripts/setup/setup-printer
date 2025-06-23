@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+
+sudo pacman -S --needed cups hplip dbus
+sleep 1
+sudo systemctl enable --now cups
+
+# http://localhost:631/
+
+sudo hp-setup

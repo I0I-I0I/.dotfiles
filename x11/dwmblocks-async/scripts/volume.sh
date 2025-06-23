@@ -16,6 +16,6 @@ fi
 printf "%s %s\n" "$icon" "$vol"
 
 case "$BLOCK_BUTTON" in
-    1) pactl set-sink-volume @DEFAULT_SINK@ -5%;;
-    3) pactl set-sink-volume @DEFAULT_SINK@ +5%;;
+    1) pactl set-sink-volume @DEFAULT_SINK@ +5%;;
+    3) pactl set-sink-volume @DEFAULT_SINK@ -5%;;
 esac

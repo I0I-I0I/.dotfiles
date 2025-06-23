@@ -26,6 +26,7 @@ show_help() {
     st                 Show current status
     up                 Enable VPN
     down               Disable VPN
+    ip                 Check your current ip VPN
     tog                Toggle VPN
 EOF
 }
@@ -48,7 +49,7 @@ vpn_up() {
         exit 1
     fi
 
-    sudo ip tuntap add dev tun0 mode tun user nnofly
+    sudo ip tuntap add dev tun0 mode tun user $USER
     sudo ip a add 10.0.0.1/24 dev tun0
     sudo ip link set dev tun0 up
     sudo badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 > $HOME/tun2socks.log 2>&1 &
@@ -89,17 +90,22 @@ vpn_toggle() {
     if _vpn_st; then
         vpn_down
     else
-        IP="$IP" vpn_up
+        vpn_up
     fi
     pkill -RTMIN+1 waybar
     pkill -RTMIN+2 waybar
 }
 
+current_ip() {
+    echo $(curl --silent --connect-timeout 3 ifconfig.io 2>/dev/null \
+        || curl --silent --connect-timeout 3 icanhazip.com 2>/dev/null)
+}
+
 vpn_status() {
-    if _vpn_st; then
-        echo '{"text": " VPN", "class": "connected"}'
+    if _vpn_st ; then
+        echo "{\"text\": \" VPN\", \"class\": \"connected\"}"
     else
-        echo '{"text": " VPN", "class": "disconnected"}'
+        echo "{\"text\": \" VPN\", \"class\": \"disconnected\"}"
     fi
 }
 
@@ -109,6 +115,7 @@ case "$1" in
     up) vpn_up ;;
     down) vpn_down ;;
     tog) vpn_toggle ;;
+    ip) current_ip ;;
     *)
         echo "Invalid input: '$1'"
         show_help

@@ -13,8 +13,11 @@
         "clock#date"
     ],
     "modules-center": [
+        "tray",
     ],
     "modules-right": [
+        "memory",
+        "cpu",
         "custom/brightness",
         "pulseaudio",
         "bluetooth",
@@ -23,9 +26,27 @@
         "battery"
     ],
 
-    "bluetooth": {
-        "on-click": "footclient -e bluetui",
+    "memory": {
+        "interval": 3,
+        "format": " {used}GiB",
+        "on-click": "footclient -e btop",
         "tooltip": true
+    },
+
+    "cpu": {
+        "interval": 3,
+        "format": " {usage}% {avg_frequency}MHz",
+        "on-click": "footclient -e btop",
+        "tooltip": true
+    },
+
+    "bluetooth": {
+        "interval": 30,
+        "format": " {status}",
+        "format-disabled": "󰂲",
+        "format-connected": " {device_battery_percentage}%",
+        "tooltip-format": "{device_alias} ({device_battery_percentage}%)",
+        "on-click": "foot -e bluetui"
     },
 
     "pulseaudio": {
@@ -46,7 +67,6 @@
         "format-icons": ["🌑", "🌘", "🌗", "🌖", "🌕"],
         "on-click": "brightnessctl set +5%",
         "on-click-right": "brightnessctl set 5%-",
-        "tooltip": "Current brightness: {}%",
         "tooltip": false
     },
 
@@ -60,13 +80,17 @@
         "tooltip": false,
     },
 
+    "tray": {
+        "icon-size": 21,
+        "spacing": 10
+    },
+
     "custom/vpn": {
         "exec": "vpn st",
         "return-type": "json",
         "exec-on-event": true,
         "signal": 1,
         "interval": 5,
-        "tooltip": false,
         "on-click": "vpn tog"
     },
 
@@ -76,12 +100,11 @@
             "warning": 20,
             "critical": 10
         },
-        "format": "{capacity}% {icon}",
-        "format-alt": "{time} {icon}",
-        "format-charging": "⚡ {capacity}%",
-        "format-plugged": "🔌 {capacity}%",
+        "format": "{icon}",
+        "format-alt": "{capacity}% {icon}",
+        "format-charging": "{capacity}%   {time}",
+        "format-plugged": "{capacity}% 🔌",
         "format-icons": ["󰂃", "󰁻", "󰁼", "󰁽", "󰁾", "󰁿", "󰂀", "󰂁", "󰂂", "󰁹"],
-
         "tooltip": true
     },
 

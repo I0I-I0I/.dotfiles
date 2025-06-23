@@ -21,4 +21,4 @@ fi
 
 time_left=$(echo "$acpi_o" | awk -F', ' '{print $3}')
 cap=$(echo "$acpi_o" | awk -F', ' '{print $2}')
-printf "%s %s \n" "$icon" "$cap"
+printf " %s %s \n" "$cap" "$icon"

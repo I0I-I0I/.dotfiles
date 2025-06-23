@@ -7,19 +7,19 @@
 static const int sloppyfocus               = 0;  /* focus follows mouse */
 static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will disable idle tracking even if it's surface isn't visible  */
 static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
-static int gaps                            = 1;  /* 1 means gaps between windows are added */
-static const unsigned int gappx            = 10; /* gap pixel between windows */
+static const int monoclegaps               = 0;  /* 1 means outer gaps in monocle layout */
 static const unsigned int borderpx         = 2;  /* border pixel of windows */
+static const unsigned int gappih           = 10; /* horiz inner gap between windows */
+static const unsigned int gappiv           = 10; /* vert inner gap between windows */
+static const unsigned int gappoh           = 10; /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov           = 10; /* vert outer gap between windows and screen edge */
 static const float rootcolor[]             = COLOR(0x222222ff);
 static const float bordercolor[]           = COLOR(0x44444400);
 static const float focuscolor[]            = COLOR(0x777777ff);
 static const float urgentcolor[]           = COLOR(0xff0000ff);
 /* This conforms to the xdg-protocol. Set the alpha to zero to restore the old behavior */
-static const float fullscreen_bg[]         = {0.1f, 0.1f, 0.1f, 1.0f}; /* You can also use glsl colors */
-static const float resize_factor           = 0.0002f; /* Resize multiplier for mouse resizing, depends on mouse sensivity. */
-static const uint32_t resize_interval_ms   = 16; /* Resize interval depends on framerate and screen refresh rate. */
+static const float fullscreen_bg[]         = {0.0f, 0.0f, 0.0f, 1.0f}; /* You can also use glsl colors */
 
-enum Direction { DIR_LEFT, DIR_RIGHT, DIR_UP, DIR_DOWN };
 /* tagging - TAGCOUNT must be no greater than 31 */
 #define TAGCOUNT (9)
 
@@ -35,7 +35,7 @@ static const Rule rules[] = {
 /* layout(s) */
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "|w|",      btrtile },
+	{ "[]=",      tile },
 	{ "><>",      NULL },    /* no layout function means floating behavior */
 	{ "[M]",      monocle },
 };
@@ -63,7 +63,7 @@ static const struct xkb_rule_names xkb_rules[] = {
 	{
         .options = "ctrl:nocaps",
 		.layout = "ru",
-	},
+    },
 };
 
 static const int repeat_rate = 35;
@@ -126,12 +126,13 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 
 /* commands */
 static const char *termcmd[] = { "footclient", NULL };
-static const char *menucmd[] = { "wmenu-run", "-i", NULL };
+static const char *menucmd[] = { "wmenu-run", "-i", "-f", "'Maple Mono CN' Normal 16", NULL };
 static const char *browsercmd[] = { "zen-browser", NULL };
 static const char *qutebrowsercmd[] = { "qutebrowser", NULL };
 static const char *waybarcmd[] = { "toggle-waybar", NULL };
 static const char *musiccmd[] = { "spotify", "--enable-features=UseOzonePlatform", "--ozone-platform=wayland", NULL };
-static const char *lockscrencmd[] = { "waylock", "-init-color", "0x111111", "-input-color", "0x444444", "-fail-color", "0x6C4141", NULL };
+static const char *lockscrencmd[] = { "waylock", "-init-color", "0x111111", "-input-color", "0x666666", "-fail-color", "0x6C4141", NULL };
+static const char *colorpickercmd[] = { "hyprpicker", "-a", "-r", NULL };
 
 static const Key keys[] = {
 	/* modifier                  key                 function        argument */
@@ -140,22 +141,27 @@ static const Key keys[] = {
     { MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_c,          spawn,          SHCMD("screenshot all") },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          spawn,          SHCMD("footclient -e change-wall") },
     { MODKEY,                    XKB_KEY_v,          spawn,          SHCMD("vpn tog") },
+
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_C,          spawn,          {.v = colorpickercmd } },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_L,          spawn,          {.v = lockscrencmd} },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_M,          spawn,          {.v = musiccmd} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_B,          spawn,          {.v = qutebrowsercmd} },
+    { MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_b,          spawn,          {.v = browsercmd} },
+    { MODKEY,                    XKB_KEY_b,          spawn,          {.v = waybarcmd} },
     { MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
-    { MODKEY,                    XKB_KEY_s,          spawn,          {.v = waybarcmd} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_B,          spawn,          {.v = browsercmd} },
-	{ MODKEY,                    XKB_KEY_b,          spawn,          {.v = qutebrowsercmd} },
-	{ MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
+    { MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
+
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
 	{ MODKEY,                    XKB_KEY_i,          incnmaster,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_d,          incnmaster,     {.i = -1} },
-	// { MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
-	// { MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
+	{ MODKEY,                    XKB_KEY_h,          setmfact,       {.f = -0.05f} },
+	{ MODKEY,                    XKB_KEY_l,          setmfact,       {.f = +0.05f} },
+
+    { MODKEY,                    XKB_KEY_space,      incxkbrules,    {.i = +1} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
-	{ MODKEY,                    XKB_KEY_g,          togglegaps,     {0} },
+    { MODKEY,                    XKB_KEY_g,          togglegaps,     {0} },
 	{ MODKEY,                    XKB_KEY_w,          killclient,     {0} },
 	{ MODKEY,                    XKB_KEY_t,          setlayout,      {.v = &layouts[0]} },
 	{ MODKEY,                    XKB_KEY_f,          setlayout,      {.v = &layouts[1]} },
@@ -168,19 +174,6 @@ static const Key keys[] = {
 	{ MODKEY,                    XKB_KEY_period,     focusmon,       {.i = WLR_DIRECTION_RIGHT} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_less,       tagmon,         {.i = WLR_DIRECTION_LEFT} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_greater,    tagmon,         {.i = WLR_DIRECTION_RIGHT} },
-	{ MODKEY,                    XKB_KEY_space,      incxkbrules,    {.i = +1} },
-
-	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_k,          swapclients,    {.i = DIR_UP} },
-	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_j,          swapclients,    {.i = DIR_DOWN} },
-	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_l,          swapclients,    {.i = DIR_RIGHT} },
-	{ MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_h,          swapclients,    {.i = DIR_LEFT} },
-	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_l,          setratio_h,     {.f = +0.025f} },
-    { MODKEY,                    XKB_KEY_l,          setratio_h,     {.f = +0.025f} },
-    { MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_h,          setratio_h,     {.f = -0.025f} },
-    { MODKEY,                    XKB_KEY_h,          setratio_h,     {.f = -0.025f} },
-	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_k,          setratio_v,     {.f = -0.025f} },
-	{ MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_j,          setratio_v,     {.f = +0.025f} },
-
 	TAGKEYS(          XKB_KEY_1, XKB_KEY_exclam,                     0),
 	TAGKEYS(          XKB_KEY_2, XKB_KEY_at,                         1),
 	TAGKEYS(          XKB_KEY_3, XKB_KEY_numbersign,                 2),

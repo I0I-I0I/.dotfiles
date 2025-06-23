@@ -6,6 +6,6 @@ idx=$(( pct * (${#icons[@]} - 1) / 100 ))
 printf "%s %s%%\n" "${icons[idx]}" "$pct"
 
 case "$BLOCK_BUTTON" in
-    1) brightnessctl set 5%-;;
-    3) brightnessctl set +5%;;
+    1) brightnessctl set +5%;;
+    3) brightnessctl set 5%-;;
 esac
