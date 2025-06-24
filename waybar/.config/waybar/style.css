@@ -99,15 +99,6 @@ window#waybar.hidden {
   margin-right: 8px;
 }
 
-#clock {
-  color: white;
-}
-
-#clock.date {
-  color: white;
-  margin-left: 16px;
-}
-
 #custom-updates {
   color: white;
   font-weight: 600;
@@ -154,4 +145,24 @@ window#waybar.hidden {
 
 #custom-vpn.disconnected {
   color: #ff0000;
+}
+
+.dark-menu {
+  background-color: #2d2d2d;
+  color: #ffffff;
+  padding: 5px;
+}
+
+.dark-menu menuitem {
+  background-color: #2d2d2d;
+  padding: 8px;
+  color: #ffffff;
+}
+
+.dark-menu menuitem:hover {
+  background-color: #3d3d3d;
+}
+
+.dark-menu separator {
+  background-color: #444444;
 }

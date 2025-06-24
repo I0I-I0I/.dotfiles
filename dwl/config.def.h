@@ -140,7 +140,8 @@ static const Key keys[] = {
     { MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_c,          spawn,          SHCMD("screenshot window") },
     { MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_c,          spawn,          SHCMD("screenshot all") },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          spawn,          SHCMD("footclient -e change-wall") },
-    { MODKEY,                    XKB_KEY_v,          spawn,          SHCMD("vpn tog") },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_V,          spawn,          SHCMD("vpn tog") },
+    { MODKEY,                    XKB_KEY_v,          spawn,          SHCMD("cliphist list | wmenu -i -f 'Maple Mono CN 12' -l 30 | cliphist decode | wl-copy") },
 
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_C,          spawn,          {.v = colorpickercmd } },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_L,          spawn,          {.v = lockscrencmd} },

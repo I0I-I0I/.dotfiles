@@ -20,14 +20,17 @@ _vpn_st() {
 
 show_help() {
     cat <<EOF
-    Usage: $0 <command>
+    Usage: vpn <command>
     Commands:
     help               Show this help message
     st                 Show current status
+    ip                 Check your current ip
     up                 Enable VPN
     down               Disable VPN
-    ip                 Check your current ip VPN
     tog                Toggle VPN
+
+    status_json        Return current status in json format (for waybar)
+
 EOF
 }
 
@@ -92,26 +95,48 @@ vpn_toggle() {
     else
         vpn_up
     fi
+
     pkill -RTMIN+1 waybar
-    pkill -RTMIN+2 waybar
 }
 
 current_ip() {
-    echo $(curl --silent --connect-timeout 3 ifconfig.io 2>/dev/null \
-        || curl --silent --connect-timeout 3 icanhazip.com 2>/dev/null)
+    if [ -z "$CACHED_IP" ] || [ $(date +%s -r /tmp/vpn_ip 2>/dev/null || echo 0) -lt $(date -d '5 minutes ago' +%s) ]; then
+        IP=$(curl --silent --connect-timeout 3 ifconfig.io 2>/dev/null || curl --silent --connect-timeout 3 icanhazip.com 2>/dev/null)
+        echo "$IP" > /tmp/vpn_ip
+        echo "$IP"
+    else
+        cat /tmp/vpn_ip 2>/dev/null
+    fi
 }
 
 vpn_status() {
-    if _vpn_st ; then
-        echo "{\"text\": \" VPN\", \"class\": \"connected\"}"
-    else
-        echo "{\"text\": \" VPN\", \"class\": \"disconnected\"}"
-    fi
+    local flag=$1
+    local public_ip=$(current_ip)
+    local local_ip=$(ip addr show wlp1s0 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' || echo "No local IP")
+
+    case $flag in
+        --json)
+            if _vpn_st ; then
+                echo "{\"text\": \" VPN\", \"class\": \"connected\", \"tooltip\": \"VPN Connected\\nPublic IP: ${public_ip:-Unknown}\\nLocal IP: ${local_ip}\"}"
+            else
+                echo "{\"text\": \" VPN\", \"class\": \"disconnected\", \"tooltip\": \"VPN Disconnected\\nPublic IP: ${public_ip:-Unknown}\\nLocal IP: ${local_ip}\"}"
+            fi
+            ;;
+        *)
+            if _vpn_st ; then
+                echo " VPN is CONNECTED"
+            else
+                echo " VPN is DISCONNECTED"
+            fi
+            echo "Public IP: ${public_ip:-Unknown}"
+            echo "Local IP: ${local_ip}"
+            ;;
+    esac
 }
 
 case "$1" in
     help) show_help ;;
-    st) vpn_status ;;
+    st) vpn_status $2 ;;
     up) vpn_up ;;
     down) vpn_down ;;
     tog) vpn_toggle ;;
