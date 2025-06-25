@@ -23,13 +23,11 @@ show_help() {
     Usage: vpn <command>
     Commands:
     help               Show this help message
-    st                 Show current status
+    st [--json]        Show current status
     ip                 Check your current ip
     up                 Enable VPN
     down               Disable VPN
     tog                Toggle VPN
-
-    status_json        Return current status in json format (for waybar)
 
 EOF
 }
@@ -112,7 +110,7 @@ current_ip() {
 vpn_status() {
     local flag=$1
     local public_ip=$(current_ip)
-    local local_ip=$(ip addr show wlp1s0 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' || echo "No local IP")
+    local local_ip=$(ip addr show $IFACE 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' || echo "No local IP")
 
     case $flag in
         --json)

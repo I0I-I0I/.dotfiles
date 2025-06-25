@@ -26,15 +26,14 @@ install_git() {
     fi
 }
 
-
 create_directory $HOME/apps
 
-off_packages="clang bat fd fzf btop yazi tmux spotifyd openssh auto-cpufreq zathura"
-aur_packages="visual-studio-code-bin zen-browser-bin windserf-next spotify dropbox-cli balena-cli-bin"
+off_packages="clang bat fd fzf btop yazi tmux spotifyd openssh auto-cpufreq zathura zen-browser"
+aur_packages="visual-studio-code-bin windsurf spotify dropbox-cli balena-cli-bin"
 
 case "$1" in
     wayland) packs="wlr-randr wlroots foot grim wmenu waybar" ;;
-    x11) packs="xorg-server xorg-xinit xorg-randr st dmenu" ;;
+    x11) packs="xorg-server xorg-xinit xorg-xrandr" ;;
     *)
         echo "Ivalid arg: $1"
         echo "[ wayland | x11 ] are available"
@@ -42,10 +41,17 @@ case "$1" in
         ;;
 esac
 
+amd_drivers="mesa-vdpau vulkan-icd-loader vulkan-radeon mesa amd-ucode"
+nvidia_drivers="nvidia nvidia-utils nvidia-dkms"
+intel_drivers="intel-media-driver vulkan-intel mesa intel-ucode"
+
 case "$2" in
-    amd) drivers="libva-mesa-driver mesa-vdpau vulkan-icd-loader vulkan-radeon mesa amd-ucode" ;;
-    nvidia) drivers="nvidia nvidia-utils nvidia-dkms egl-wayland" ;;
-    intel) drivers="vulkan-intel mesa" ;;
+    amd) sudo pacman -S --needed $amd_drivers ;;
+    intel) sudo pacman -S --needed $intel_drivers ;;
+    nvidia) sudo pacman -S --needed $nvidia_drivers ;;
+    amd_nvidia) sudo pacman -S --needed $amd_drivers $nvidia_drivers ;;
+    intel_nvidia) sudo pacman -S --needed $intel_drivers $nvidia_drivers ;;
+    all) sudo pacman -S --needed $intel_drivers $amd_dirvers $nvidia_drivers ;;
     *)
         echo "Ivalid arg: $2"
         echo "[ amd | nvidia | intel ] are available"
@@ -54,12 +60,11 @@ case "$2" in
 esac
 
 sudo pacman -Syu
-sudo pacman -S --needed git curl wget base-devel clang cmake unzip ninja alsa-lib stow go
+sudo pacman -S --needed git curl wget base-devel clang cmake unzip ninja alsa-lib stow go $off_packages $packs
 
-sudo pacman -S --needed $off_packages $packs
-sudo pacman -S --needed $drivers
+sleep 1
 
-yay -S --needed $aur_packages
+paru -S --needed $aur_packages
 
 install_git "neovim/neovim" "$HOME/apps/neovim"
 cd $HOME/apps/neovim && make CMAKE_BUILD_TYPE=Release && sudo make install

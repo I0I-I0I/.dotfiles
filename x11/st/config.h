@@ -5,7 +5,7 @@
  *
  * font: see http://freedesktop.org/software/fontconfig/fontconfig-user.html
  */
-static char *font = "Maple Mono CN:pixelsize=18:antialias=true:autohint=true";
+static char *font = "Maple Mono NF CN:pixelsize=20:antialias=true:autohint=true";
 static int borderpx = 0;
 
 /*

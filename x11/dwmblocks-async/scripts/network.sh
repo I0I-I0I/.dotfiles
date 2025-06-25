@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
 
-iface="wlp1s0"
-ip=$(ip -4 addr show dev "$iface" \
+if [ -f /etc/environment ]; then
+    source /etc/environment
+else
+    echo "Error: /etc/environment not found" >&2
+    exit 1
+fi
+
+ip=$(ip -4 addr show dev "$IFACE" \
      | awk '/inet /{print $2}')
 read -r net_name net_type <<< $(nmcli connection | awk '{print $1, $3}' | head -2 | tail -1)
 
