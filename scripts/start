@@ -7,3 +7,4 @@ wbg /home/nnofly/.dotfiles/walls/1369866_1.jpg &
 waybar &
 wl-paste --watch cliphist store &
 foot --server &
+systemctl --user start swayidle.service

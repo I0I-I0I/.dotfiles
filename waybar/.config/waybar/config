@@ -47,8 +47,8 @@
     },
 
     "cpu": {
-        "interval": 2,
-        "format": "{icon0}{icon1}{icon2}{icon3}{usage:>2}% ",
+        "interval": 3,
+        "format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}%",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "tooltip": true,
         "on-click": "foot -e btop"
