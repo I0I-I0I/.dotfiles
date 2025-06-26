@@ -1,7 +1,7 @@
 /* See LICENSE file for copyright and license details. */
 
 /* appearance */
-static const unsigned int borderpx  = 2;        /* border pixel of windows */
+static const unsigned int borderpx  = 0;        /* border pixel of windows */
 static const unsigned int snap      = 32;       /* snap pixel */
 static const unsigned int gappih    = 15;       /* horiz inner gap between windows */
 static const unsigned int gappiv    = 15;       /* vert inner gap between windows */
@@ -11,7 +11,7 @@ static       int smartgaps          = 0;        /* 1 means no outer gap when the
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "Maple Mono NF CN:size=14" };
-static const char dmenufont[]       = "Maple Mono NF CN:size=12";
+static const char dmenufont[]       = "Maple Mono NF CN:size=14";
 static const char col_black1[]      = "#000000";
 static const char col_gray1[]       = "#222222";
 static const char col_gray2[]       = "#444444";
@@ -34,6 +34,7 @@ static const Rule rules[] = {
 	 */
 	/* class      instance    title       tags mask     isfloating   monitor */
 	{ "zen-browser",  NULL,       NULL,       1 << 0,       0,           -1 },
+	{ "qutebrowser",  NULL,       NULL,       1 << 0,       0,           -1 },
 };
 
 /* layout(s) */
@@ -47,20 +48,11 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
-	{ "[]=",      tile },    /* first entry is default */
-	{ "[M]",      monocle },
-	{ "[@]",      spiral },
-	{ "[\\]",     dwindle },
-	{ "H[]",      deck },
-	{ "TTT",      bstack },
-	{ "===",      bstackhoriz },
-	{ "HHH",      grid },
-	{ "###",      nrowgrid },
-	{ "---",      horizgrid },
-	{ ":::",      gaplessgrid },
-	{ "|M|",      centeredmaster },
-	{ ">M>",      centeredfloatingmaster },
-	{ "><>",      NULL },    /* no layout function means floating behavior */
+    { ">M>",      centeredfloatingmaster },
+    { "H[]",      deck },
+    { "[M]",      monocle },
+    { "[]=",      tile },
+	{ "><>",      NULL },
 	{ NULL,       NULL },
 };
 
@@ -80,23 +72,35 @@ static const Layout layouts[] = {
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont, "-nb", col_gray1, "-nf", col_gray3, "-sb", col_cyan, "-sf", col_gray4, NULL };
-static const char *termcmd[]  = { "st", NULL };
+static const char *termcmd[]  = { "alacritty", "msg", "create-window", NULL };
 static const char *browsercmd[]  = { "zen", NULL };
+static const char *qutebrowsercmd[]  = { "qutebrowser", NULL };
 static const char *screenshotcmd[]  = { "flameshot", "gui", NULL };
+static const char *colorcmd[]  = { "xcolor", "|", "xclip", "-selection", "clipboard", NULL };
+static const char *clipmanagercmd[]  = { "clipcat-menu", NULL };
+static const char *filemanagercmd[]  = { "alacritty", "msg", "create-window", "-e", "yazi", NULL };
+static const char *emacscmd[]  = { "emacs", NULL };
+static const char *filemanagerguicmd[]  = { "thunar", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-	{ MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browsercmd } },
+        { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = qutebrowsercmd } },
 	{ MODKEY,                       XK_c,      spawn,          {.v = screenshotcmd } },
+	{ MODKEY|ShiftMask,             XK_Return, spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
+	{ MODKEY,                       XK_v,      spawn,          {.v = clipmanagercmd } },
+	{ MODKEY,                       XK_e,      spawn,          {.v = filemanagercmd } },
+	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = filemanagerguicmd } },
+	{ MODKEY|ShiftMask,             XK_c,      spawn,          SHCMD("xcolor | xclip -selection clipboard") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_g,      togglegaps,     {0} },
+        { MODKEY,                       XK_g,      togglegaps,     {0} },
+        { MODKEY|ShiftMask,             XK_h,      toggleborder,   {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-    { MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },

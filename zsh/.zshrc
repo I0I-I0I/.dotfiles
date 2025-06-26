@@ -1,11 +1,13 @@
-export ELECTRON_OZONE_PLATFORM_HINT=auto
-export QT_QPA_PLATFORM=wayland
-export QT_QPA_PLATFORM=offscreen
-export LIBVA_DRIVER_NAME=radeonsi
-export VDPAU_DRIVER=radeonsi
-export MOZ_ENABLE_WAYLAND=1
-export QT_QPA_PLATFORM=wayland
+# export ELECTRON_OZONE_PLATFORM_HINT=auto
+# export QT_QPA_PLATFORM=wayland
+# export QT_QPA_PLATFORM=offscreen
+# export LIBVA_DRIVER_NAME=radeonsi
+# export VDPAU_DRIVER=radeonsi
+# export MOZ_ENABLE_WAYLAND=1
+export QT_QPA_PLATFORM=xcb
 
+# export TERM="st-256color"
+export COLORTERM=truecolor
 
 # load modules
 zmodload zsh/complist

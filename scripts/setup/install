@@ -34,11 +34,6 @@ aur_packages="visual-studio-code-bin windsurf spotify dropbox-cli balena-cli-bin
 case "$1" in
     wayland) packs="wlr-randr wlroots foot grim wmenu waybar" ;;
     x11) packs="xorg-server xorg-xinit xorg-xrandr" ;;
-    *)
-        echo "Ivalid arg: $1"
-        echo "[ wayland | x11 ] are available"
-        exit 1
-        ;;
 esac
 
 amd_drivers="mesa-vdpau vulkan-icd-loader vulkan-radeon mesa amd-ucode"
@@ -52,21 +47,14 @@ case "$2" in
     amd_nvidia) sudo pacman -S --needed $amd_drivers $nvidia_drivers ;;
     intel_nvidia) sudo pacman -S --needed $intel_drivers $nvidia_drivers ;;
     all) sudo pacman -S --needed $intel_drivers $amd_dirvers $nvidia_drivers ;;
-    *)
-        echo "Ivalid arg: $2"
-        echo "[ amd | nvidia | intel ] are available"
-        exit 1
-        ;;
 esac
 
 sudo pacman -Syu
 sudo pacman -S --needed git curl wget base-devel clang cmake unzip ninja alsa-lib stow go $off_packages $packs
 
-sleep 1
-
 paru -S --needed $aur_packages
 
-install_git "neovim/neovim" "$HOME/apps/neovim"
-cd $HOME/apps/neovim && make CMAKE_BUILD_TYPE=Release && sudo make install
-
-install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
+# install_git "neovim/neovim" "$HOME/apps/neovim"
+# cd $HOME/apps/neovim && make CMAKE_BUILD_TYPE=Release && sudo make install
+#
+# install_git "i0i-i0i/init.lua" "$HOME/.config/nvim"
