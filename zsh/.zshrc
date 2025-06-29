@@ -113,3 +113,10 @@ PROMPT='%{$fg[green]%}%   %{$reset_color%}% %F{121%}%2~ %f${vcs_info_msg_0_}%
 
 # sudo pacman -S zsh-syntax-highlighting
 source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# fnm
+FNM_PATH="/home/nnofly/.local/share/fnm"
+if [ -d "$FNM_PATH" ]; then
+  export PATH="/home/nnofly/.local/share/fnm:$PATH"
+  eval "`fnm env`"
+fi
