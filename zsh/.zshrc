@@ -71,9 +71,7 @@ alias ls="ls --color=auto"
 alias la="ls -Alhv --group-directories-first --color=auto"
 alias ll="ls -vA --group-directories-first --color=auto"
 alias httpie-gui="httpie-desktop --enable-features=UseOzonePlatform --ozone-platform=wayland"
-
-alias pbcopy='xsel --clipboard --input'
-alias pbpaste='xsel --clipboard --output'
+alias btop="sudo btop"
 
 # Tmux
 export PATH=$PATH:~/.tmux/scripts
@@ -83,7 +81,6 @@ alias tms="tmux -L second"
 alias tmls="ls /tmp/tmux-$(id -u)"
 alias tmk="tmux kill-session"
 alias tmks="tmux kill-server"
-alias btop="sudo btop"
 
 source <(fzf --zsh)
 
