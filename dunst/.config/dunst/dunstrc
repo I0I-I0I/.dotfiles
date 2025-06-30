@@ -15,15 +15,15 @@
     indicate_hidden = yes
     transparency = 0
     separator_height = 2
-    padding = 5
-    horizontal_padding = 5
+    padding = 12
+    horizontal_padding = 12
     text_icon_padding = 25
-    frame_width = 2
-    frame_color = "#c4a7e7"
+    frame_color = "#000000"
+    frame_width = 1
     gap_size = 20
-    separator_color = frame
+    separator_color = foreground
     sort = yes
-    font = Maple Mono 12
+    font = Maple Mono NF CN 12
     line_height = 0
     markup = full
     format = "<i>%s</i>\n%b"
@@ -47,7 +47,7 @@
     always_run_script = true
     title = Dunst
     class = Dunst
-    corner_radius = 10
+    corner_radius = 0
     ignore_dbusclose = false
     force_xwayland = false
     force_xinerama = false
@@ -61,25 +61,26 @@
 [urgency_low]
     # IMPORTANT: colors have to be defined in quotation marks.
     # Otherwise the "#" and following would be interpreted as a comment.
-    background = "#1f1d2e"
-    foreground = "#ebbcba"
-    frame_color = "#c4a7e7"
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#90EE90"  # Green for low urgency
     timeout = 10
     # Icon for notifications with low urgency, uncomment to enable
     #default_icon = /path/to/icon
 
 [urgency_normal]
-    background = "#1f1d2e"
-    foreground = "#ebbcba"
-    highlight = "#c4a7e7"
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#ffffff"  # Yellow for normal urgency
+    highlight = "#000000"
     timeout = 10
     # Icon for notifications with normal urgency, uncomment to enable
     #default_icon = /path/to/icon
 
 [urgency_critical]
-    background = "#1f1d2e"
-    foreground = "#ebbcba"
-    frame_color = "#c4a7e7"
+    background = "#000000"
+    foreground = "#ffffff"
+    frame_color = "#FF0000"  # Red for critical urgency
     timeout = 0
 
 [brightness]
@@ -88,6 +89,6 @@
     set_stack_tag = "light"
 
 [music]
-    desktop_entry = "yandex-music"
+    desktop_entry = "spotifyd"
     history_ignore = yes
     set_stack_tag = "music"

@@ -12,10 +12,21 @@ else
 fi
 
 _vpn_st() {
-    if ip link show tun0 &> /dev/null; then
+    if ip link show tun0 &>/dev/null; then
         return 0
     fi
     return 1
+}
+
+_notify() {
+    if command_exists dunstify; then
+        if [ "$2" == "critical" ]; then
+            icon=" "
+        else
+            icon=" "
+        fi
+        dunstify -r 22 "VPN $icon" "$1" -u "$2" -t 2000
+    fi
 }
 
 show_help() {
@@ -40,6 +51,7 @@ fi
 vpn_up() {
     if _vpn_st; then
         echo "VPN already connected"
+        _notify "already connected" low
         exit 0
     fi
 
@@ -47,20 +59,23 @@ vpn_up() {
 
     if [ -z "$SERVER_IP" ] || [ -z "$DEFAULT_GW" ]; then
         echo "something is missing: \$SERVER_IP or \$DEFAULT_GW"
+        _notify "something is missing: \$SERVER_IP or \$DEFAULT_GW" critical
         exit 1
     fi
 
     sudo ip tuntap add dev tun0 mode tun user $USER
     sudo ip a add 10.0.0.1/24 dev tun0
     sudo ip link set dev tun0 up
-    sudo badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 > $HOME/tun2socks.log 2>&1 &
+    sudo badvpn-tun2socks --tundev tun0 --netif-ipaddr 10.0.0.2 --netif-netmask 255.255.255.0 --socks-server-addr 127.0.0.1:1080 >$HOME/tun2socks.log 2>&1 &
     sudo ip r a $SERVER_IP via $DEFAULT_GW
     sudo ip r a default via 10.0.0.2 metric 10
 
     if _vpn_st; then
         echo "VPN connection successful"
+        _notify "" low
     else
         echo "VPN connection failed"
+        _notify "failed" critical
         exit 1
     fi
 }
@@ -73,6 +88,7 @@ vpn_down() {
     sudo ip route del default via 10.0.0.2 >/dev/null 2>&1
     if [ -z "$DEFAULT_GW" ]; then
         echo "something is missing: \$DEFAULT_GATEWAY"
+        _notify "something is missing: \$DEFAULT_GATEWAY" critical
     else
         sudo ip route del $SERVER_IP 2>/dev/null
     fi
@@ -82,9 +98,11 @@ vpn_down() {
     sudo pkill -f "badvpn-tun2sock"
     if _vpn_st; then
         echo "VPN still connected"
+        _notify "still connected" low
         exit 1
     fi
     echo "VPN disconnected"
+    _notify "" critical
 }
 
 vpn_toggle() {
@@ -100,7 +118,7 @@ vpn_toggle() {
 current_ip() {
     if [ -z "$CACHED_IP" ] || [ $(date +%s -r /tmp/vpn_ip 2>/dev/null || echo 0) -lt $(date -d '5 minutes ago' +%s) ]; then
         IP=$(curl --silent --connect-timeout 3 ifconfig.io 2>/dev/null || curl --silent --connect-timeout 3 icanhazip.com 2>/dev/null)
-        echo "$IP" > /tmp/vpn_ip
+        echo "$IP" >/tmp/vpn_ip
         echo "$IP"
     else
         cat /tmp/vpn_ip 2>/dev/null
@@ -113,35 +131,35 @@ vpn_status() {
     local local_ip=$(ip addr show $IFACE 2>/dev/null | grep -oP '(?<=inet\s)\d+(\.\d+){3}' || echo "No local IP")
 
     case $flag in
-        --json)
-            if _vpn_st ; then
-                echo "{\"text\": \" VPN\", \"class\": \"connected\", \"tooltip\": \"VPN Connected\\nPublic IP: ${public_ip:-Unknown}\\nLocal IP: ${local_ip}\"}"
-            else
-                echo "{\"text\": \" VPN\", \"class\": \"disconnected\", \"tooltip\": \"VPN Disconnected\\nPublic IP: ${public_ip:-Unknown}\\nLocal IP: ${local_ip}\"}"
-            fi
-            ;;
-        *)
-            if _vpn_st ; then
-                echo " VPN is CONNECTED"
-            else
-                echo " VPN is DISCONNECTED"
-            fi
-            echo "Public IP: ${public_ip:-Unknown}"
-            echo "Local IP: ${local_ip}"
-            ;;
+    --json)
+        if _vpn_st; then
+            echo "{\"text\": \" VPN\", \"class\": \"connected\", \"tooltip\": \"VPN Connected\\nPublic IP: ${public_ip:-Unknown}\\nLocal IP: ${local_ip}\"}"
+        else
+            echo "{\"text\": \" VPN\", \"class\": \"disconnected\", \"tooltip\": \"VPN Disconnected\\nPublic IP: ${public_ip:-Unknown}\\nLocal IP: ${local_ip}\"}"
+        fi
+        ;;
+    *)
+        if _vpn_st; then
+            echo " VPN is CONNECTED"
+        else
+            echo " VPN is DISCONNECTED"
+        fi
+        echo "Public IP: ${public_ip:-Unknown}"
+        echo "Local IP: ${local_ip}"
+        ;;
     esac
 }
 
 case "$1" in
-    help) show_help ;;
-    st) vpn_status $2 ;;
-    up) vpn_up ;;
-    down) vpn_down ;;
-    tog) vpn_toggle ;;
-    ip) current_ip ;;
-    *)
-        echo "Invalid input: '$1'"
-        show_help
-        exit 1
-        ;;
+help) show_help ;;
+st) vpn_status $2 ;;
+up) vpn_up ;;
+down) vpn_down ;;
+tog) vpn_toggle ;;
+ip) current_ip ;;
+*)
+    echo "Invalid input: '$1'"
+    show_help
+    exit 1
+    ;;
 esac

@@ -364,6 +364,7 @@ static void urgent(struct wl_listener *listener, void *data);
 static void view(const Arg *arg);
 static void virtualkeyboard(struct wl_listener *listener, void *data);
 static void virtualpointer(struct wl_listener *listener, void *data);
+static void warpcursor(const Client *c);
 static Monitor *xytomon(double x, double y);
 static void xytonode(double x, double y, struct wlr_surface **psurface,
 		Client **pc, LayerSurface **pl, double *nx, double *ny);
@@ -417,8 +418,7 @@ static KeyboardGroup *kb_group;
 static unsigned int kblayout = 0;
 static unsigned int cursor_mode;
 static Client *grabc;
-static Client initial_grabc;
-static int grabcx, grabcy, grabx, graby, grabcenterx, grabcentery; /* client-relative */
+static int grabcx, grabcy; /* client-relative */
 
 static struct wlr_output_layout *output_layout;
 static struct wlr_box sgeom;
@@ -566,6 +566,7 @@ arrange(Monitor *m)
 		m->lt[m->sellt]->arrange(m);
 	motionnotify(0, NULL, 0, 0, 0, 0);
 	checkidleinhibitor(NULL);
+	warpcursor(focustop(selmon));
 }
 
 void
@@ -1450,6 +1451,10 @@ focusclient(Client *c, int lift)
 	if (locked)
 		return;
 
+	/* Warp cursor to center of client if it is outside */
+	if (lift)
+		warpcursor(c);
+
 	/* Raise client in stacking order if requested */
 	if (c && lift)
 		wlr_scene_node_raise_to_top(&c->scene->node);
@@ -2054,27 +2059,8 @@ motionnotify(uint32_t time, struct wlr_input_device *device, double dx, double d
 			.width = grabc->geom.width, .height = grabc->geom.height}, 1);
 		return;
 	} else if (cursor_mode == CurResize) {
-		if (grabcenterx < grabx) {
-			if (grabcentery < graby) {
-				/* bottom-right */
-				resize(grabc, (struct wlr_box){.x = initial_grabc.geom.x, .y = initial_grabc.geom.y,
-					.width = (int)round(cursor->x) - initial_grabc.geom.x, .height = (int)round(cursor->y) - initial_grabc.geom.y}, 1);
-			} else {
-				/* top-right */
-				resize(grabc, (struct wlr_box){.x = initial_grabc.geom.x, .y = (int)round(cursor->y),
-					.width = (int)round(cursor->x) - initial_grabc.geom.x, .height = initial_grabc.geom.y + initial_grabc.geom.height - (int)round(cursor->y)}, 1);
-			}
-		} else {
-			if (grabcentery < graby) {
-				/* bottom-left */
-				resize(grabc, (struct wlr_box){.x = (int)round(cursor->x), .y = initial_grabc.geom.y,
-					.width = initial_grabc.geom.x + initial_grabc.geom.width - (int)round(cursor->x), .height = (int)round(cursor->y) - initial_grabc.geom.y}, 1);
-			} else {
-				/* top-left */
-				resize(grabc, (struct wlr_box){.x = (int)round(cursor->x), .y = (int)round(cursor->y),
-					.width = initial_grabc.geom.x + initial_grabc.geom.width - (int)round(cursor->x), .height = initial_grabc.geom.y + initial_grabc.geom.height - (int)round(cursor->y)}, 1);
-			}
-		}
+		resize(grabc, (struct wlr_box){.x = grabc->geom.x, .y = grabc->geom.y,
+			.width = (int)round(cursor->x) - grabc->geom.x, .height = (int)round(cursor->y) - grabc->geom.y}, 1);
 		return;
 	}
 
@@ -2122,42 +2108,10 @@ moveresize(const Arg *arg)
 	case CurResize:
 		/* Doesn't work for X11 output - the next absolute motion event
 		 * returns the cursor to where it started */
-		initial_grabc = *grabc;
-		grabx = (int)round(cursor->x);
-		graby = (int)round(cursor->y);
-		grabcx = (int)round(cursor->x) - grabc->geom.x;
-		grabcy = (int)round(cursor->y) - grabc->geom.y;
-		grabcenterx = grabc->geom.width / 2 + grabc->geom.x;
-		grabcentery = grabc->geom.height / 2 + grabc->geom.y;
-		if (grabcenterx < grabx) {
-			if (grabcentery < graby) {
-				/* bottom-right */
-				wlr_cursor_warp_closest(cursor, NULL,
-					grabc->geom.x + grabc->geom.width,
-					grabc->geom.y + grabc->geom.height);
-				wlr_cursor_set_xcursor(cursor, cursor_mgr, "se-resize");
-			} else {
-				/* top-right */
-				wlr_cursor_warp_closest(cursor, NULL,
-					grabc->geom.x + grabc->geom.width,
-					grabc->geom.y);
-				wlr_cursor_set_xcursor(cursor, cursor_mgr, "ne-resize");
-			}
-		} else {
-			if (grabcentery < graby) {
-				/* bottom-left */
-				wlr_cursor_warp_closest(cursor, NULL,
-					grabc->geom.x,
-					grabc->geom.y + grabc->geom.height);
-				wlr_cursor_set_xcursor(cursor, cursor_mgr, "sw-resize");
-			} else {
-				/* top-left */
-				wlr_cursor_warp_closest(cursor, NULL,
-					grabc->geom.x,
-					grabc->geom.y);
-				wlr_cursor_set_xcursor(cursor, cursor_mgr, "nw-resize");
-			}
-		}
+		wlr_cursor_warp_closest(cursor, NULL,
+				grabc->geom.x + grabc->geom.width,
+				grabc->geom.y + grabc->geom.height);
+		wlr_cursor_set_xcursor(cursor, cursor_mgr, "se-resize");
 		break;
 	}
 }
@@ -3217,6 +3171,27 @@ virtualpointer(struct wl_listener *listener, void *data)
 	wlr_cursor_attach_input_device(cursor, device);
 	if (event->suggested_output)
 		wlr_cursor_map_input_to_output(cursor, device, event->suggested_output);
+}
+
+void
+warpcursor(const Client *c) {
+	if (cursor_mode != CurNormal) {
+		return;
+	}
+	if (!c && selmon) {
+		wlr_cursor_warp_closest(cursor,
+			  NULL,
+			  selmon->w.x + selmon->w.width / 2.0 ,
+			  selmon->w.y + selmon->w.height / 2.0);
+	}
+	else if ( c && (cursor->x < c->geom.x ||
+		cursor->x > c->geom.x + c->geom.width ||
+		cursor->y < c->geom.y ||
+		cursor->y > c->geom.y + c->geom.height))
+		wlr_cursor_warp_closest(cursor,
+			  NULL,
+			  c->geom.x + c->geom.width / 2.0,
+			  c->geom.y + c->geom.height / 2.0);
 }
 
 Monitor *
