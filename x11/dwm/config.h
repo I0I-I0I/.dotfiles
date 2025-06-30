@@ -49,9 +49,8 @@ static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen win
 static const Layout layouts[] = {
 	/* symbol     arrange function */
     { ">M>",      centeredfloatingmaster },
-    { "H[]",      deck },
-    { "[M]",      monocle },
     { "[]=",      tile },
+    { "[M]",      monocle },
 	{ "><>",      NULL },
 	{ NULL,       NULL },
 };
@@ -79,32 +78,34 @@ static const char *screenshotcmd[]  = { "flameshot", "gui", NULL };
 static const char *colorcmd[]  = { "xcolor", "|", "xclip", "-selection", "clipboard", NULL };
 static const char *clipmanagercmd[]  = { "clipcat-menu", NULL };
 static const char *filemanagercmd[]  = { "alacritty", "msg", "create-window", "-e", "yazi", NULL };
+static const char *emacscmd[]  = { "emacs", NULL };
 static const char *filemanagerguicmd[]  = { "thunar", NULL };
 
 static const Key keys[] = {
 	/* modifier                     key        function        argument */
 	{ MODKEY,                       XK_p,      spawn,          {.v = dmenucmd } },
-    { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = qutebrowsercmd } },
+    { MODKEY|Mod1Mask,              XK_b,      spawn,          {.v = qutebrowsercmd } },
+    { MODKEY|ShiftMask,             XK_b,      spawn,          {.v = browsercmd } },
 	{ MODKEY,                       XK_c,      spawn,          {.v = screenshotcmd } },
+	{ MODKEY|Mod1Mask,              XK_Return, spawn,          {.v = emacscmd } },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_v,      spawn,          {.v = clipmanagercmd } },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filemanagercmd } },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = filemanagerguicmd } },
 	{ MODKEY|ShiftMask,             XK_c,      spawn,          SHCMD("xcolor | xclip -selection clipboard") },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
-	{ MODKEY,                       XK_g,      togglegaps,     {0} },
-    { MODKEY|ShiftMask,             XK_h,      toggleborder,   {0} },
+    { MODKEY,                       XK_g,      togglegaps,     {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
-    { MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
+	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_l,      setmfact,       {.f = +0.05} },
 	{ MODKEY|ShiftMask,             XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
-	{ MODKEY,                       XK_w,      killclient,     {0} },
-	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                       XK_q,      killclient,     {0} },
+	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[0]} },
+	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[1]} },
 	{ MODKEY,                       XK_m,      setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|ShiftMask,             XK_space,  togglefloating, {0} },
 	{ MODKEY,                       XK_0,      view,           {.ui = ~0 } },

@@ -53,5 +53,6 @@ dwmblocks &
 redshift -l 55.45:37.36 &
 DISPLAY=:0 xset r rate 300 35 &
 alacritty --daemon &
+clipcatd
 sleep 1
 exec dwm

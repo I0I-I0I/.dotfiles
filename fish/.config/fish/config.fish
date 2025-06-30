@@ -6,8 +6,8 @@ set -gx PATH $PATH ~/apps
 set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/apps/yazi/target/release
 set -gx PATH $PATH ~/apps/neovim/build/bin
-set -gx PATH $PATH ~/.dotfiles/fish/.config/fish/scripts
 set -gx PATH $PATH ~/go/bin
+set -gx PATH $PATH ~/.dotfiles/scripts
 
 set -gx EDITOR /usr/local/bin/nvim
 
@@ -29,7 +29,7 @@ alias tmls="ls /tmp/tmux-$(id -u)"
 alias tmk="tmux kill-session"
 alias tmks="tmux kill-server"
 
-bind \ct "tmux-sessionizer"
+bind \cs "tmux-sessionizer"
 bind -k nul "tmux-yazi"
 
 alias wifi="nmtui"
