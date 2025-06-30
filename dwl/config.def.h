@@ -125,14 +125,16 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *termcmd[] = { "footclient", NULL };
+static const char *termcmd[] = { "alacritty", NULL };
 static const char *menucmd[] = { "wmenu-run", "-i", "-f", "'Maple Mono CN' Normal 16", NULL };
-static const char *browsercmd[] = { "zen-browser", NULL };
+static const char *browsercmd[] = { "zen", NULL };
 static const char *qutebrowsercmd[] = { "qutebrowser", NULL };
 static const char *waybarcmd[] = { "toggle-waybar", NULL };
 static const char *musiccmd[] = { "spotify", "--enable-features=UseOzonePlatform", "--ozone-platform=wayland", NULL };
 static const char *lockscrencmd[] = { "waylock", "-init-color", "0x111111", "-input-color", "0x666666", "-fail-color", "0x6C4141", NULL };
 static const char *colorpickercmd[] = { "hyprpicker", "-a", "-r", NULL };
+static const char *explorecmd[] = { "st -c yazi", NULL };
+static const char *wallpapercmd[] = { "waypaper", NULL };
 
 static const Key keys[] = {
 	/* modifier                  key                 function        argument */
@@ -143,6 +145,8 @@ static const Key keys[] = {
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_V,          spawn,          SHCMD("vpn tog") },
     { MODKEY,                    XKB_KEY_v,          spawn,          SHCMD("cliphist list | wmenu -i -f 'Maple Mono CN 12' -l 30 | cliphist decode | wl-copy") },
 
+    { MODKEY,                    XKB_KEY_e,          spawn,          {.v = explorecmd } },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          spawn,          {.v = wallpapercmd } },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_C,          spawn,          {.v = colorpickercmd } },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_L,          spawn,          {.v = lockscrencmd} },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_M,          spawn,          {.v = musiccmd} },
@@ -163,12 +167,12 @@ static const Key keys[] = {
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
     { MODKEY,                    XKB_KEY_g,          togglegaps,     {0} },
-	{ MODKEY,                    XKB_KEY_w,          killclient,     {0} },
+	{ MODKEY,                    XKB_KEY_q,          killclient,     {0} },
 	{ MODKEY,                    XKB_KEY_t,          setlayout,      {.v = &layouts[0]} },
-	{ MODKEY,                    XKB_KEY_f,          setlayout,      {.v = &layouts[1]} },
-	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[2]} },
+	{ MODKEY,                    XKB_KEY_m,          setlayout,      {.v = &layouts[1]} },
+	{ MODKEY,                    XKB_KEY_f,          setlayout,      {.v = &layouts[2]} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_space,      togglefloating, {0} },
-	{ MODKEY,                    XKB_KEY_e,         togglefullscreen, {0} },
+	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_E,          togglefullscreen, {0} },
 	{ MODKEY,                    XKB_KEY_0,          view,           {.ui = ~0} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_parenright, tag,            {.ui = ~0} },
 	{ MODKEY,                    XKB_KEY_comma,      focusmon,       {.i = WLR_DIRECTION_LEFT} },

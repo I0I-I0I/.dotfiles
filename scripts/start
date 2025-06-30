@@ -3,8 +3,8 @@
 dwl &
 sleep 1
 wlsunset -S 4:30 -s 23:00 -t 4000:6500 &
-wbg /home/nnofly/.dotfiles/walls/1369866_1.jpg &
 waybar &
 wl-paste --watch cliphist store &
-foot --server &
+alacritty --daemon &
+waypaper --restore
 systemctl --user start swayidle.service
