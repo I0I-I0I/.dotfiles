@@ -1,9 +1,10 @@
 /* Black */
 
 * {
-  font-family: "JetBrains Mono Nerd Font";
-  font-weight: 600;
-  font-size: 16px;
+  font-family: "Maple Mono NF CN SemiBold";
+  /* font-weight: 600; */
+  font-style: italic;
+  font-size: 14px;
   margin: 0;
   padding: 0 0;
   padding: 0 8px;

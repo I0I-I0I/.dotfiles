@@ -9,6 +9,14 @@ set -gx PATH $PATH ~/apps/neovim/build/bin
 set -gx PATH $PATH ~/go/bin
 set -gx PATH $PATH ~/.dotfiles/scripts
 
+set -gx ELECTRON_OZONE_PLATFORM_HINT auto
+set -gx QT_QPA_PLATFORM wayland
+set -gx QT_QPA_PLATFORM offscreen
+set -gx LIBVA_DRIVER_NAME radeonsi
+set -gx VDPAU_DRIVER radeonsi
+set -gx MOZ_ENABLE_WAYLAND 1
+set -gx QT_QPA_PLATFORM xcb
+
 set -gx EDITOR /usr/local/bin/nvim
 
 # Aliases

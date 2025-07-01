@@ -6,5 +6,8 @@ wlsunset -S 4:30 -s 23:00 -t 4000:6500 &
 waybar &
 wl-paste --watch cliphist store &
 alacritty --daemon &
-waypaper --restore
-systemctl --user start swayidle.service
+waypaper --restore &
+
+if [ -f "$HOME/.config/systemd/user/swayidle.service" ]; then
+    systemctl --user start swayidle.service
+fi

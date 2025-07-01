@@ -9,10 +9,10 @@ static const int bypass_surface_visibility = 0;  /* 1 means idle inhibitors will
 static const int smartgaps                 = 0;  /* 1 means no outer gap when there is only one window */
 static const int monoclegaps               = 0;  /* 1 means outer gaps in monocle layout */
 static const unsigned int borderpx         = 0;  /* border pixel of windows */
-static const unsigned int gappih           = 10; /* horiz inner gap between windows */
-static const unsigned int gappiv           = 10; /* vert inner gap between windows */
-static const unsigned int gappoh           = 10; /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov           = 10; /* vert outer gap between windows and screen edge */
+static const unsigned int gappih           = 12; /* horiz inner gap between windows */
+static const unsigned int gappiv           = 12; /* vert inner gap between windows */
+static const unsigned int gappoh           = 12; /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov           = 12; /* vert outer gap between windows and screen edge */
 static const float rootcolor[]             = COLOR(0x222222ff);
 static const float bordercolor[]           = COLOR(0x44444400);
 static const float focuscolor[]            = COLOR(0x777777ff);
@@ -48,10 +48,10 @@ static const Layout layouts[] = {
 /* NOTE: ALWAYS add a fallback rule, even if you are completely sure it won't be used */
 static const MonitorRule monrules[] = {
 	/* name       mfact  nmaster scale layout       rotate/reflect                x    y */
-	{ "HDMI-A-1", 0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  100 },
-	{ "eDP-1",    0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+	// { "HDMI-A-1", 0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  100 },
+	// { "eDP-1",    0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 
-    // { NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
+    { NULL,       0.55f, 1,      1,    &layouts[0], WL_OUTPUT_TRANSFORM_NORMAL,   -1,  -1 },
 };
 
 /* keyboard */
@@ -104,7 +104,7 @@ LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT
 LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE
 */
 static const enum libinput_config_accel_profile accel_profile = LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE;
-static const double accel_speed = 0.0;
+static const double accel_speed = -0.5;
 
 /* You can choose between:
 LIBINPUT_CONFIG_TAP_MAP_LRM -- 1/2/3 finger tap maps to left/right/middle
@@ -133,7 +133,7 @@ static const char *waybarcmd[] = { "toggle-waybar", NULL };
 static const char *musiccmd[] = { "spotify", "--enable-features=UseOzonePlatform", "--ozone-platform=wayland", NULL };
 static const char *lockscrencmd[] = { "waylock", "-init-color", "0x111111", "-input-color", "0x666666", "-fail-color", "0x6C4141", NULL };
 static const char *colorpickercmd[] = { "hyprpicker", "-a", "-r", NULL };
-static const char *explorecmd[] = { "foot -c yazi", NULL };
+static const char *explorecmd[] = { "foot", "-e", "yazi", NULL };
 static const char *wallpapercmd[] = { "waypaper", NULL };
 
 static const Key keys[] = {
@@ -141,7 +141,6 @@ static const Key keys[] = {
     { MODKEY,                    XKB_KEY_c,          spawn,          SHCMD("screenshot region") },
     { MODKEY|WLR_MODIFIER_CTRL,  XKB_KEY_c,          spawn,          SHCMD("screenshot window") },
     { MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_c,          spawn,          SHCMD("screenshot all") },
-    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_P,          spawn,          SHCMD("footclient -e change-wall") },
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_V,          spawn,          SHCMD("vpn tog") },
     { MODKEY,                    XKB_KEY_v,          spawn,          SHCMD("cliphist list | wmenu -i -f 'Maple Mono CN 12' -l 30 | cliphist decode | wl-copy") },
 
@@ -152,9 +151,9 @@ static const Key keys[] = {
     { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_M,          spawn,          {.v = musiccmd} },
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_B,          spawn,          {.v = browsercmd} },
     { MODKEY|WLR_MODIFIER_ALT,   XKB_KEY_b,          spawn,          {.v = qutebrowsercmd} },
+    { MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     spawn,          {.v = termcmd} },
     { MODKEY,                    XKB_KEY_b,          spawn,          {.v = waybarcmd} },
     { MODKEY,                    XKB_KEY_p,          spawn,          {.v = menucmd} },
-    { MODKEY,                    XKB_KEY_Return,     spawn,          {.v = termcmd} },
 
 	{ MODKEY,                    XKB_KEY_j,          focusstack,     {.i = +1} },
 	{ MODKEY,                    XKB_KEY_k,          focusstack,     {.i = -1} },
@@ -173,7 +172,7 @@ static const Key keys[] = {
 	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Left,       moveresizekb,   {.v = (int []){ 0, 0, -40, 0 }}},
 
     { MODKEY,                    XKB_KEY_space,      incxkbrules,    {.i = +1} },
-	{ MODKEY|WLR_MODIFIER_SHIFT, XKB_KEY_Return,     zoom,           {0} },
+	{ MODKEY,                    XKB_KEY_Return,     zoom,           {0} },
 	{ MODKEY,                    XKB_KEY_Tab,        view,           {0} },
     { MODKEY,                    XKB_KEY_g,          togglegaps,     {0} },
 	{ MODKEY,                    XKB_KEY_q,          killclient,     {0} },

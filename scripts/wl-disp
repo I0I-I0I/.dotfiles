@@ -17,8 +17,6 @@ if [ "${#outputs[@]}" -lt 1 ]; then
     exit 1
 fi
 
-echo ${outputs[*]}
-
 outputs_order=("$primary")
 
 for o in "${outputs[@]}"; do
@@ -26,15 +24,12 @@ for o in "${outputs[@]}"; do
     outputs_order+=("$o")
 done
 
-echo "Active outputs: ${outputs_order[*]}"
-
 list() {
     wlr-randr | awk '/\S/ {print}'
 }
 
 get() {
     case "$1" in
-    primary) echo "Primary monitor: $primary" ;;
     *) wlr-randr --json | jq -r '.[] | select(.name=="'"$1"'" and .enabled==true) | .name' ;;
     esac
 }
@@ -44,14 +39,11 @@ mirror() {
         echo "Error: At least two outputs required to mirror."
         exit 1
     fi
-    echo "Mirroring all outputs to $primary"
-    # Use primary's mode for all
-    read -r pw ph <<<$(jq -r '.[] | select(.name=="'"$primary"'" and .enabled==true) | "\(.width) \(.height)"' <<<"$outputs_json")
     for o in "${outputs_order[@]}"; do
-        if ([ "$o" == "$primary" ]); then
+        if ([ "$o" == "$1" ]); then
             continue
         fi
-        wl-mirror --fullscreen --fullscreen-output "$primary" "$o"
+        wl-mirror --fullscreen --fullscreen-output $1 $o
     done
 }
 
@@ -109,17 +101,6 @@ rotate_disp() {
     esac
 }
 
-swap() {
-    if [ "${#outputs_order[@]}" -lt 2 ]; then
-        echo "Error: At least two outputs required to swap."
-        exit 1
-    fi
-    next=${outputs_order[1]}
-    echo "Swapping primary to $next"
-    primary="$next"
-    wlr-randr --output "$primary" --primary
-}
-
 off() {
     local disp="$1"
     echo "Turning off $disp"
@@ -140,8 +121,6 @@ only() {
             wlr-randr --output "$o" --off
         fi
     done
-    wlr-randr --output "$target" --primary
-    primary="$target"
 }
 
 apply_profile() {
@@ -156,40 +135,60 @@ apply_profile() {
     "$script"
 }
 
+set_opts() {
+    mode=$1
+
+    case "$mode" in
+        rate)
+            disp=$2
+            resolution=$3
+            if [[ "$3" =~ ^[0-9]+$ ]]; then
+                rate=$3
+                resolution="1920x1080"
+            else
+                rate=$4
+                if [ -z "$rate" ]; then
+                    echo "Error: Refresh rate not specified."
+                    exit 1
+                fi
+            fi
+            wlr-randr --output "$disp" --mode "${resolution}@${rate}Hz"
+            ;;
+        *) echo "Invalid input: $mode"
+    esac
+}
+
 show_help() {
     cat <<EOF
-    Usage: $0 <mode> [options]
-    Modes:
-    list               List active outputs
-    mirror             Mirror all outputs to primary
-    extend [h|v]       Extend horizontally (h) or vertically (v)
-    rotate <out> [o]   Rotate output (o: normal|left|right|inverted)
-    swap               Swap primary to next output
-    off <out>          Turn off specified output
-    only <out>         Use only specified output
-    profile <name>     Apply a saved profile
-    help               Show this help message
+Usage: wl-disp <mode> [options]
+    help                          Show this help message
+    list                          List active outputs
+    mirror                        Mirror all outputs to primary
+    extend [h|v]                  Extend horizontally (h) or vertically (v)
+    rotate <out> [o]              Rotate output (o: normal|left|right|inverted)
+    off <out>                     Turn off specified output
+    only <out>                    Use only specified output
+    profile <name>                Apply a saved profile
+    set
+        rate <out> <res> <rate>   Set refresh rate
 EOF
 }
 
-case "${1:-}" in
-list) list ;;
-mirror) mirror ;;
-extend) extend "${2:-h}" ;;
-rotate) rotate_disp "$2" "${3:-}" ;;
-swap) swap ;;
-off) off "$2" ;;
-on) on "$2" ;;
-only) only "$2" ;;
-profile) apply_profile "$2" ;;
-get) get "$2" ;;
-help | -h | --help) show_help ;;
-"")
-    extend h
-    ;;
-*)
-    echo "Invalid mode: $1"
-    show_help
-    exit 1
-    ;;
+case "$1" in
+    list) list ;;
+    mirror) mirror "${@:2}" ;;
+    extend) extend "${2:-h}" ;;
+    rotate) rotate_disp "$2" "${3:-}" ;;
+    off) off "$2" ;;
+    on) on "$2" ;;
+    only) only "$2" ;;
+    profile) apply_profile "$2" ;;
+    get) get "$2" ;;
+    set) set_opts "${@:2}" ;;
+    help | -h | --help) show_help ;;
+    *)
+        echo "Invalid mode: $1"
+        show_help
+        exit 1
+        ;;
 esac

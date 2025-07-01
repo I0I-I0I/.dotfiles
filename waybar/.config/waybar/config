@@ -5,7 +5,7 @@
     "spacing": 0,
     "margin-left": 0,
     "margin-top": 0,
-    "margin-right": 0,
+    "margin-right": -1,
     "sort-by-number": true,
 
     "modules-left": [
@@ -51,18 +51,27 @@
         "format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}%",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "tooltip": true,
-        "on-click": "foot -e btop"
+        "on-click": "allacritty -e btop"
     },
 
     "bluetooth": {
         "interval": 30,
-        "format": " {status}",
+        "format": "",
+        "format-no-controller": "",
         "format-disabled": "󰂲",
-        "format-connected": " {device_battery_percentage}%",
+        "format-connected": " {device_alias}",
+        "format-connected-battery": " {device_alias} ({device_battery_percentage}%)",
+
         "tooltip-format": "All devices:\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "\t{device_alias}",
         "tooltip-format-enumerate-connected-battery": "\t{device_alias} ({device_battery_percentage}%)",
-        "on-click": "foot -e bluetui"
+
+        "tooltip-format":                "{status}\n\nDevices:\n{device_enumerate}",
+        "tooltip-format-enumerate":      "\t• {device_alias} [{device_battery_percentage}%]\n",
+        "tooltip-format-enumerate-no-bat":"\t• {device_alias}\n",
+
+        "on-click": "allacritty -e bluetui",
+        "on-right-click":"bluetoothctl power toggle",
     },
 
     "pulseaudio": {
@@ -95,11 +104,11 @@
     },
 
     "network": {
-        "interface": "wlp1s0",
+        // "interface": "wlp*",
         "format": "{ifname}",
         "interval": 5,
         "format-wifi": " ",
-        "format-ethernet": "",
+        "format-ethernet": " ",
         "format-disconnected": " ",
         "tooltip-format": "{ifname}",
         "tooltip-format-wifi": "{essid}   {frequency}MHz\nInterface: {ifname}\nUp: {bandwidthUpBytes}\nDown: {bandwidthDownBytes}",
