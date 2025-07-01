@@ -25,7 +25,7 @@ _notify() {
         else
             icon=" "
         fi
-        dunstify -r 22 "VPN $icon" "$1" -u "$2" -t 2000
+        dunstify -r 22 "VPN $icon" "$1" -u "$2" -t 3000
     fi
 }
 
@@ -50,16 +50,16 @@ fi
 
 vpn_up() {
     if _vpn_st; then
-        echo "VPN already connected"
         _notify "already connected" low
+        echo "VPN already connected"
         exit 0
     fi
 
     USER=$(whoami)
 
     if [ -z "$SERVER_IP" ] || [ -z "$DEFAULT_GW" ]; then
-        echo "something is missing: \$SERVER_IP or \$DEFAULT_GW"
         _notify "something is missing: \$SERVER_IP or \$DEFAULT_GW" critical
+        echo "something is missing: \$SERVER_IP or \$DEFAULT_GW"
         exit 1
     fi
 
@@ -71,11 +71,11 @@ vpn_up() {
     sudo ip r a default via 10.0.0.2 metric 10
 
     if _vpn_st; then
-        echo "VPN connection successful"
         _notify "" low
+        echo "VPN connection successful"
     else
-        echo "VPN connection failed"
         _notify "failed" critical
+        echo "VPN connection failed"
         exit 1
     fi
 }
@@ -87,8 +87,8 @@ vpn_down() {
     fi
     sudo ip route del default via 10.0.0.2 >/dev/null 2>&1
     if [ -z "$DEFAULT_GW" ]; then
-        echo "something is missing: \$DEFAULT_GATEWAY"
         _notify "something is missing: \$DEFAULT_GATEWAY" critical
+        echo "something is missing: \$DEFAULT_GATEWAY"
     else
         sudo ip route del $SERVER_IP 2>/dev/null
     fi
@@ -97,12 +97,12 @@ vpn_down() {
     sudo ip link del tun0 2>/dev/null
     sudo pkill -f "badvpn-tun2sock"
     if _vpn_st; then
-        echo "VPN still connected"
         _notify "still connected" low
+        echo "VPN still connected"
         exit 1
     fi
-    echo "VPN disconnected"
     _notify "" critical
+    echo "VPN disconnected"
 }
 
 vpn_toggle() {
