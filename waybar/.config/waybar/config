@@ -70,7 +70,7 @@
         "tooltip-format-enumerate":      "\t• {device_alias} [{device_battery_percentage}%]\n",
         "tooltip-format-enumerate-no-bat":"\t• {device_alias}\n",
 
-        "on-click": "allacritty -e bluetui",
+        "on-click": "alacritty -e bluetui",
         "on-right-click":"bluetoothctl power toggle",
     },
 
