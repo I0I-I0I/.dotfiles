@@ -4,7 +4,7 @@ blur = true
 
 [font]
 normal = { family = "Maple Mono NF CN", style = "normal" }
-size = 14
+size = 15
 
 [colors]
 primary.background = "#000000"

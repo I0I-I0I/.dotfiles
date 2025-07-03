@@ -42,7 +42,7 @@
     "memory": {
         "interval": 3,
         "format": " {used}GiB",
-        "on-click": "footclient -e btop",
+        "on-click": "alacritty -e btop",
         "tooltip": true
     },
 
@@ -51,7 +51,7 @@
         "format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}%",
         "format-icons": ["▁", "▂", "▃", "▄", "▅", "▆", "▇", "█"],
         "tooltip": true,
-        "on-click": "allacritty -e btop"
+        "on-click": "alacritty -e btop"
     },
 
     "bluetooth": {
@@ -114,7 +114,7 @@
         "tooltip-format-wifi": "{essid}   {frequency}MHz\nInterface: {ifname}\nUp: {bandwidthUpBytes}\nDown: {bandwidthDownBytes}",
         "tooltip-format-ethernet": "{ifname} ",
         "tooltip-format-disconnected": "Disconnected  ",
-        "on-click": "footclient -e nmtui",
+        "on-click": "alacritty -e nmtui",
         "max-length": 50
     },
 
@@ -149,7 +149,7 @@
     "clock": {
         "format": "{:%A, %B %d, %Y - %R}",
         "tooltip": true,
-        "tooltip-format": "<tt><small>{calendar}</small></tt>",
+        "tooltip-format": "<tt><big>{calendar}</big></tt>",
         "calendar": {
             "mode"          : "year",
             "mode-mon-col"  : 3,

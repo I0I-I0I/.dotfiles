@@ -1,0 +1,177 @@
+(use-package emacs
+  :ensure nil
+  :init
+  (setq inhibit-startup-message t)
+  (scroll-bar-mode -1)
+  (tooltip-mode -1)
+  (tool-bar-mode -1)
+  (set-fringe-mode 10)
+  (setq ring-bell-function 'ignore)
+  (setq mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+  (setq mouse-wheel-progressive-speed nil)
+  (setq mouse-wheel-follow-mouse 't)
+  (setq scroll-step 1)
+  (setq which-key-show-early-on-C-h t)
+  (setq which-key-idle-delay 0.5)
+  (which-key-mode)
+  (which-key-setup-side-window-right)
+  (fido-mode)
+  (icomplete-mode) 
+  (set-face-attribute 'default nil :font "Maple Mono NF CN" :height 140)
+  (load-theme 'wombat)
+  (global-display-line-numbers-mode t))
+
+(setq treesit-language-source-alist
+ '((bash "https://github.com/tree-sitter/tree-sitter-bash")
+   (cmake "https://github.com/uyha/tree-sitter-cmake")
+   (css "https://github.com/tree-sitter/tree-sitter-css")
+   (elisp "https://github.com/Wilfred/tree-sitter-elisp")
+   (go "https://github.com/tree-sitter/tree-sitter-go")
+   (html "https://github.com/tree-sitter/tree-sitter-html")
+   (javascript "https://github.com/tree-sitter/tree-sitter-javascript" "master" "src")
+   (json "https://github.com/tree-sitter/tree-sitter-json")
+   (make "https://github.com/alemuller/tree-sitter-make")
+   (markdown "https://github.com/ikatyang/tree-sitter-markdown")
+   (python "https://github.com/tree-sitter/tree-sitter-python")
+   (toml "https://github.com/tree-sitter/tree-sitter-toml")
+   (tsx "https://github.com/tree-sitter/tree-sitter-typescript" "master" "tsx/src")
+   (typescript "https://github.com/tree-sitter/tree-sitter-typescript" "master" "typescript/src")
+   (yaml "https://github.com/ikatyang/tree-sitter-yaml")))
+
+(add-to-list 'major-mode-remap-alist '(python-mode . python-ts-mode))
+(add-hook 'python-ts-mode-hook 'eglot-ensure)
+
+;; Package Management
+(require 'package)
+(package-initialize)
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+
+(unless package-archive-contents
+  (package-refresh-contents))
+
+(unless (package-installed-p 'use-package)
+  (package-install 'use-package))
+
+(require 'use-package)
+(setq use-package-always-ensure t)
+
+(use-package swiper
+  :ensure t
+  :bind (("C-s" . swiper)))
+
+(use-package python-ts-mode
+  :ensure nil
+  :bind (:map python-ts-mode-map
+	      ("C-c f b" . treesit-beginning-of-defun)
+              ("C-c f e" . treesit-end-of-defun))
+  :mode "\\.py\\'"
+  :custom
+  (ruby-indent-level 4)
+  (ruby-indent-tabs-mode nil))
+
+(use-package company
+  :ensure t
+  :hook (prog-mode . global-company-mode)
+  :config
+  ;; Core settings
+  (setq company-minimum-prefix-length 1
+        company-idle-delay 0.2
+        company-tooltip-align-annotations t)
+  
+  ;; Enable LSP completions via CAPF
+  (add-to-list 'company-backends #'company-capf)  ; Built into company-mode:cite[3]:cite[7]
+
+  ;; Keybindings
+  :bind (:map company-active-map
+         ("C-n" . company-select-next)
+         ("C-p" . company-select-previous)
+         ("<tab>" . company-complete-selection)))
+
+(use-package company-quickhelp  ; Show docs in popup
+  :ensure t
+  :hook (company-mode . company-quickhelp-mode))
+
+(use-package eglot
+  :ensure t
+  :defer t
+  :bind (("M-TAB" . completion-at-point)
+         ("M-g i" . imenu)
+         ("C-h ." . display-local-help)
+         ("M-." . xref-find-definitions)
+         ("M-," . xref-go-back)
+         ("M-?" . xref-find-references)
+         ("C-c C-a" . eglot-code-actions)
+         ("C-c a i" . eglot-code-actions-organize-imports)
+         ("C-c C-r" . eglot-rename)
+         ("C-c C-f" . eglot-format)
+         ("C-c C-d" . eldoc))
+  :hook ((python-mode . eglot-ensure)
+         (python-mode . flyspell-prog-mode)
+         (python-mode . superword-mode)
+         (python-mode . hs-minor-mode)
+         (python-mode . (lambda () (set-fill-column 88))))
+  :config
+  (add-hook 'eglot-managed-mode-hook
+            (lambda ()
+              (setq-local company-backends '(company-capf company-keywords))))
+  
+  ;; Primary server - Pyright (for completions, definitions, etc)
+  (add-to-list 'eglot-server-programs 
+               '(python-mode . ("pyright-langserver" "--stdio")))
+  
+  ;; Secondary server - Ruff (for linting/formatting)
+  (add-to-list 'eglot-server-programs
+               '(python-mode . ("ruff", "server")))
+  
+  ;; Pyright configuration
+  (setq-default eglot-workspace-configuration
+                '((:pyright
+		   (:analysis (:typeCheckingMode "off")
+                            :disableLanguageServices nil
+                            :disableOrganizeImports nil
+                            :openFilesOnly t
+                            :useLibraryCodeForTypes t)
+		   :python (
+			    :pythonPath ".venv/bin/python"
+                   ))))
+  
+  ;; Ruff configuration
+  (setq-default eglot-workspace-configuration
+                (append eglot-workspace-configuration
+                        '((:ruff (:lineLength 88
+                                 :select ["E" "F" "W" "I"]
+                                 :format (:enabled t))))))
+  
+  ;; Format on save
+  (add-hook 'python-mode-hook
+            (lambda ()
+              (add-hook 'before-save-hook #'eglot-format-buffer nil t))))
+
+(use-package auto-virtualenv
+  :ensure t
+  :config
+  (setq auto-virtualenv-verbose t)
+  (auto-virtualenv-setup))
+
+  (setq auto-virtualenv-global-dirs
+	'(".venv" "venv"))
+
+  (setq auto-virtualenv-python-project-files
+	'("requirements.txt" "Pipfile" "pyproject.toml" "setup.py" "manage.py" "tox.ini" ".flake8"))
+
+ (use-package pyvenv
+  :ensure t
+  :config
+  (setq pyvenv-mode-line-indicator "(venv)")
+  (pyvenv-mode 1))  ; Globally enable
+
+;; Keybindings for venv management
+(define-key python-mode-map (kbd "C-c v v") 'pyvenv-workon)
+
+(use-package flymake
+  :hook (prog-mode . flymake-mode)
+      :bind (("C-h ." . display-local-help)
+          :map flymake-mode-map
+          ("C-c ! n" . flymake-goto-next-error)
+          ("C-c ! p" . flymake-goto-prev-error)
+          ("C-c ! l" . flymake-show-diagnostics-buffer)))
