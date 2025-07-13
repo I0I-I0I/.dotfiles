@@ -11,11 +11,11 @@ set -gx QT_QPA_PLATFORM xcb
 
 set -gx EDITOR /usr/local/bin/nvim
 set -gx PATH $PATH ~/.tmux/scripts
+set -gx PATH $PATH ~/.config/emacs/bin
 
 alias py="uv run python"
 alias vi="/sbin/vim"
-alias vim="nvim"
-alias cim="CONF=code nvim"
+alias vim="CONF=code nvim"
 alias poe="uv run poe"
 alias la="ls -Alhv --group-directories-first --color=auto"
 alias ll="ls -vA --group-directories-first --color=auto"
@@ -25,6 +25,8 @@ alias tmks="tmux kill-server"
 bind \cs "tmux-sessionizer"
 
 fish_config theme choose "Rose Pine"
+
+tmux new -s main 2>/dev/null || tmux attach -t main 2>/dev/null
 
 # pnpm
 set -gx PNPM_HOME "/home/i0i/.local/share/pnpm"

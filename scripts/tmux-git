@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+window_name="Gitu"
+
+tmux neww -n $window_name gitu
