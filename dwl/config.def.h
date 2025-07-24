@@ -104,7 +104,7 @@ LIBINPUT_CONFIG_ACCEL_PROFILE_FLAT
 LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE
 */
 static const enum libinput_config_accel_profile accel_profile = LIBINPUT_CONFIG_ACCEL_PROFILE_ADAPTIVE;
-static const double accel_speed = 0;
+static const double accel_speed = -0.5;
 
 /* You can choose between:
 LIBINPUT_CONFIG_TAP_MAP_LRM -- 1/2/3 finger tap maps to left/right/middle
@@ -125,7 +125,7 @@ static const enum libinput_config_tap_button_map button_map = LIBINPUT_CONFIG_TA
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* commands */
-static const char *termcmd[] = { "alacritty", NULL };
+static const char *termcmd[] = { "ghostty", NULL };
 static const char *menucmd[] = { "wmenu-run", "-i", "-f", "'Maple Mono CN' Normal 16", NULL };
 static const char *browsercmd[] = { "zen", NULL };
 static const char *qutebrowsercmd[] = { "qutebrowser", NULL };
@@ -215,3 +215,4 @@ static const Button buttons[] = {
 	{ MODKEY, BTN_MIDDLE, togglefloating, {0} },
 	{ MODKEY, BTN_RIGHT,  moveresize,     {.ui = CurResize} },
 };
+
