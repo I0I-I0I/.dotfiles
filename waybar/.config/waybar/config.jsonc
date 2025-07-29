@@ -9,6 +9,7 @@
     "sort-by-number": true,
     "modules-left": [
         "custom/power",
+        "hyprland/workspaces",
         "tray"
     ],
     "modules-center": [
@@ -190,6 +191,28 @@
         },
         "actions": {
             "on-click": "mode"
+        }
+    },
+
+    "hyprland/workspaces": {
+        "format": "{icon}",
+        "format-icons": {
+            "1": "一",
+            "2": "二",
+            "3": "三",
+            "4": "四",
+            "5": "五",
+            "6": "六",
+            "7": "七",
+            "8": "八",
+            "9": "九"
+        },
+        "on-scroll-up": "hyprctl dispatch workspace e+1",
+        "on-scroll-down": "hyprctl dispatch workspace e-1",
+        "on-click": "activate",
+        "all-outputs": false,
+        "persistent_workspaces": {
+            "*": 5
         }
     }
 }

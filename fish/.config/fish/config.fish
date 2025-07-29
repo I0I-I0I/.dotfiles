@@ -1,5 +1,6 @@
 set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/.dotfiles/scripts
+set -gx PATH $PATH /home/nnofly/.local/bin
 
 set -gx ELECTRON_OZONE_PLATFORM_HINT auto
 set -gx QT_QPA_PLATFORM wayland
