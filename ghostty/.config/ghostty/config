@@ -6,7 +6,7 @@ cursor-style = block
 cursor-style-blink = true
 shell-integration-features = no-cursor
 
-background-opacity = 0.75
+background-opacity = 0.8
 background = "#000000"
 
 window-padding-balance = true
