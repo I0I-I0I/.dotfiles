@@ -1,52 +1,15 @@
-/* Black */
-
 * {
-  font-family: "Maple Mono NF CN SemiBold";
-  /* font-weight: 600; */
-  /* font-style: italic; */
-  font-size: 14px;
-  margin: 0;
-  padding: 0;
-  padding: 0;
-  color: white;
-}
-
-#window {
-  padding: 0;
+    font-family: "Maple Mono NF CN SemiBold";
+    font-weight: 600;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    color: white;
 }
 
 window#waybar {
-  background-color: #000001;
+    background-color: #000001;
 }
-
-window#waybar.hidden {
-  opacity: 0.2;
-}
-
-#workspaces button {
-  padding: 0;
-  background-color: #000001;
-  transition-property: color;
-  transition-duration: 0.35s;
-  /* border-radius: 50%; */
-  color: grey;
-}
-
-#workspaces button.active {
-  color: white;
-}
-
-#workspaces button.urgent {
-  background-color: #000001;
-  color: white;
-}
-
-#mode {
-  background-color: #000001;
-  border-bottom: 3px solid #ffffff;
-}
-
-/* Common Widget Styles */
 
 #custom-updates,
 #window,
@@ -61,139 +24,128 @@ window#waybar.hidden {
 #temperature,
 #memory,
 #pulseaudio {
-  padding: 5px 0px;
-  border: none;
-  background-color: #000001;
-  color: white;
+    padding: 5px 0px;
+    border: none;
+}
+
+#clock {
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-right: 12px;
 }
 
 #battery {
-  padding-left: 8px;
-  padding-right: 8px;
-}
-
-#battery.charging {
-  color: lightgreen;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
 #battery.warning {
-  color: yellow;
+    color: yellow;
 }
 
 #battery.critical {
-  color: red;
+    color: red;
+}
+
+#battery.charging {
+    color: lightgreen;
 }
 
 #bluetooth {
-  padding-right: 8px;
-  padding-left: 8px;
+    padding-right: 12px;
+    padding-left: 8px;
 }
 
 #network {
-  color: white;
-  padding-right: 8px;
-  padding-left: 8px;
+    padding-right: 12px;
+    padding-left: 12px;
 }
 
 #custom-power {
-  padding-left: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: 12px;
 }
 
 #custom-vpn {
-  padding-left: 8px;
-  padding-right: 8px;
-  margin-right: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
 #custom-updates {
-  color: white;
-  font-weight: 600;
+    font-weight: 600;
 }
 
-#temperature {
-  color: white;
-  border-right: none;
-  padding-left: 15px;
-  padding-right: 8px;
-}
-
-/* CPU Usage */
 #cpu {
-  color: white;
-  padding-left: 8px;
-  padding-right: 8px;
-  margin-right: 16px;
+    padding-left: 8px;
+    padding-right: 8px;
 }
 
-/* Memory Usage */
 #memory {
-  color: white;
-  padding-left: 8px;
-  padding-right: 8px;
+    padding-left: 8px;
+    padding-right: 8px;
+    margin-left: 44px;
 }
 
-#custom-brightness {
-  padding-left: 8px;
-  padding-right: 8px;
+#backlight {
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
-/* Pulseaudio Widget */
 #pulseaudio {
-  margin-right: 16px;
-  padding-left: 8px;
-  padding-right: 8px;
+    padding-left: 12px;
+    padding-right: 12px;
 }
 
-/* VPN */
 #custom-vpn.connected {
-  color: lightgreen;
+    color: lightgreen;
 }
 
 #custom-vpn.disconnected {
-  color: red;
-}
-
-.dark-menu {
-  background-color: #2d2d2d;
-  color: #ffffff;
-  padding: 5px;
-}
-
-.dark-menu menuitem {
-  background-color: #2d2d2d;
-  padding: 8px;
-  color: #ffffff;
-}
-
-.dark-menu menuitem:hover {
-  background-color: #3d3d3d;
-}
-
-.dark-menu separator {
-  background-color: #444444;
+    color: red;
 }
 
 #workspaces {
-  padding: 0 4px;
-  margin: 0 4px;
-  border-radius: 0px;
+    padding: 0 0px;
+    margin: 0 0px;
+    border-radius: 0px;
 }
 
 #workspaces button {
-  padding: 0;
-  margin: 0;
-  min-width: 30px;
-  border-radius: 0;
-  background: transparent;
-  color: #4a4a4a;
-  box-shadow: none;
-  transition: .2s;
+    padding: 0;
+    margin: 0;
+    min-width: 30px;
+    border-radius: 0;
+    background: transparent;
+    box-shadow: none;
+    transition: .2s;
 }
 
 #workspaces button * {
-  margin-left: .5px;
+    transition: .2s;
+    color: #666;
 }
 
-#workspaces button.active {
-    background-color: #444444;
+#workspaces button.active * {
+    color: #fff;
+}
+
+.memory-usage {
+    color: red;
+}
+
+.memory-usage.low {
+    color: #a3be8c;
+}
+
+.memory-usage.high {
+    color: #bf616a;
+}
+
+.cpu-usage {
+    color: inherit;
+}
+
+.cpu-usage.high {
+    color: #bf616a;
 }

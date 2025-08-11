@@ -1,0 +1,87 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[c]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "[cpp]": {
+    "editor.defaultFormatter": "llvm-vs-code-extensions.vscode-clangd"
+  },
+  "[python]": {
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "python.defaultInterpreterPath": "d:\\attachment\\Python3.11.4\\python.exe",
+
+  // "editor.suggestOnTriggerCharacters": false,
+  // "editor.quickSuggestions": {
+  //   "other": false,
+  //   "comments": false,
+  //   "strings": false
+  // },
+
+  "tailwindcss-intellisense.trace.server": "verbose",
+
+  "terminal.integrated.sendKeybindingsToShell": true,
+  "explorer.confirmDelete": false,
+  "explorer.confirmDragAndDrop": false,
+  "editor.minimap.enabled": false,
+  "editor.formatOnSave": true,
+  "editor.foldingImportsByDefault": true,
+  "workbench.colorTheme": "Black Italic",
+  "workbench.editor.editorActionsLocation": "hidden",
+  "workbench.activityBar.location": "hidden",
+  "workbench.startupEditor": "none",
+  "editor.fontFamily": "Maple Mono, Consolas, 'Courier New', monospace",
+  "terminal.integrated.fontFamily": "Maple Mono",
+
+  // Django
+  "files.associations": {
+    "**/templates/*.html": "django-html",
+    "**/templates/*": "django-txt",
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+  },
+  "emmet.includeLanguages": { "django-html": "html" },
+  "[django-html]": {
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "junstyle.vscode-django-support"
+  },
+  "python.analysis.typeCheckingMode": "standard",
+  "window.menuBarVisibility": "compact",
+  "chat.commandCenter.enabled": false,
+  "workbench.navigationControl.enabled": false,
+  "window.commandCenter": false,
+  "workbench.layoutControl.enabled": false,
+  "codeium.enableCodeLens": false,
+  "breadcrumbs.enabled": false,
+  "window.density.editorTabHeight": "compact",
+  "workbench.editor.showTabs": "none",
+  "editor.lineHeight": 0,
+  "editor.fontSize": 17,
+  "workbench.colorCustomizations": {},
+
+  // Vim
+  "vim.normalModeKeyBindingsNonRecursive": [
+    {
+      "before": ["<Esc>"],
+      "when": ["editorFocus"],
+      "commands": [":nohl"],
+      "silent": true
+    }
+  ],
+  "vim.incsearch": true,
+  "vim.useCtrlKeys": true,
+  "vim.hlsearch": true,
+  "vim.highlightedyank.enable": true,
+  "vim.smartRelativeLine": true,
+  "vim.surround": true,
+  "extensions.experimental.affinity": {
+    "vscodevim.vim": 1
+  },
+
+  "terminal.integrated.tabs.enableAnimation": false
+}

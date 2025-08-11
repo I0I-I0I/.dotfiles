@@ -1,30 +1,43 @@
 {
     "layer": "top",
-    "position": "top", // or "bottom", "left", "right"
-    "exclusive": true, // set to false if you want to hide bar
+    "position": "top",
+    "exclusive": true,
     "spacing": 0,
     "margin-left": 0,
     "margin-top": 0,
-    "margin-right": -1,
     "sort-by-number": true,
     "modules-left": [
         "custom/power",
-        "hyprland/workspaces",
-        "tray"
+        "hyprland/workspaces"
     ],
     "modules-center": [
-        "clock"
+        "custom/waybar-mpris"
     ],
     "modules-right": [
         "memory",
         "cpu",
-        "backlight",
         "pulseaudio",
-        "bluetooth",
+        "backlight",
         "network",
+        "bluetooth",
         "custom/vpn",
-        "battery"
+        "battery",
+        "clock"
     ],
+
+    // paru -S waybar-mpris-git
+    "custom/waybar-mpris": {
+        "return-type": "json",
+        "exec": "waybar-mpris --position --pause  --play ",
+        "on-click": "waybar-mpris --send toggle",
+        "on-click-right": "waybar-mpris --send player-next",
+        "on-scroll-up": "waybar-mpris --send next",
+        "on-scroll-down": "waybar-mpris --send prev",
+        "smooth-scrolling-threshold": 25,
+        "tooltip": false,
+        "escape": true
+    },
+
     "custom/power": {
         "format": " ",
         "tooltip": false,
@@ -37,15 +50,17 @@
             "hibernate": "systemctl hibernate"
         }
     },
+
     "memory": {
         "interval": 3,
-        "format": " {used}GiB",
+        "format": "{used}GiB",
         "on-click": "ghostty -e btop",
-        "tooltip": true
+        "tooltip": false
     },
+
     "cpu": {
         "interval": 3,
-        "format": "{icon0}{icon1}{icon2}{icon3} {usage:>2}%",
+        "format": "{icon0}{icon1}{icon2}{icon3}",
         "format-icons": [
             "▁",
             "▂",
@@ -59,46 +74,46 @@
         "tooltip": true,
         "on-click": "ghostty -e btop"
     },
+
     "bluetooth": {
         "interval": 30,
         "format": "",
         "format-no-controller": "",
         "format-disabled": "󰂲",
-        "format-connected": " {device_alias}",
-        "format-connected-battery": " {device_alias} ({device_battery_percentage}%)",
+        "format-connected": "󰂱 ",
+        "format-connected-battery": "󰂱 ",
         "tooltip-format": "All devices:\n{device_enumerate}",
         "tooltip-format-enumerate-connected": "\t{device_alias}",
         "tooltip-format-enumerate-connected-battery": "\t{device_alias} ({device_battery_percentage}%)",
-        "tooltip-format": "{status}\n\nDevices:\n{device_enumerate}",
         "tooltip-format-enumerate": "\t• {device_alias} [{device_battery_percentage}%]\n",
         "tooltip-format-enumerate-no-bat": "\t• {device_alias}\n",
         "on-click": "ghostty -e bluetui",
         "on-right-click": "bluetoothctl power toggle"
     },
+
     "pulseaudio": {
-        "format": "{icon} {volume}%",
-        "format-bluetooth": "{icon} {volume}%",
-        "format-muted": "  󰖁  ",
-        "format-icons": {
-            "headphones": "",
-            "handsfree": "",
-            "headset": "",
-            "phone": "",
-            "phone-muted": "",
-            "portable": "",
-            "default": [
-                "",
-                ""
-            ]
-        },
+        "format": "{icon}",
+        "format-bluetooth": "{icon}",
+        "format-muted": "󰖁 ",
+        "tooltip": true,
+        "tooltip-format": "{icon} {volume}%",
+        "format-icons": [
+            " ",
+            " ",
+            " ",
+            " "
+        ],
         "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
         "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
         "on-scroll-down": "pactl set-sink-volume @DEFAULT_SINK@ -1%",
         "smooth-scrolling-threshold": 2
     },
+
     "backlight": {
         "device": "amd_backlight",
-        "format": "{icon} {percent}%",
+        "format": "{icon}",
+        "tooltip": true,
+        "tooltip-format": "{percent}%",
         "format-icons": [
             "",
             "",
@@ -118,22 +133,19 @@
         ],
         "on-click": "brightnessctl set 20%",
         "on-click-right": "brightnessctl set 65%",
-        "smooth-scrolling-threshold": 2,
-        "tooltip": false
+        "smooth-scrolling-threshold": 2
     },
     "network": {
-        // "interface": "wlp*",
         "format": "{ifname}",
         "interval": 5,
         "format-wifi": " ",
-        "format-ethernet": " ",
+        "format-ethernet": "󰈁 ",
         "format-disconnected": " ",
         "tooltip-format": "{ifname}",
         "tooltip-format-wifi": "{essid}   {frequency}MHz\nInterface: {ifname}\nUp: {bandwidthUpBytes}\nDown: {bandwidthDownBytes}",
-        "tooltip-format-ethernet": "{ifname} ",
+        "tooltip-format-ethernet": "{ifname} 󰈁",
         "tooltip-format-disconnected": "Disconnected  ",
-        "on-click": "ghostty -e nmtui",
-        "max-length": 50
+        "on-click": "ghostty -e nmtui"
     },
     "tray": {
         "icon-size": 21,
@@ -155,24 +167,24 @@
         },
         "format": "{icon}",
         "format-alt": "{capacity}% {icon}",
-        "format-charging": "{capacity}%   {time}",
-        "format-plugged": "{capacity}% 🔌",
+        "format-charging": "{capacity}% {icon}",
+        "format-plugged": "{capacity}% ",
         "format-icons": [
-            "󰂃",
-            "󰁻",
-            "󰁼",
-            "󰁽",
-            "󰁾",
-            "󰁿",
-            "󰂀",
-            "󰂁",
-            "󰂂",
-            "󰁹"
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "",
+            ""
         ],
         "tooltip": true
     },
     "clock": {
-        "format": "{:%A, %B %d, %Y - %R}",
+        "format": "{:%a %d %B %I:%M %p}",
         "tooltip": true,
         "tooltip-format": "<tt><big>{calendar}</big></tt>",
         "calendar": {
@@ -193,7 +205,6 @@
             "on-click": "mode"
         }
     },
-
     "hyprland/workspaces": {
         "format": "{icon}",
         "format-icons": {
@@ -216,4 +227,4 @@
         }
     }
 }
-}
+

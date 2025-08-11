@@ -1,0 +1,21 @@
+[
+  {
+    "context": "Editor",
+    "bindings": {
+      "ctrl-alt-up": "editor::MoveToStartOfParagraph",
+      "ctrl-alt-down": "editor::MoveToEndOfParagraph",
+      "ctrl-shift-up": "editor::SelectToStartOfParagraph",
+      "ctrl-shift-down": "editor::SelectToEndOfParagraph",
+
+      "ctrl-alt-d": "editor::SelectPrevious",
+      "ctrl-k ctrl-alt-d": [
+        "editor::SelectPrevious",
+        { "replace_newest": true }
+      ],
+
+      "ctrl-enter": "editor::NewlineBelow",
+      "shift-enter": "editor::NewlineAbove",
+      "ctrl-k": null
+    }
+  }
+]
