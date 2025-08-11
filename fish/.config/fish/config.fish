@@ -1,6 +1,7 @@
 set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/.dotfiles/scripts
-set -gx PATH $PATH /home/nnofly/.local/bin
+set -gx PATH $PATH ~/.local/bin
+set -gx PATH $PATH ~/.local/share/nvim/mason/bin
 
 set -gx ELECTRON_OZONE_PLATFORM_HINT auto
 set -gx QT_QPA_PLATFORM wayland
@@ -12,7 +13,6 @@ set -gx QT_QPA_PLATFORM xcb
 
 set -gx EDITOR /usr/local/bin/nvim
 set -gx PATH $PATH ~/.tmux/scripts
-set -gx PATH $PATH ~/.config/emacs/bin
 
 alias py="uv run python"
 alias vi="/sbin/vim"
@@ -35,3 +35,5 @@ if not string match -q -- $PNPM_HOME $PATH
   set -gx PATH "$PNPM_HOME" $PATH
 end
 # pnpm end
+
+source ~/.secure-keys
