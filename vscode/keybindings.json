@@ -22,12 +22,12 @@
   {
     "key": "shift+k",
     "command": "editor.action.moveLinesUpAction",
-    "when": "vim.mode != 'Insert' && editorTextFocus"
+    "when": "vim.mode != 'Insert' && vim.mode != 'Normal' && editorTextFocus"
   },
   {
     "key": "shift+j",
     "command": "editor.action.moveLinesDownAction",
-    "when": "vim.mode != 'Insert' && editorTextFocus"
+    "when": "vim.mode != 'Insert' && vim.mode != 'Normal' && editorTextFocus"
   },
 
   {
@@ -58,16 +58,6 @@
   },
 
   {
-    "key": "g r a",
-    "command": "editor.action.codeAction",
-    "when": "vim.mode == 'Normal' && editorTextFocus"
-  },
-  {
-    "key": "g r n",
-    "command": "editor.action.rename",
-    "when": "vim.mode == 'Normal' && editorHasRenameProvider && editorTextFocus && !editorReadonly"
-  },
-  {
     "key": "ctrl+p",
     "command": "workbench.action.quickOpen",
     "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
@@ -83,18 +73,28 @@
     "when": "vim.mode == 'Normal' && editorTextFocus"
   },
   {
-    "key": "g r r",
+    "key": "space r a",
+    "command": "editor.action.codeAction",
+    "when": "vim.mode == 'Normal' && editorTextFocus"
+  },
+  {
+    "key": "space r n",
+    "command": "editor.action.rename",
+    "when": "vim.mode == 'Normal' && editorHasRenameProvider && editorTextFocus && !editorReadonly"
+  },
+  {
+    "key": "space r r",
     "command": "editor.action.goToReferences",
     "when": "vim.mode == 'Normal' && editorTextFocus"
   },
   {
-    "key": "g r i",
+    "key": "space r i",
     "command": "editor.action.goToImplementation",
     "when": "vim.mode == 'Normal' && editorTextFocus"
   },
   {
     "key": "[ d",
-    "command": "editor.action.marker.prev",
+    "command": "editor.action.marker.next",
     "when": "vim.mode == 'Normal' && editorTextFocus"
   },
   {
@@ -130,9 +130,13 @@
   },
 
   {
-    "key": "space t",
+    "key": "ctrl+w shift+o",
     "command": "workbench.action.closeOtherEditors",
     "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "ctrl+w c",
+    "command": "workbench.action.closeActiveEditor"
   },
 
   {
@@ -231,6 +235,10 @@
   },
   {
     "key": "ctrl+b",
+    "command": "workbench.action.toggleAuxiliaryBar"
+  },
+  {
+    "key": "ctrl+alt+b",
     "command": "workbench.action.toggleSidebarVisibility"
   },
   {
@@ -242,6 +250,52 @@
     "key": "space .",
     "command": "workbench.action.showAllEditors",
     "when": "vim.mode == 'Normal' && (editorTextFocus || !inputFocus)"
+  },
+
+  {
+    "key": "space f f",
+    "command": "workbench.view.search.focus",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f g",
+    "command": "workbench.view.scm",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f x",
+    "command": "workbench.view.extensions",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f w",
+    "command": "workbench.view.extension.mintdocs",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f p",
+    "command": "workbench.view.extension.project-manager",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f t",
+    "command": "workbench.view.testing.focus",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f d",
+    "command": "workbench.view.debug",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f e",
+    "command": "workbench.view.explorer",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
+  },
+  {
+    "key": "space f shift+e",
+    "command": "workbench.files.action.focusOpenEditorsView",
+    "when": "(vim.mode == 'Normal' || vim.mode == 'Visual') && (editorTextFocus || !inputFocus)"
   },
 
   {
@@ -295,7 +349,7 @@
     "when": "vim.mode == 'Normal' && !accessibilityHelpIsShown && !accessibleViewIsShown"
   },
   {
-    "key": "g O",
+    "key": "space O",
     "command": "workbench.action.gotoSymbol",
     "when": "vim.mode == 'Normal' && !accessibilityHelpIsShown && !accessibleViewIsShown && editorTextFocus"
   },

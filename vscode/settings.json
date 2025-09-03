@@ -17,11 +17,10 @@
   },
   "python.defaultInterpreterPath": "d:\\attachment\\Python3.11.4\\python.exe",
 
-  // "editor.suggestOnTriggerCharacters": false,
-  // "editor.quickSuggestions": {
-  //   "other": false,
-  //   "comments": false,
-  //   "strings": false
+  // "workbench.colorCustomizations": {
+  //   "statusBar.background": "#000000",
+  //   "statusBar.noFolderBackground": "#000000",
+  //   "statusBar.debuggingBackground": "#000000"
   // },
 
   "tailwindcss-intellisense.trace.server": "verbose",
@@ -34,7 +33,6 @@
   "editor.foldingImportsByDefault": true,
   "workbench.colorTheme": "Black Italic",
   "workbench.editor.editorActionsLocation": "hidden",
-  "workbench.activityBar.location": "hidden",
   "workbench.startupEditor": "none",
   "editor.fontFamily": "Maple Mono, Consolas, 'Courier New', monospace",
   "terminal.integrated.fontFamily": "Maple Mono",
@@ -43,7 +41,8 @@
   "files.associations": {
     "**/templates/*.html": "django-html",
     "**/templates/*": "django-txt",
-    "**/requirements{/**,*}.{txt,in}": "pip-requirements"
+    "**/requirements{/**,*}.{txt,in}": "pip-requirements",
+    "*.py": "python"
   },
   "emmet.includeLanguages": { "django-html": "html" },
   "[django-html]": {
@@ -61,8 +60,8 @@
   "window.density.editorTabHeight": "compact",
   "workbench.editor.showTabs": "none",
   "editor.lineHeight": 0,
-  "editor.fontSize": 17,
-  "workbench.colorCustomizations": {},
+  "editor.fontSize": 18,
+  "terminal.integrated.tabs.enableAnimation": false,
 
   // Vim
   "vim.normalModeKeyBindingsNonRecursive": [
@@ -82,6 +81,6 @@
   "extensions.experimental.affinity": {
     "vscodevim.vim": 1
   },
-
-  "terminal.integrated.tabs.enableAnimation": false
+  "workbench.colorCustomizations": {},
+  "workbench.activityBar.location": "hidden"
 }

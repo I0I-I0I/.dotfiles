@@ -1,45 +1,24 @@
 #!/bin/bash
 
-DIR_FILE=~/.cache/trans_direction
+current_direction=$1
 
-# Read current direction, default to ru-en
-if [[ -f "$DIR_FILE" ]]; then
-    current_direction=$(cat "$DIR_FILE")
-else
-    current_direction="ru-en"
-    echo "$current_direction" > "$DIR_FILE"
-fi
-
-# Check if the sidebar window is open
 window_id=$(hyprctl clients -j | jq -r '.[] | select(.class == "kitty-sidebar") | .address')
 
 if [[ -n "$window_id" ]]; then
-    # Sidebar is open: close it and toggle direction
     hyprctl dispatch closewindow address:$window_id
-    if [[ "$current_direction" == "ru-en" ]]; then
-        new_direction="en-ru"
-    else
-        new_direction="ru-en"
-    fi
-    echo "$new_direction" > "$DIR_FILE"
 else
-    # Sidebar is closed: open it with current direction
     kitty --class=kitty-sidebar -e bash -c "trans -s ${current_direction:0:2} -t ${current_direction:3:2}" &
 
-    # Give some time for the window to open
     sleep 0.5
 
-    # Get screen dimensions
     screen_width=$(hyprctl monitors -j | jq '.[0].width')
     screen_height=$(hyprctl monitors -j | jq '.[0].height')
 
-    # Calculate sidebar position and size
     sidebar_width=400
     sidebar_height=$screen_height
     sidebar_x=$((screen_width - sidebar_width))
     sidebar_y=0
 
-    # Move and resize the window
     hyprctl dispatch movewindowpixel exact $sidebar_x,$sidebar_y,address:$(hyprctl clients -j | jq -r '.[] | select(.class == "kitty-sidebar") | .address')
     hyprctl dispatch resizewindowpixel exact $sidebar_width,$sidebar_height,address:$(hyprctl clients -j | jq -r '.[] | select(.class == "kitty-sidebar") | .address')
 fi
