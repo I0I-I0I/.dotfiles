@@ -94,7 +94,7 @@ window#waybar {
 
 #pulseaudio {
     padding-left: 12px;
-    padding-right: 12px;
+    padding-right: 0px;
 }
 
 #custom-vpn.connected {

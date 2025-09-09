@@ -1,3 +1,7 @@
+set -gx GTK_THEME Adwaita:dark
+set -gx GTK2_RC_FILES /usr/share/themes/Adwaita-dark/gtk-2.0/gtkrc
+set -gx QT_STYLE_OVERRIDE Adwaita-Dark
+
 set -gx PATH $PATH ~/.local/share/pnpm
 set -gx PATH $PATH ~/.dotfiles/scripts
 set -gx PATH $PATH ~/.local/bin

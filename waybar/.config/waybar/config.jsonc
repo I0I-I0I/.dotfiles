@@ -78,11 +78,11 @@
   },
 
   "pulseaudio": {
-    "format": "{icon}",
-    "format-bluetooth": "{icon}",
+    "format": "{volume}% {icon}",
+    "format-bluetooth": "{volume}% {icon}",
     "format-muted": "󰖁 ",
-    "tooltip": true,
-    "tooltip-format": "{icon} {volume}%",
+    "tooltip": false,
+    "tooltip-format": "{volume}% {icon}",
     "format-icons": [" ", " ", " ", " "],
     "on-click": "pactl set-sink-mute @DEFAULT_SINK@ toggle",
     "on-scroll-up": "pactl set-sink-volume @DEFAULT_SINK@ +1%",
@@ -92,8 +92,8 @@
 
   "backlight": {
     "device": "amd_backlight",
-    "format": "{icon}",
-    "tooltip": true,
+    "format": "{percent}% {icon}",
+    "tooltip": false,
     "tooltip-format": "{percent}%",
     "format-icons": [
       "",
