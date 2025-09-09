@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 
-command_exists() {
-    command -v "$1" >/dev/null 2>&1
-}
-
 if [ -f /etc/environment ]; then
     source /etc/environment
 else
-    echo "Error: /etc/environment not found" >&2
+    echo "Error: /etc/environment not found and also you need to set \$SERVER_IP to your VPN server IP in /etc/environment" >&2
     exit 1
 fi
+
+IFACE=$(nmcli -t -f DEVICE,STATE device status | awk -F: '$2=="connected"{print $1; exit}')
+DEFAULT_GW=$(nmcli -g IP4.GATEWAY device show $IFACE)
+
+command_exists() {
+    command -v "$1" >/dev/null 2>&1
+}
 
 _vpn_st() {
     if ip link show tun0 &>/dev/null; then
