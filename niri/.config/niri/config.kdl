@@ -32,7 +32,7 @@ output "HDMI-A-1" {
 
 layout {
     gaps 0
-    empty-workspace-above-first
+    // empty-workspace-above-first
     always-center-single-column
     default-column-display "tabbed"
     center-focused-column "never"
@@ -60,27 +60,27 @@ binds {
 
     Mod+H     { focus-column-left; }
     Mod+L     { focus-column-right; }
-    // Mod+J     { focus-window-down; }
-    // Mod+K     { focus-window-up; }
+    Mod+J     { focus-window-down; }
+    Mod+K     { focus-window-up; }
     Mod+Ctrl+H     { move-column-left; }
     Mod+Ctrl+L     { move-column-right; }
-    // Mod+Ctrl+J     { move-window-down; }
-    // Mod+Ctrl+K     { move-window-up; }
+    Mod+Ctrl+J     { move-window-down; }
+    Mod+Ctrl+K     { move-window-up; }
     Mod+Shift+H     { focus-monitor-left; }
     Mod+Shift+L     { focus-monitor-right; }
-    // Mod+Shift+J     { focus-monitor-down; }
-    // Mod+Shift+K     { focus-monitor-up; }
+    Mod+Shift+J     { focus-monitor-down; }
+    Mod+Shift+K     { focus-monitor-up; }
     Mod+Shift+Ctrl+H     { move-column-to-monitor-left; }
     Mod+Shift+Ctrl+L     { move-column-to-monitor-right; }
     Mod+Shift+Ctrl+J     { move-column-to-monitor-down; }
     Mod+Shift+Ctrl+K     { move-column-to-monitor-up; }
 
-    Mod+J              { focus-workspace-down; }
-    Mod+K              { focus-workspace-up; }
-    Mod+Ctrl+J         { move-column-to-workspace-down; }
-    Mod+Ctrl+K         { move-column-to-workspace-up; }
-    Mod+Shift+J        { move-workspace-down; }
-    Mod+Shift+K        { move-workspace-up; }
+    Mod+I              { focus-workspace-down; }
+    Mod+U              { focus-workspace-up; }
+    Mod+Ctrl+I         { move-column-to-workspace-down; }
+    Mod+Ctrl+U         { move-column-to-workspace-up; }
+    Mod+Shift+I        { move-workspace-down; }
+    Mod+Shift+U        { move-workspace-up; }
 
     Mod+1 { focus-workspace 1; }
     Mod+2 { focus-workspace 2; }
@@ -118,7 +118,7 @@ binds {
     Mod+Shift+Minus { set-window-height "-10%"; }
     Mod+Shift+Equal { set-window-height "+10%"; }
     Mod+V       { toggle-window-floating; }
-    Mod+Shift+V { switch-focus-between-floating-and-tiling; }
+    Mod+Ctrl+V { switch-focus-between-floating-and-tiling; }
     Mod+W { toggle-column-tabbed-display; }
     Mod+Shift+P { power-off-monitors; }
     Mod+O repeat=false { toggle-overview; }
@@ -135,6 +135,14 @@ binds {
     Mod+Alt+TouchpadScrollDown { spawn "brightnessctl" "--class=backlight" "set" "1%-"; }
     Mod+Alt+TouchpadScrollUp   { spawn "brightnessctl" "--class=backlight" "set" "+1%"; }
 
+    Mod+Right { spawn "playerctl" "next" ; }
+    Mod+Left { spawn "playerctl" "previous" ; }
+    Mod+Up { spawn "playerctl" "-p" "spotify" "loop" "track" ; }
+    Mod+Down { spawn "playerctl" "-p" "spotify" "loop" "none" ; }
+    Mod+Shift+Up { spawn "playerctl" "-p" "spotify" "shuffle" "on" ; }
+    Mod+Shift+Down { spawn "playerctl" "-p" "spotify" "shuffle" "off" ; }
+    Mod+Shift+Space { spawn "playerctl" "-p" "spotify" "play-pause" ; }
+
     Mod+Ctrl+C { screenshot; }
     Mod+Shift+Ctrl+C { screenshot-screen; }
     Mod+Alt+C { screenshot-window; }
@@ -142,14 +150,17 @@ binds {
     Mod+Q repeat=false { close-window; }
     Mod+Shift+Q repeat=false { quit; }
 
-    Alt+Space { spawn "fuzzel" ; }
-    Mod+Return { spawn "foot" ; }
-    Mod+E { spawn "bash" "-c" "foot -e yazi" ; }
+    Alt+Space { spawn "rofi" "-show" "drun"; }
+    Mod+Return { spawn "footclient" ; }
+    Mod+E { spawn "bash" "-c" "footclient -e yazi" ; }
+    Mod+S { spawn "tmux-sessionizer-gui"; }
+    Mod+B { spawn "bookmarks"; }
     Mod+Alt+L { spawn "hyprlock" ; }
-    Mod+Alt+B { spawn "zen" ; }
+    Mod+Shift+B { spawn "zen" ; }
     Mod+Shift+C { spawn "hyprpicker" "-a" "-r" ; }
-    Mod+Alt+V { spawn-sh "vpn tog" ; }
-    Mod+B allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill waybar || waybar"; }
+    Mod+Shift+V { spawn-sh "vpn tog" ; }
+    Mod+Shift+M { spawn-sh "spotify" ; }
+    Mod+Ctrl+B allow-when-locked=true hotkey-overlay-title=null { spawn-sh "pkill waybar || waybar"; }
 }
 
 window-rule {
@@ -174,9 +185,9 @@ window-rule {
 
 window-rule {
     match app-id="foot"
-    open-floating true
-    default-column-width { proportion 0.9; }
-    default-window-height { fixed 1000; }
+    default-column-width { proportion 1.0; }
+    // open-floating true
+    // default-window-height { fixed 1000; }
 }
 
 window-rule {
@@ -197,3 +208,4 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 spawn-at-startup "wlsunset -d 1800 -S 4:30 -s 22:00 -t 4000:6500"
 spawn-at-startup "waybar"
 spawn-at-startup "swww-daemon"
+spawn-at-startup "foot --server"

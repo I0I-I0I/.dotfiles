@@ -31,8 +31,6 @@ bind \cs "tmux-sessionizer"
 
 fish_config theme choose "Rose Pine"
 
-# tmux new -s main 2>/dev/null || tmux attach -t main 2>/dev/null
-
 # pnpm
 set -gx PNPM_HOME "/home/i0i/.local/share/pnpm"
 if not string match -q -- $PNPM_HOME $PATH
@@ -40,4 +38,4 @@ if not string match -q -- $PNPM_HOME $PATH
 end
 # pnpm end
 
-source ~/.secure-keys
+source ~/secure/.secure-keys
