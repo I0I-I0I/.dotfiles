@@ -51,7 +51,7 @@ layout {
 }
 
 animations {
-    // off
+    off
     slowdown 0.7
 }
 
