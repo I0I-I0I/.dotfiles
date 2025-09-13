@@ -1,0 +1,218 @@
+# ========== basics / variables ==========
+set $mod Mod4
+set $alt Mod1
+set $term foot
+
+# ========== input (keyboard / touchpad) ==========
+# Matches all keyboards — adjust to a specific device if you want.
+input * {
+    xkb_layout us,ru
+    xkb_options "ctrl:nocaps,grp:win_space_toggle"
+    repeat_delay 250
+    repeat_rate 35
+}
+
+# Touchpad: enable tap-to-click
+# If your touchpad device id is known, replace * with e.g. "type:touchpad" or device name
+input * {
+    # Only enable tap for touchpads; duplicate block above is fine if sway picks correct device
+    tap enabled
+}
+
+# ========== outputs ==========
+output eDP-1 {
+    # exact framerate in mode may be ignored, Sway will pick a matching mode
+    # mode 1920x1080@60.00
+    position 0 0
+    scale 1
+}
+
+# Disable HDMI output
+output HDMI-A-1 disable
+
+# ========== general window / layout notes ==========
+# Sway layout concepts differ from Hyprland columns/presets.
+# There is no direct concept of "columns with width proportions" or a "centered column"
+# in the same way; use split, tabbed, stacked, or resize manually.
+# Many Hyprland column commands are approximated below where possible.
+
+# ========== keybindings ==========
+# focus movement
+bindsym $mod+h focus left
+bindsym $mod+l focus right
+bindsym $mod+j focus down
+bindsym $mod+k focus up
+
+# move (container)
+bindsym $mod+Ctrl+h move left
+bindsym $mod+Ctrl+l move right
+bindsym $mod+Ctrl+j move down
+bindsym $mod+Ctrl+k move up
+
+# focus output (monitor)
+bindsym $mod+Shift+h focus output left
+bindsym $mod+Shift+l focus output right
+bindsym $mod+Shift+j focus output down
+bindsym $mod+Shift+k focus output up
+
+# move container to other outputs (approx)
+bindsym $mod+Shift+Ctrl+h move container to output left
+bindsym $mod+Shift+Ctrl+l move container to output right
+bindsym $mod+Shift+Ctrl+j move container to output down
+bindsym $mod+Shift+Ctrl+k move container to output up
+
+# workspace navigation
+bindsym $mod+i workspace prev
+bindsym $mod+u workspace next
+bindsym $mod+Ctrl+i move container to workspace prev
+bindsym $mod+Ctrl+u move container to workspace next
+bindsym $mod+Shift+i move workspace to output up
+bindsym $mod+Shift+u move workspace to output down
+
+# numeric workspace keys
+bindsym $mod+1 workspace 1
+bindsym $mod+2 workspace 2
+bindsym $mod+3 workspace 3
+bindsym $mod+4 workspace 4
+bindsym $mod+5 workspace 5
+bindsym $mod+6 workspace 6
+bindsym $mod+7 workspace 7
+bindsym $mod+8 workspace 8
+bindsym $mod+9 workspace 9
+
+# move container to workspace numbers
+bindsym $mod+Ctrl+1 move container to workspace 1
+bindsym $mod+Ctrl+2 move container to workspace 2
+bindsym $mod+Ctrl+3 move container to workspace 3
+bindsym $mod+Ctrl+4 move container to workspace 4
+bindsym $mod+Ctrl+5 move container to workspace 5
+bindsym $mod+Ctrl+6 move container to workspace 6
+bindsym $mod+Ctrl+7 move container to workspace 7
+bindsym $mod+Ctrl+8 move container to workspace 8
+bindsym $mod+Ctrl+9 move container to workspace 9
+
+# NOTE: Hyprland "consume/expel" operations and column-specific operations
+# have no direct equivalent in sway. If you want "tabbing" behavior, use:
+# bindsym $mod+w layout tabbed
+# and for stacking:
+# bindsym $mod+Shift+w layout stacked
+
+# Tab/column/window controls (approximations)
+bindsym $mod+BracketLeft   # no direct equivalent — keep for future mapping
+bindsym $mod+BracketRight  # no direct equivalent — keep for future mapping
+# basic tile/float/popup
+bindsym $mod+Comma focus
+bindsym $mod+Period focus
+
+# resize shortcuts (approximate; Sway supports shrink/grow)
+bindsym $mod+Minus resize shrink width 50 px
+bindsym $mod+Equal resize grow width 50 px
+bindsym $mod+Shift+Minus resize shrink height 50 px
+bindsym $mod+Shift+Equal resize grow height 50 px
+
+# window toggles
+bindsym $mod+v floating toggle
+bindsym $mod+Ctrl+v focus floating
+bindsym $mod+f fullscreen toggle
+bindsym $mod+Shift+f fullscreen toggle
+bindsym $mod+Ctrl+f focus
+
+# center column / center visible columns -> no direct sway equivalent
+# maximize column -> maximize container (use fullscreen or enlarge manually)
+bindsym $mod+c layout toggle tabbed
+
+# player / media controls
+bindsym $mod+Right exec --no-startup-id playerctl next
+bindsym $mod+Left  exec --no-startup-id playerctl previous
+bindsym $mod+Up    exec --no-startup-id playerctl -p spotify loop track
+bindsym $mod+Down  exec --no-startup-id playerctl -p spotify loop none
+bindsym $mod+Shift+Up   exec --no-startup-id playerctl -p spotify shuffle on
+bindsym $mod+Shift+Down exec --no-startup-id playerctl -p spotify shuffle off
+bindsym $mod+Shift+Space exec --no-startup-id playerctl -p spotify play-pause
+
+# audio / brightness keys (XF86)
+bindsym XF86AudioRaiseVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1+
+bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 0.1-
+bindsym XF86AudioMute        exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindsym XF86AudioMicMute     exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
+
+bindsym XF86MonBrightnessUp   exec brightnessctl --class=backlight set +5%
+bindsym XF86MonBrightnessDown exec brightnessctl --class=backlight set 5%-
+
+# Touchpad scroll + modifiers: Wayland doesn't always surface scroll as keys.
+# Approximations are tricky — you can use a compositor gesture tool (e.g. libinput-gestures, mako/gestures)
+# or map physical buttons. Skipping exact mapping here.
+
+# screenshots (requires grim & slurp)
+bindsym $mod+Ctrl+c  exec --no-startup-id bash -c 'mkdir -p ~/Pictures/Screenshots && grim -g "$(slurp)" ~/Pictures/Screenshots/Screenshot_$(date +%F_%H-%M-%S).png'
+bindsym $mod+Shift+Ctrl+c exec --no-startup-id bash -c 'mkdir -p ~/Pictures/Screenshots && grim ~/Pictures/Screenshots/Screenshot_$(date +%F_%H-%M-%S).png'
+bindsym $mod+Alt+c exec --no-startup-id bash -c 'mkdir -p ~/Pictures/Screenshots && grim -g "$(slurp)" ~/Pictures/Screenshots/Screenshot_$(date +%F_%H-%M-%S).png'
+
+# window close / quit
+bindsym $mod+q kill
+bindsym $mod+Shift+q exit
+
+# apps / spawns
+bindsym Alt+space exec --no-startup-id rofi -show drun
+bindsym $mod+Return exec --no-startup-id foot
+bindsym $mod+e exec --no-startup-id bash -c 'foot -e yazi'
+bindsym $mod+s exec --no-startup-id tmux-sessionizer-gui
+bindsym $mod+b exec --no-startup-id bookmarks
+# lock screen - hyprlock is Hyprland-only; use swaylock
+bindsym $mod+Alt+l exec --no-startup-id swaylock -f
+
+bindsym $mod+Shift+b exec --no-startup-id zen
+# hyprpicker is Hyprland-only — common Wayland alternatives: slurp + grim + swappy
+bindsym $mod+Shift+c exec --no-startup-id slurp | xargs -I{} grim -g {} /tmp/selection.png && swappy -f /tmp/selection.png
+bindsym $mod+Shift+v exec --no-startup-id bash -c 'vpn tog'
+bindsym $mod+Shift+m exec --no-startup-id spotify
+bindsym $mod+Ctrl+b exec --no-startup-id bash -c 'pkill waybar || waybar &'
+
+# toggles / misc
+# Mod+Shift+P to power-off monitors — approximate by running swaymsg to turn outputs off.
+# WARNING: turning outputs off can be disruptive. Test carefully.
+bindsym $mod+Shift+p exec --no-startup-id bash -c 'for o in $(swaymsg -t get_outputs | jq -r ".[].name"); do swaymsg output $o disable; done'
+
+# Mod+O toggle overview -> Swaybar/Wayland desktops don't have an "overview" default; map to scratchpad show
+bindsym $mod+o scratchpad show
+
+# ========== window rules (for_window) ==========
+# For-floating rules and titles
+for_window [title="^Open Folder$"] floating enable
+for_window [title="^Open File$"] floating enable
+for_window [app_id="thunar"] floating enable
+
+# windsuf opacity: Sway doesn't natively support per-window opacity.
+# If you want window transparency, you need a compositor that supports it
+# (for example, use a patched wlroots compositor) or set up layer-shell-based theming.
+# Here we only toggle floating as a fallback:
+for_window [app_id="windsurf"] floating enable
+
+# foot terminal special handling (approximation)
+for_window [app_id="foot"] floating disable
+
+# kitty-sidebar -> float and move to a "scratchpad" workspace
+for_window [app_id="kitty-sidebar"] floating enable
+for_window [app_id="kitty-sidebar"] move to workspace scratchpad
+
+# ========== aesthetics & misc ==========
+# No direct equivalents for:
+# - always-center-single-column / center-focused-column
+# - default-column-width / focus-ring / animations (Sway intentionally minimal)
+# - prefer-no-csd (client-side decorations depend on the toolkit)
+# If you want GTK apps without CSD, consider gtk3/gtk4 theme settings or use xdg-desktop-portal hacks.
+
+# screenshot path used above: ~/Pictures/Screenshots
+
+# ========== startup programs ==========
+# start necessary background programs (no-startup-id to prevent sway waiting)
+exec_always --no-startup-id wlsunset -d 1800 -S 04:30 -s 22:00 -t 4000:6500
+exec_always --no-startup-id waybar
+exec_always --no-startup-id swww-daemon
+exec_always --no-startup-id foot --server
+
+# ========== end ==========
+# Notes:
+#  - Hyprland column/tab-specific commands are not 1:1 mappable; Sway uses split/tabbed/stacked layouts and manual resizing.
+#  - Hypr-specific utilities (hyprlock, hyprpicker) were replaced with sway alternatives (swaylock, slurp+grim+swappy). Replace with your preferred tools.
+#  - If you want per-window opacity or advanced column behaviour you may need extra tools or a compositor patch.
