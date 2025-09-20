@@ -32,6 +32,13 @@ bind -x '"\C-s":"tmux-sessionizer"'
 
 eval "$(fzf --bash)"
 
+parse_git_branch() {
+     git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
+}
+
+# export PS1="\u@\h:\w \$(parse_git_branch)$ " # no colors
+export PS1="\[\033[38;2;42;162;152m\]\u\[\033[38;2;220;49;46m\]@\[\033[38;2;39;139;211m\]\h:\[\033[38;2;133;153;0m\]\w \[\033[38;2;220;49;46m\]\$(parse_git_branch)\[\033[0m\]$ " # solarized-osaka
+
 # pnpm
 export PNPM_HOME="/home/nnofly/.local/share/pnpm"
 case ":$PATH:" in

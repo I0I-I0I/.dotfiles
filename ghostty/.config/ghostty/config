@@ -1,5 +1,7 @@
 font-size = 17
 
+theme = Builtin Solarized Dark
+
 # font-family = "Maple Mono"
 # adjust-cell-height = 2
 
