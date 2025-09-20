@@ -18,15 +18,19 @@ check_command() {
 check_command timew
 check_command fzf
 
-get_current() {
+timespent_get() {
     current_tracking=$(timew get dom.active)
 
     if [ -n "$current_tracking" ] && [ "$current_tracking" != "0" ]; then
         category=$(timew get dom.active.tags)
         time_output=$(timew day "$category" 2>/dev/null | grep Tracked | awk '{print $2}')
         if [ -n "$time_output" ]; then
-            IFS=: read hours minutes seconds <<< "$time_output"
-            echo "${hours}h ${minutes}m $category"
+            IFS=: read hours minutes _ <<< "$time_output"
+            if ((hours == 0)); then
+                echo "${minutes}m $category"
+            else
+                echo "${hours}h ${minutes}m $category"
+            fi
         else
             echo "Tracking: $category"
         fi
@@ -37,8 +41,8 @@ get_current() {
 
 timespent_set() {
     CATEGORIES=(
-        "CUSTOMIZING"
-        "PROGRAMMING"
+        "WORKFLOW"
+        "WORK"
         "WASTED"
         "STOP"
     )
@@ -50,17 +54,26 @@ timespent_set() {
     fi
 
     if [[ "$selected" == "STOP" ]]; then
-        timew stop
+        timew stop >/dev/null 2>&1
         tmux set -g status-right ""
-        exit 0
     else
         timew start "$selected" >/dev/null 2>&1
-        status_text="$(get_current)"
-        tmux set -g status-right "#(printf \"$status_text\")"
+        tmux set -g status-right "#(echo \"$(timespent_get)\")"
+    fi
+
+    urls=("www.youtube.com")
+    if [[ "$selected" == "WORK" ]]; then
+        for url in $urls; do
+            echo "::1 $url" >> /etc/hosts
+        done
+    else
+        for url in $urls; do
+            sudo sed -i.auto_bak -E "/^(::1|127\\.0\\.0\\.1)[[:space:]]+$url/d" /etc/hosts
+        done
     fi
 }
 
 case "$1" in
-    "get") get_current ;;
+    "get") timespent_get ;;
     "set") timespent_set ;;
 esac
