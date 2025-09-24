@@ -1,7 +1,0 @@
-#!/usr/bin/env bash
-
-if pidof spotifyd >/dev/null; then
-    killall spotifyd
-fi
-
-spotifyd -B 320 -b alsa --audio-format s32
