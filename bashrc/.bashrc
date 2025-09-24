@@ -2,7 +2,7 @@ export PATH="$PATH:$HOME/.dotfiles/scripts:$HOME/.local/bin:$HOME/.local/share/n
 
 # export GTK_THEME="Adwaita:dark"
 # export QT_STYLE_OVERRIDE="Adwaita-Dark"
-# export QT_QPA_PLATFORM="xcb"
+export QT_QPA_PLATFORM="xcb"
 export ELECTRON_OZONE_PLATFORM_HINT="auto"
 export MOZ_ENABLE_WAYLAND="1"
 export LIBVA_DRIVER_NAME="radeonsi"
@@ -19,9 +19,10 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 alias py="uv run python"
 alias vi="/sbin/vim"
 alias vim="nvim"
-alias la="ls -Alhv --group-directories-first --color=auto"
-alias l="ls -vA --group-directories-first --color=auto"
-alias git-cz="git-cz --disable-emoji"
+alias ls="ls --group-directories-first --color=no"
+alias la="ls -Alhv --group-directories-first --color=no"
+# alias l="ls -vA --group-directories-first --color=no"
+alias cz="git-cz --disable-emoji"
 
 [ -t 0 ] && stty -ixon
 
@@ -36,8 +37,8 @@ parse_git_branch() {
      git branch 2> /dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/(\1)/'
 }
 
-# export PS1="\u@\h:\w \$(parse_git_branch)$ " # no colors
-export PS1="\[\033[38;2;42;162;152m\]\u\[\033[38;2;220;49;46m\]@\[\033[38;2;39;139;211m\]\h:\[\033[38;2;133;153;0m\]\w \[\033[38;2;220;49;46m\]\$(parse_git_branch)\[\033[0m\]$ " # solarized-osaka
+export PS1="\u@\h:\w \$(parse_git_branch)$ " # no colors
+# export PS1="\[\033[38;2;42;162;152m\]\u\[\033[38;2;220;49;46m\]@\[\033[38;2;39;139;211m\]\h:\[\033[38;2;133;153;0m\]\w \[\033[38;2;220;49;46m\]\$(parse_git_branch)\[\033[0m\]$ " # solarized-osaka
 
 # pnpm
 export PNPM_HOME="/home/nnofly/.local/share/pnpm"

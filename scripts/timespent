@@ -18,6 +18,14 @@ check_command() {
 check_command timew
 check_command fzf
 
+CATEGORIES=(
+    "STOP"
+    "WORK"
+    "LEARNING"
+    "CUSTOMIZING"
+    "WASTED"
+)
+
 timespent_get() {
     current_tracking=$(timew get dom.active)
 
@@ -40,13 +48,6 @@ timespent_get() {
 }
 
 timespent_set() {
-    CATEGORIES=(
-        "WORKFLOW"
-        "WORK"
-        "WASTED"
-        "STOP"
-    )
-
     selected=$(printf "%s\n" "${CATEGORIES[@]}" | fzf --prompt="Category:")
 
     if [ -z "$selected" ]; then
@@ -59,6 +60,7 @@ timespent_set() {
     else
         timew start "$selected" >/dev/null 2>&1
         tmux set -g status-right "#(echo \"$(timespent_get)\")"
+        tmux set -g status-interval 60
     fi
 
     urls=("www.youtube.com")
