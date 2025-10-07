@@ -1,14 +1,12 @@
 font-size = 16
 
-# theme = Builtin Solarized Dark
-
 # font-family = "Maple Mono"
 # adjust-cell-height = 2
 
 font-family = "MonoLisa"
-# font-style = "Medium"
+font-style = "Medium"
 adjust-cell-height = 5
-adjust-cell-width = -2
+adjust-cell-width = -1
 
 cursor-style = block
 cursor-style-blink = true

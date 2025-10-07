@@ -15,3 +15,5 @@
 
 [advice]
     detachedHead = false
+[interactive]
+    singlekey = true
