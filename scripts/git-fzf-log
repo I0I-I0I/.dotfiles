@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+header_text="Current Branch: $(git rev-parse --abbrev-ref HEAD)"
+term_width=$(tput cols)
+pad=$(( (term_width - ${#header_text}) / 2 ))
+printf -v padded_header "%*s%s" "$pad" "" "$header_text"
+
+{
+    git branch --all --sort=-committerdate --format="%(refname:short)" | sed 's/^[ *]*//' | grep -v HEAD \
+        | sed 's#^remotes/##' | sort -u | awk '{print "\033[34m" "branch: " $0 "\033[0m"}'
+    git log --graph --oneline --pretty=format:'%cr (%an) %s %d [%h]' --date=short
+} | fzf --ansi --layout=reverse \
+    --preview-window=right,60% \
+    --preview '
+        item={}
+        if echo "$item" | grep -q "branch: "; then
+            branch_name=$(echo "$item" | sed "s/.*branch: //" | sed "s/\033\[34m//" | sed "s/\033\[0m//")
+            git log --oneline --graph --color=always \
+                --pretty=format:"%cr (%an) %s %d [%h]" "$branch_name" --
+        else
+            commit_hash=$(echo "$item" | cut -d"[" -f2 | cut -d"]" -f1)
+            git show --color=always "$commit_hash" 2>/dev/null || true
+        fi
+    ' \
+    --bind 'enter:execute(
+        item={}
+        if echo "$item" | grep -q "branch: "; then
+            branch_name=$(echo "$item" | sed "s/.*branch: //" | sed "s/\033\[34m//" | sed "s/\033\[0m//")
+            git switch "$branch_name"
+        else
+            commit_hash=$(echo "$item" | cut -d"[" -f2 | cut -d"]" -f1)
+            git switch -d "$commit_hash"
+        fi
+    )+abort' \
+    --bind 'alt-r:execute(
+        item={}
+        if echo "$item" | grep -q "branch: "; then
+            echo "Cannot rebase onto a branch label directly."
+        else
+            commit_hash=$(echo "$item" | cut -d"[" -f2 | cut -d"]" -f1)
+            git rebase -i "$commit_hash~"
+        fi
+    )' \
+    --bind 'alt-s:execute(git stash)' \
+    --bind 'ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up,ctrl-/:toggle-preview' \
+    --header="Current: $(git rev-parse --abbrev-ref HEAD)"

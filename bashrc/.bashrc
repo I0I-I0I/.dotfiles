@@ -1,4 +1,4 @@
-export PATH="$PATH:$HOME/.dotfiles/scripts:$HOME/.local/bin:$HOME/.local/share/nvim/mason/bin:$HOME/.cargo/bin:$HOME/apps/v2rayN-linux-64/"
+export PATH="$PATH:$HOME/.dotfiles/scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/apps/v2rayN-linux-64/"
 
 # export GTK_THEME="Adwaita:dark"
 # export QT_STYLE_OVERRIDE="Adwaita-Dark"
@@ -22,6 +22,7 @@ export HISTTIMEFORMAT="[%F %T] "
 export HISTFILE=~/.history
 PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
+alias open="xdg-open"
 alias py="uv run python"
 alias vi="/sbin/vim"
 alias vim="nvim"

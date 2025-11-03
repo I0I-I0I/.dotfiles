@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ESC=$'\x1b'
+GREEN="${ESC}[32m"
+RED="${ESC}[31m"
+RESET="${ESC}[0m"
+
+GEN=$(mktemp)
+
+cat >"$GEN" <<'GEN_EOF'
+#!/usr/bin/env bash
+set -euo pipefail
+ESC=$'\x1b'
+GREEN="${ESC}[32m"
+RED="${ESC}[31m"
+RESET="${ESC}[0m"
+while IFS= read -r -d '' entry; do
+  status="${entry:0:2}"
+  file="${entry:3}"
+  if [[ "$status" == "??" ]]; then
+    printf "%b%s\t%s%b\n" "$RED" "??" "$file" "$RESET"
+  elif [[ "${status:0:1}" != " " ]]; then
+    printf "%b%s\t%s%b\n" "$GREEN" "$status" "$file" "$RESET"
+  elif [[ "${status:1:1}" != " " ]]; then
+    printf "%b%s\t%s%b\n" "$RED" "$status" "$file" "$RESET"
+  else
+    printf "%s\t%s\n" "$status" "$file"
+  fi
+done < <(git status --porcelain -z)
+GEN_EOF
+
+chmod +x "$GEN"
+
+TMPSEL=$(mktemp)
+trap 'rm -f "$GEN" "$TMPSEL" 2>/dev/null || true' EXIT
+
+fzf_out=$(
+  "$GEN" | fzf --ansi --multi --layout=reverse \
+    --preview-window=right,60% \
+    --preview '\
+        sed -r "s/\x1b\[[0-9;]*m//g" <<< {} \
+        | cut -f2- \
+        | xargs -I file sh -c '\''\
+        if git diff --staged --name-only -- "file" | grep -q .; then \
+            git diff --color=always --staged -- "file"; \
+            else git diff --color=always -- "file"; \
+        fi'\''' \
+    --bind 'ctrl-d:preview-half-page-down,ctrl-u:preview-half-page-up' \
+    --bind 'shift-tab:toggle-all,ctrl-/:toggle-preview' \
+    --bind 'alt-c:execute(git commit)+reload:'"$GEN"  \
+    --bind 'alt-r:execute(file=$(echo {} | awk "{print \$2}"); [ -n "$file" ] && git restore "$file")+reload:'"$GEN"  \
+    --bind 'alt-a:execute(file=$(echo {} | awk "{print \$2}"); [ -n "$file" ] && git add "$file" -p)+reload:'"$GEN"  \
+    --bind 'enter:execute(file=$(echo {} | awk "{print \$2}"); [ -n "$file" ] && nvim "$file")' \
+    --bind 'alt-s:execute-silent(printf "%s\n" {+} | sed -r "s/\\x1b\\[[0-9;]*m//g" | cut -f2- | while IFS= read -r file; do git add -- "$file"; done)+reload:'"$GEN" \
+    --bind 'alt-u:execute-silent(printf "%s\n" {+} | sed -r "s/\\x1b\\[[0-9;]*m//g" | cut -f2- | while IFS= read -r file; do git restore --staged -- "$file"; done)+reload:'"$GEN"
+)
+
+if [[ -z "${fzf_out:-}" ]]; then
+  exit 0
+fi
+
+lines=$(printf "%s\n" "$fzf_out" | tail -n +2)
+
+: > "$TMPSEL"
+printf "%s\n" "$lines" \
+  | sed -r 's/\x1b\[[0-9;]*m//g' \
+  | while IFS= read -r line; do
+      if [[ "$line" == *$'\t'* ]]; then
+        file="${line#*$'\t'}"
+      else
+        file="${line#* }"
+      fi
+      [[ -z "$file" ]] && continue
+      printf '%s\0' "$file" >> "$TMPSEL"
+    done
+
+if [[ ! -s "$TMPSEL" ]]; then
+  exit 0
+fi
