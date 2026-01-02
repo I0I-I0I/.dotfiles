@@ -21,10 +21,40 @@ check_command fzf
 CATEGORIES=(
     "STOP"
     "WORK"
-    "LEARNING"
     "CUSTOMIZING"
     "WASTED"
 )
+
+if [ -z "$(tmux show-environment -g TIMESPENT_INITIALIZED 2>/dev/null)" ]; then
+    DEFAULT_TMUX_STATUS_RIGHT=$(tmux show-option -gv status-right 2>/dev/null || echo "")
+    tmux set-environment -g TIMESPENT_INITIALIZED 1
+    tmux set-environment -g DEFAULT_TMUX_STATUS_RIGHT "$DEFAULT_TMUX_STATUS_RIGHT"
+else
+    DEFAULT_TMUX_STATUS_RIGHT=$(tmux show-environment -g DEFAULT_TMUX_STATUS_RIGHT 2>/dev/null | cut -d= -f2-)
+fi
+
+help() {
+    cat <<EOF
+Usage:
+    timespent get - get time spent for the current category
+    timespent set - set the current category (select from [${CATEGORIES[@]}] with fzf)
+EOF
+}
+
+modify_hosts() {
+    local action="$1"
+    local url="$2"
+
+    case "$action" in
+        "block")
+            echo "::1 $url" | sudo tee -a /etc/hosts > /dev/null
+            echo "127.0.0.1 $url" | sudo tee -a /etc/hosts > /dev/null
+            ;;
+        "unblock")
+            sudo sed -i.auto_bak -E "/^(::1|127\\.0\\.0\\.1)[[:space:]]+$url/d" /etc/hosts
+            ;;
+    esac
+}
 
 timespent_get() {
     current_tracking=$(timew get dom.active)
@@ -48,34 +78,44 @@ timespent_get() {
 }
 
 timespent_set() {
-    selected=$(printf "%s\n" "${CATEGORIES[@]}" | fzf --prompt="Category:")
-
-    if [ -z "$selected" ]; then
-        exit 0
+    if [[ -z "${2:-}" ]]; then
+        category=$(printf "%s\n" "${CATEGORIES[@]}" | fzf --prompt="Category:")
+    elif [[ "${CATEGORIES[*]}" == *"$2"* ]]; then
+        category="$2"
+    else
+        echo "Category '$2' is not valid!"
+        echo "Use one of the following categories: ${CATEGORIES[*]}"
+        exit 1
     fi
 
-    if [[ "$selected" == "STOP" ]]; then
+    if [[ "$category" == "STOP" ]]; then
         timew stop >/dev/null 2>&1
-        tmux set -g status-right ""
+        tmux set -g status-right "$DEFAULT_TMUX_STATUS_RIGHT"
     else
-        timew start "$selected" >/dev/null 2>&1
-        tmux set -g status-right "#(echo \"$(timespent_get)\")"
+        timew start "$category" >/dev/null 2>&1
+        tmux set -g status-right "#(echo \"$(timespent_get)\") | $DEFAULT_TMUX_STATUS_RIGHT"
         tmux set -g status-interval 60
     fi
 
     urls=("www.youtube.com")
-    if [[ "$selected" == "WORK" ]]; then
+    if [[ "$category" == "WORK" ]]; then
         for url in $urls; do
-            echo "::1 $url" >> /etc/hosts
+            modify_hosts "block" "$url"
         done
     else
         for url in $urls; do
-            sudo sed -i.auto_bak -E "/^(::1|127\\.0\\.0\\.1)[[:space:]]+$url/d" /etc/hosts
+            modify_hosts "unblock" "$url"
         done
     fi
 }
 
+if [[ -z "${1:-}" ]]; then
+    help
+    exit 1
+fi
+
 case "$1" in
     "get") timespent_get ;;
-    "set") timespent_set ;;
+    "set") timespent_set "$@" ;;
+    *) echo "Invalid command!"; help; exit 1 ;;
 esac

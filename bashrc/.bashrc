@@ -1,4 +1,4 @@
-export PATH="$PATH:$HOME/.dotfiles/scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/apps/v2rayN-linux-64/"
+export PATH="$PATH:$HOME/.dotfiles/scripts:$HOME/.local/bin:$HOME/.cargo/bin:$HOME/apps/v2rayN-linux-64/:~/go/bin/"
 
 # export GTK_THEME="Adwaita:dark"
 # export QT_STYLE_OVERRIDE="Adwaita-Dark"
@@ -24,12 +24,12 @@ PROMPT_COMMAND="history -a; $PROMPT_COMMAND"
 
 alias open="xdg-open"
 alias py="uv run python"
-alias vi="/sbin/vim"
 alias vim="nvim"
 alias ls="ls -p --group-directories-first --color=always"
 alias la="ls -Alhvp --group-directories-first --color=always"
 
 bind -x '"\C-s":"tmux-sessionizer"'
+# bind '"\C-s":"zi\n"'
 
 eval "$(fzf --bash)"
 

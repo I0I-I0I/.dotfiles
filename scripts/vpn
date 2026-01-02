@@ -154,15 +154,15 @@ vpn_status() {
 }
 
 case "$1" in
-help) show_help ;;
-st) vpn_status $2 ;;
-up) vpn_up ;;
-down) vpn_down ;;
-tog) vpn_toggle ;;
-ip) current_ip ;;
-*)
-    echo "Invalid input: '$1'"
-    show_help
-    exit 1
-    ;;
+    help) show_help ;;
+    st) vpn_status $2 ;;
+    up) vpn_up ;;
+    down) vpn_down ;;
+    tog) vpn_toggle ;;
+    ip) current_ip ;;
+    *)
+        echo "Invalid input: '$1'"
+        show_help
+        exit 1
+        ;;
 esac

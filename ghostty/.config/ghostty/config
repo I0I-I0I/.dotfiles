@@ -1,30 +1,34 @@
-font-size = 16
+font-size = 18
 
+# font-family = "DepartureMono Nerd Font Mono"
+# font-family = "FantasqueSansM Nerd Font"
 font-family = "Maple Mono"
+# font-family = "GohuFont 11 Nerd Font Mono"
+font-style = "Regular"
 adjust-cell-height = 2
 
-# font-family = "MonoLisa"
-# font-style = "Medium"
-# adjust-cell-height = 5
-# adjust-cell-width = -1
-
-cursor-style = block
-cursor-style-blink = true
 shell-integration-features = no-cursor
 
 background-opacity = 0.73
 background = "#000000"
+background-blur = true
 
 window-padding-balance = true
 window-padding-color = extend-always
-window-decoration = false
+window-decoration = none
 
 confirm-close-surface = false
 
 gtk-titlebar = false
-gtk-tabs-location = hidden
 
-keybind = ctrl+shift+n=unbind
-keybind = ctrl+a=unbind
+keybind = ctrl+shift+j=unbind
+keybind = ctrl+shift+l=unbind
+keybind = ctrl+tab=unbind
 
-# theme = "Night Owlish Light"
+keybind = ctrl+alt+h=goto_split:left
+keybind = ctrl+alt+j=goto_split:down
+keybind = ctrl+alt+k=goto_split:up
+keybind = ctrl+alt+l=goto_split:right
+
+# theme = dark:IR Black,light:Night Owlish Light
+theme = IR Black
