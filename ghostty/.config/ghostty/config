@@ -1,4 +1,4 @@
-font-size = 18
+font-size = 23
 
 # font-family = "DepartureMono Nerd Font Mono"
 # font-family = "FantasqueSansM Nerd Font"
@@ -11,7 +11,7 @@ shell-integration-features = no-cursor
 
 background-opacity = 0.73
 background = "#000000"
-background-blur = true
+maximize = true
 
 window-padding-balance = true
 window-padding-color = extend-always
@@ -23,7 +23,7 @@ gtk-titlebar = false
 
 keybind = ctrl+shift+j=unbind
 keybind = ctrl+shift+l=unbind
-keybind = ctrl+tab=unbind
+# keybind = ctrl+tab=unbind
 
 keybind = ctrl+alt+h=goto_split:left
 keybind = ctrl+alt+j=goto_split:down
@@ -31,4 +31,4 @@ keybind = ctrl+alt+k=goto_split:up
 keybind = ctrl+alt+l=goto_split:right
 
 # theme = dark:IR Black,light:Night Owlish Light
-theme = IR Black
+# theme = IR Black
