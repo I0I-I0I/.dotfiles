@@ -2,7 +2,7 @@
   "show_signature_help_after_edits": false,
   "auto_signature_help": false,
   "sticky_scroll": {
-    "enabled": true
+    "enabled": true,
   },
   "which_key": {
     "delay_ms": 500,
@@ -24,7 +24,7 @@
     },
   },
   "edit_predictions": {
-    "provider": "supermaven",
+    "provider": "zed",
   },
   "auto_update": true,
   "gutter": {
@@ -39,14 +39,13 @@
     "use_smartcase_find": true,
     "highlight_on_yank_duration": 200,
   },
-  "toolbar": { "breadcrumbs": true,
-               "quick_actions": true },
+  "toolbar": { "breadcrumbs": true, "quick_actions": true },
   "scrollbar": { "show": "never" },
   "tab_bar": { "show": false },
   "ui_font_family": "Maple Mono",
   "buffer_font_family": "Maple Mono",
   "telemetry": { "diagnostics": false, "metrics": false },
-  "ui_font_size": 20.0,
+  "ui_font_size": 24.0,
   "buffer_font_size": 22.0,
   "theme": {
     "mode": "dark",
