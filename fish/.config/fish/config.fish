@@ -19,7 +19,13 @@ fish_add_path -g $PNPM_HOME
 
 if status is-interactive
   stty -ixon
-  bind \cs '__tmux_sessionizer'
+  # bind \cs '__tmux_sessionizer'
+  bind \cs '__zoxide'
+end
+
+function __zoxide
+  commandline -r 'zi'
+  commandline -f execute
 end
 
 function __tmux_sessionizer
@@ -53,7 +59,6 @@ alias vim='nvim'
 alias ls='ls -p --group-directories-first --color=always'
 alias la='ls -Alhvp --group-directories-first --color=always'
 alias share='python3 -m http.server 8000 & sleep 1; ngrok http 8000'
+alias cd='z'
 
-#if type -q fzf
-#fzf --fish | source
-#end
+zoxide init fish | source

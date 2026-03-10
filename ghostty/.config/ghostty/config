@@ -1,4 +1,4 @@
-font-size = 23
+font-size = 16
 
 # font-family = "DepartureMono Nerd Font Mono"
 # font-family = "FantasqueSansM Nerd Font"
@@ -23,8 +23,8 @@ gtk-titlebar = false
 
 keybind = ctrl+shift+j=unbind
 keybind = ctrl+shift+l=unbind
-keybind = ctrl+alt+l=unbind
-keybind = ctrl+tab=unbind
+# keybind = ctrl+alt+l=unbind
+# keybind = ctrl+tab=unbind
 # keybind = ctrl+tab=unbind
 
 keybind = ctrl+alt+h=goto_split:left

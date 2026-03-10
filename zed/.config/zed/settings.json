@@ -1,4 +1,19 @@
 {
+  "agent": {
+    "default_model": {
+      "provider": "openai",
+      "model": "gpt-5.3-codex",
+      "enable_thinking": true
+    },
+    "favorite_models": [
+      {
+        "provider": "openai",
+        "model": "gpt-5.3-codex",
+        "enable_thinking": false
+      }
+    ],
+    "model_parameters": []
+  },
   "show_signature_help_after_edits": false,
   "auto_signature_help": false,
   "sticky_scroll": {
@@ -13,18 +28,13 @@
       "enabled": false,
     },
   },
+  "status_bar": { "experimental.show": true },
+  "project_panel": {
+    "default_width": 800,
+    "hide_root": true,
+  },
   "git": {
     "inline_blame": { "enabled": false },
-  },
-  "agent_servers": {
-    "codex": {
-      "favorite_config_option_values": {
-        "reasoning_effort": ["medium"],
-      },
-    },
-  },
-  "edit_predictions": {
-    "provider": "zed",
   },
   "auto_update": true,
   "gutter": {
@@ -39,14 +49,21 @@
     "use_smartcase_find": true,
     "highlight_on_yank_duration": 200,
   },
-  "toolbar": { "breadcrumbs": true, "quick_actions": true },
+  "toolbar": { "breadcrumbs": false, "quick_actions": false },
   "scrollbar": { "show": "never" },
-  "tab_bar": { "show": false },
+  "tab_bar": {
+    "show": true,
+    "show_nav_history_buttons": false,
+    "show_tab_bar_buttons": false,
+  },
   "ui_font_family": "Maple Mono",
   "buffer_font_family": "Maple Mono",
   "telemetry": { "diagnostics": false, "metrics": false },
-  "ui_font_size": 24.0,
+  "ui_font_size": 20.0,
   "buffer_font_size": 22.0,
+  "terminal": {
+    "env": { "EDITOR": "zed --wait" },
+  },
   "theme": {
     "mode": "dark",
     "light": "flat᛫light",

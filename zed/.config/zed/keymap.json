@@ -1,7 +1,14 @@
 [
   {
     "bindings": {
+      "ctrl-k": null,
+
       "ctrl-q": "pane::CloseActiveItem",
+
+      "alt-i": "pane::ActivatePreviousItem",
+      "alt-o": "pane::ActivateNextItem",
+      "alt-shift-i": "pane::SwapItemLeft",
+      "alt-shift-o": "pane::SwapItemRight",
     },
   },
 
@@ -11,13 +18,9 @@
       "ctrl-s": "workspace::Save",
       "ctrl-alt-s": "workspace::SaveWithoutFormat",
       "ctrl-j": "workspace::ToggleBottomDock",
-    },
-  },
-
-  {
-    "context": "FileFinder && Picker && Editor && !menu",
-    "bindings": {
-      "ctrl-v": "editor::Paste",
+      "ctrl-l": "editor::DuplicateLineDown",
+      "ctrl-shift-c": "editor::Copy",
+      "ctrl-shift-v": "editor::Paste",
     },
   },
 
@@ -25,11 +28,9 @@
     "context": "VimControl && !menu",
     "bindings": {
       "ctrl-w": null,
-      "ctrl-k": null,
-      "ctrl-n": null,
+
       "g o": "vim::StartOfDocument",
-      "ctrl-k y p": "workspace::CopyRelativePath",
-      "ctrl-k g l": "git_graph::Open",
+
       "ctrl-b": "workspace::ToggleLeftDock",
       "ctrl-y": ["workspace::SendKeystrokes", "4 ctrl-y"],
       "ctrl-e": ["workspace::SendKeystrokes", "4 ctrl-e"],
@@ -38,18 +39,21 @@
       "alt-n": "editor::SelectNext",
       "alt-p": "editor::SelectPrevious",
       "alt-a": "editor::SelectAllMatches",
-      "ctrl-l": "editor::DuplicateLineDown",
       "alt-h": "editor::SelectLargerSyntaxNode",
       "ctrl-alt-h": "editor::SelectSmallerSyntaxNode",
       "ctrl-k h": "editor::SelectAll",
       "shift-y": ["workspace::SendKeystrokes", "y $"],
+
+      "alt-y p": "workspace::CopyRelativePath",
+
+      "ctrl-k g l": "git_graph::Open",
     },
   },
   {
     "context": "vim_mode == normal || vim_mode == visual",
     "bindings": {
-      "alt-f": "vim::PushSneak",
-      "alt-shift-f": "vim::PushSneakBackward",
+      "s": "vim::PushSneak",
+      "S": "vim::PushSneakBackward",
     },
   },
   {
@@ -83,22 +87,6 @@
       "alt-shift-l": "workspace::MovePaneRight",
       "alt-shift-j": "workspace::MovePaneDown",
       "alt-shift-k": "workspace::MovePaneUp",
-    },
-  },
-  {
-    "context": "Editor && VimControl && !VimWaiting && !menu",
-    "bindings": {
-      "alt-1": ["task::Spawn", { "task_name": "open mark 1" }],
-      "alt-2": ["task::Spawn", { "task_name": "open mark 2" }],
-      "alt-3": ["task::Spawn", { "task_name": "open mark 3" }],
-      "alt-4": ["task::Spawn", { "task_name": "open mark 4" }],
-      "alt-5": ["task::Spawn", { "task_name": "open mark 5" }],
-      "alt-6": ["task::Spawn", { "task_name": "open mark 6" }],
-      "alt-7": ["task::Spawn", { "task_name": "open mark 7" }],
-      "alt-8": ["task::Spawn", { "task_name": "open mark 8" }],
-      "alt-9": ["task::Spawn", { "task_name": "open mark 9" }],
-      "alt-0": ["task::Spawn", { "task_name": "add mark" }],
-      "alt-e": ["task::Spawn", { "task_name": "edit marks" }],
     },
   },
 ]
