@@ -6,7 +6,7 @@ fish_add_path -g \
     $HOME/go/bin \
     $HOME/apps/bin \
     $HOME/.bun/bin \
-    $HOME/.opencode/bin \
+    $HOME/.opencode/bin
 
 set -gx ANDROID_SDK_ROOT "$HOME/apps/android-tools/"
 fish_add_path -g \
