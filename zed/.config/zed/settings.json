@@ -1,4 +1,7 @@
 {
+  "git_panel": {
+    "tree_view": true
+  },
   "agent": {
     "default_model": {
       "provider": "openai",

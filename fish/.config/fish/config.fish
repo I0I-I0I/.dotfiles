@@ -19,8 +19,8 @@ fish_add_path -g $PNPM_HOME
 
 if status is-interactive
   stty -ixon
-  # bind \cs '__tmux_sessionizer'
-  bind \cs '__zoxide'
+  bind \cs '__tmux_sessionizer'
+  # bind \cs '__zoxide'
 end
 
 function __zoxide
@@ -51,6 +51,10 @@ set -gx EDITOR "/usr/local/bin/nvim"
 
 function codex
     HTTP_PROXY=http://127.0.0.1:10808 HTTPS_PROXY=http://127.0.0.1:10808 command codex $argv
+end
+
+function opencode
+    HTTP_PROXY=http://127.0.0.1:10808 HTTPS_PROXY=http://127.0.0.1:10808 command opencode $argv
 end
 
 alias open='xdg-open'
