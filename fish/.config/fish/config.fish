@@ -8,12 +8,6 @@ fish_add_path -g \
     $HOME/.bun/bin \
     $HOME/.opencode/bin
 
-set -gx ANDROID_SDK_ROOT "$HOME/apps/android-tools/"
-fish_add_path -g \
-    $ANDROID_SDK_ROOT/platform-tools \
-    $ANDROID_SDK_ROOT/emulator \
-    $ANDROID_SDK_ROOT/cmdline-tools/bin
-
 set -gx PNPM_HOME "$HOME/.local/share/pnpm"
 fish_add_path -g $PNPM_HOME
 
@@ -41,13 +35,6 @@ if test -f "$HOME/.cargo/env.fish"
   source "$HOME/.cargo/env.fish"
 end
 
-set -gx QT_QPA_PLATFORM "xcb"
-set -gx ELECTRON_OZONE_PLATFORM_HINT "auto"
-set -gx MOZ_ENABLE_WAYLAND "1"
-set -gx LIBVA_DRIVER_NAME "radeonsi"
-set -gx VDPAU_DRIVER "radeonsi"
-
-set -gx EDITOR "/usr/local/bin/nvim"
 
 function codex
     HTTP_PROXY=http://127.0.0.1:10808 HTTPS_PROXY=http://127.0.0.1:10808 command codex $argv
@@ -56,6 +43,8 @@ end
 function opencode
     HTTP_PROXY=http://127.0.0.1:10808 HTTPS_PROXY=http://127.0.0.1:10808 command opencode $argv
 end
+
+set -gx EDITOR "nvim"
 
 alias open='xdg-open'
 alias py='uv run python'
