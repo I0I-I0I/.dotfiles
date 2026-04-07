@@ -21,6 +21,15 @@ add_to_path "$HOME/.dotfiles/scripts" \
             "$HOME/.opencode/bin" \
             "$HOME/.local/share/pnpm"
 
+
+HISTFILE=~/.bash_history
+HISTSIZE=100000
+HISTFILESIZE=200000
+HISTCONTROL=ignoreboth
+HISTIGNORE="ls:cd:pwd:exit:date:* --help"
+HISTTIMEFORMAT="%F %T "
+shopt -s histappend
+
 if [[ $- == *i* ]]; then
   stty -ixon
   bind -x '"\C-s":$HOME/.dotfiles/scripts/tmux-sessionizer'
@@ -59,4 +68,5 @@ parse_git_branch() {
 if [[ $- == *i* ]]; then
   source /usr/share/git/completion/git-prompt.sh 2>/dev/null || true
   PS1='\w$(parse_git_branch) $ '
+  PROMPT_COMMAND="history -a; history -n"
 fi
