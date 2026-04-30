@@ -1,21 +1,31 @@
 {
+  "proxy": "socks5h://localhost:10808",
+  "agent_servers": {
+    "codex-acp": {
+      "type": "registry",
+    },
+  },
+  "outline_panel": {
+    "dock": "right",
+  },
+  "collaboration_panel": {
+    "dock": "right",
+  },
   "git_panel": {
-    "tree_view": true
+    "dock": "right",
+    "tree_view": true,
   },
   "agent": {
+    "single_file_review": true,
+    "dock": "left",
+    "play_sound_when_agent_done": "always",
+    "notify_when_agent_waiting": "all_screens",
     "default_model": {
       "provider": "openai",
-      "model": "gpt-5.3-codex",
-      "enable_thinking": true
+      "model": "gpt-5.4",
+      "enable_thinking": false,
     },
-    "favorite_models": [
-      {
-        "provider": "openai",
-        "model": "gpt-5.3-codex",
-        "enable_thinking": false
-      }
-    ],
-    "model_parameters": []
+    "model_parameters": [],
   },
   "show_signature_help_after_edits": false,
   "auto_signature_help": false,
@@ -33,7 +43,7 @@
   },
   "status_bar": { "experimental.show": true },
   "project_panel": {
-    "default_width": 800,
+    "dock": "right",
     "hide_root": true,
   },
   "git": {
@@ -75,11 +85,22 @@
 
   "languages": {
     "Python": {
-      "language_servers": ["ty", "ruff"],
+      "language_servers": ["basedpyright", "ruff"],
     },
   },
 
   "lsp": {
+    "basedpyright": {
+      "settings": {
+        "basedpyright.analysis": {
+          "diagnosticMode": "workspace",
+          "typeCheckingMode": "strict",
+        },
+        "python": {
+          "pythonPath": ".venv/bin/python",
+        },
+      },
+    },
     "ty": {
       "settings": {
         "diagnosticMode": "workspace",

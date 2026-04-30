@@ -55,9 +55,6 @@ alias la="ls -Alhvp --group-directories-first --color=always"
 alias share="python3 -m http.server 8000 & sleep 1; ngrok http 8000"
 alias cd="z"
 
-eval "$(zoxide init bash)"
-eval "$(fzf --bash)"
-
 parse_git_branch() {
     local branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
     if [[ -n $branch ]]; then
@@ -70,3 +67,14 @@ if [[ $- == *i* ]]; then
   PS1='\w$(parse_git_branch) $ '
   PROMPT_COMMAND="history -a; history -n"
 fi
+
+# pnpm
+export PNPM_HOME="/home/nnofly/.local/share/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+# pnpm end
+
+eval "$(zoxide init bash)"
+eval "$(fzf --bash)"
