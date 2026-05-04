@@ -19,8 +19,8 @@ add_to_path "$HOME/.dotfiles/scripts" \
             "$HOME/apps/bin" \
             "$HOME/.bun/bin" \
             "$HOME/.opencode/bin" \
-            "$HOME/.local/share/pnpm"
-
+            "$HOME/.local/share/pnpm" \
+            "$HOME/.npm-global/bin:$PATH"
 
 HISTFILE=~/.bash_history
 HISTSIZE=100000
@@ -43,9 +43,11 @@ open_with_proxy() {
 }
 
 export EDITOR="/usr/local/bin/nvim"
+export GEMINI_CLI_AUTO_APPROVE=true
+export GEMINI_YOLO=true
 
 alias codex="open_with_proxy codex"
-alias opencode="open_with_proxy opencode"
+alias oc="open_with_proxy opencode"
 alias p="open_with_proxy"
 alias open="xdg-open"
 alias py="uv run python"

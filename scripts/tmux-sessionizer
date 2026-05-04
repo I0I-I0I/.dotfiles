@@ -3,23 +3,28 @@
 SELECTED_WORKTREE_PATH=
 SELECTED_WORKTREE_NAME=
 
+MAIN_SESSION="main"
+if [[ -n $TMUX ]]; then
+    MAIN_SESSION=$(tmux display-message -p '#S')
+fi
+
 switch_to() {
     if [[ -z $TMUX ]]; then
-        tmux attach-session -t "=$1"
+        tmux attach-session -t "$MAIN_SESSION:$1"
     else
-        tmux switch-client -t "=$1"
+        tmux switch-client -t "$MAIN_SESSION:$1"
     fi
 }
 
-has_session() {
-    tmux has-session -t "=$1" 2>/dev/null
+has_window() {
+    tmux list-windows -t "$MAIN_SESSION" -F '#W' 2>/dev/null | grep -q "^$1\$"
 }
 
 hydrate() {
     if [ -f "$2/.tmux-sessionizer" ]; then
-        tmux send-keys -t "=$1" "source $2/.tmux-sessionizer" c-M
+        tmux send-keys -t "$MAIN_SESSION:$1" "source $2/.tmux-sessionizer" c-M
     elif [ -f "$HOME/.tmux-sessionizer" ]; then
-        tmux send-keys -t "=$1" "source $HOME/.tmux-sessionizer" c-M
+        tmux send-keys -t "$MAIN_SESSION:$1" "source $HOME/.tmux-sessionizer" c-M
     fi
 }
 
@@ -276,13 +281,17 @@ main() {
     tmux_running=$(pgrep tmux)
 
     if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
-        tmux new-session -s "$selected_name" -c "$selected"
+        tmux new-session -d -s "$MAIN_SESSION" -n "$selected_name" -c "$selected"
         hydrate "$selected_name" "$selected"
+        switch_to "$selected_name"
         return
     fi
 
-    if ! has_session "$selected_name"; then
-        tmux new-session -ds "$selected_name" -c "$selected"
+    if ! tmux has-session -t "$MAIN_SESSION" 2>/dev/null; then
+        tmux new-session -d -s "$MAIN_SESSION" -n "$selected_name" -c "$selected"
+        hydrate "$selected_name" "$selected"
+    elif ! has_window "$selected_name"; then
+        tmux new-window -t "$MAIN_SESSION" -n "$selected_name" -c "$selected"
         hydrate "$selected_name" "$selected"
     fi
 

@@ -1,23 +1,27 @@
 {
-  "proxy": "socks5h://localhost:10808",
+  "proxy": "",
   "agent_servers": {
+    "gemini": {
+      "default_mode": "yolo",
+      "type": "registry"
+    },
     "codex-acp": {
       "type": "registry",
     },
   },
   "outline_panel": {
-    "dock": "right",
+    "dock": "left",
   },
   "collaboration_panel": {
-    "dock": "right",
+    "dock": "left",
   },
   "git_panel": {
-    "dock": "right",
+    "dock": "left",
     "tree_view": true,
   },
   "agent": {
     "single_file_review": true,
-    "dock": "left",
+    "dock": "right",
     "play_sound_when_agent_done": "always",
     "notify_when_agent_waiting": "all_screens",
     "default_model": {
@@ -43,7 +47,7 @@
   },
   "status_bar": { "experimental.show": true },
   "project_panel": {
-    "dock": "right",
+    "dock": "left",
     "hide_root": true,
   },
   "git": {

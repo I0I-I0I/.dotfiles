@@ -1,0 +1,42 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SESSIONS=("main" "prog" "ssh")
+DEFAULT_SESSION="main"
+
+setup_session() {
+    local sn="$1"
+    if ! tmux has-session -t "$sn" 2>/dev/null; then
+        tmux new-session -ds "$sn" -c "$HOME"
+        configure_session "$sn"
+    fi
+}
+
+configure_session() {
+    local sn="$1"
+    case "$sn" in
+        "main")
+            tmux new-window -t "$sn" -n "Notes" -c "$HOME/Dropbox/"
+            ;;
+        "prog")
+            tmux send-keys -t "$sn" "cd $HOME/code/ && clear" C-m
+            ;;
+    esac
+}
+
+if ! command -v tmux &> /dev/null; then
+    echo "Error: tmux is not installed." >&2
+    exit 1
+fi
+
+for session in "${SESSIONS[@]}"; do
+    setup_session "$session"
+done
+
+TARGET="${1:-$DEFAULT_SESSION}"
+
+if [[ -n "${TMUX:-}" ]]; then
+    tmux switch-client -t "$TARGET"
+else
+    tmux attach -t "$TARGET:^"
+fi
